@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mtc.mapper.InteractionMapper">
+  <resultMap id="BaseResultMap" type="com.example.mtc.model.Interaction">
+    <id column="interaction_id" jdbcType="BIGINT" property="interactionId" />
+    <result column="post_id" jdbcType="BIGINT" property="postId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="is_like" jdbcType="BIT" property="isLike" />
+    <result column="is_favorite" jdbcType="BIT" property="isFavorite" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    interaction_id, post_id, user_id, is_like, is_favorite
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_community_interaction
+    where interaction_id = #{interactionId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_community_interaction
+    where interaction_id = #{interactionId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.mtc.model.Interaction">
+    <selectKey keyProperty="interactionId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_interaction (post_id, user_id, is_like, 
+      is_favorite)
+    values (#{postId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{isLike,jdbcType=BIT}, 
+      #{isFavorite,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.mtc.model.Interaction">
+    <selectKey keyProperty="interactionId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_interaction
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="postId != null">
+        post_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="isLike != null">
+        is_like,
+      </if>
+      <if test="isFavorite != null">
+        is_favorite,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="postId != null">
+        #{postId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="isLike != null">
+        #{isLike,jdbcType=BIT},
+      </if>
+      <if test="isFavorite != null">
+        #{isFavorite,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.Interaction">
+    update t_community_interaction
+    <set>
+      <if test="postId != null">
+        post_id = #{postId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="isLike != null">
+        is_like = #{isLike,jdbcType=BIT},
+      </if>
+      <if test="isFavorite != null">
+        is_favorite = #{isFavorite,jdbcType=BIT},
+      </if>
+    </set>
+    where interaction_id = #{interactionId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.Interaction">
+    update t_community_interaction
+    set post_id = #{postId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      is_like = #{isLike,jdbcType=BIT},
+      is_favorite = #{isFavorite,jdbcType=BIT}
+    where interaction_id = #{interactionId,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.example.mtc.model.Interaction">
+    <id column="interaction_id" jdbcType="BIGINT" property="interactionId" />
+    <result column="post_id" jdbcType="BIGINT" property="postId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="is_like" jdbcType="BIT" property="isLike" />
+    <result column="is_favorite" jdbcType="BIT" property="isFavorite" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    interaction_id, post_id, user_id, is_like, is_favorite
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_community_interaction
+    where interaction_id = #{interactionId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_community_interaction
+    where interaction_id = #{interactionId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.mtc.model.Interaction">
+    <selectKey keyProperty="interactionId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_interaction (post_id, user_id, is_like, 
+      is_favorite)
+    values (#{postId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{isLike,jdbcType=BIT}, 
+      #{isFavorite,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.mtc.model.Interaction">
+    <selectKey keyProperty="interactionId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_interaction
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="postId != null">
+        post_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="isLike != null">
+        is_like,
+      </if>
+      <if test="isFavorite != null">
+        is_favorite,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="postId != null">
+        #{postId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="isLike != null">
+        #{isLike,jdbcType=BIT},
+      </if>
+      <if test="isFavorite != null">
+        #{isFavorite,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.Interaction">
+    update t_community_interaction
+    <set>
+      <if test="postId != null">
+        post_id = #{postId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="isLike != null">
+        is_like = #{isLike,jdbcType=BIT},
+      </if>
+      <if test="isFavorite != null">
+        is_favorite = #{isFavorite,jdbcType=BIT},
+      </if>
+    </set>
+    where interaction_id = #{interactionId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.Interaction">
+    update t_community_interaction
+    set post_id = #{postId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      is_like = #{isLike,jdbcType=BIT},
+      is_favorite = #{isFavorite,jdbcType=BIT}
+    where interaction_id = #{interactionId,jdbcType=BIGINT}
+  </update>
+</mapper>

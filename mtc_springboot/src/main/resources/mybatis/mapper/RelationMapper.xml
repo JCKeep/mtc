@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mtc.mapper.RelationMapper">
+  <resultMap id="BaseResultMap" type="com.example.mtc.model.Relation">
+    <id column="relation_id" jdbcType="BIGINT" property="relationId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="doctor_id" jdbcType="BIGINT" property="doctorId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    relation_id, user_id, doctor_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_community_relation
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_community_relation
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.mtc.model.Relation">
+    <selectKey keyProperty="relationId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_relation (user_id, doctor_id)
+    values (#{userId,jdbcType=BIGINT}, #{doctorId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.mtc.model.Relation">
+    <selectKey keyProperty="relationId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="doctorId != null">
+        doctor_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="doctorId != null">
+        #{doctorId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.Relation">
+    update t_community_relation
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="doctorId != null">
+        doctor_id = #{doctorId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.Relation">
+    update t_community_relation
+    set user_id = #{userId,jdbcType=BIGINT},
+      doctor_id = #{doctorId,jdbcType=BIGINT}
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.example.mtc.model.Relation">
+    <id column="relation_id" jdbcType="BIGINT" property="relationId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="doctor_id" jdbcType="BIGINT" property="doctorId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    relation_id, user_id, doctor_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_community_relation
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_community_relation
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.mtc.model.Relation">
+    <selectKey keyProperty="relationId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_relation (user_id, doctor_id)
+    values (#{userId,jdbcType=BIGINT}, #{doctorId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.mtc.model.Relation">
+    <selectKey keyProperty="relationId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="doctorId != null">
+        doctor_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="doctorId != null">
+        #{doctorId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.Relation">
+    update t_community_relation
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="doctorId != null">
+        doctor_id = #{doctorId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.Relation">
+    update t_community_relation
+    set user_id = #{userId,jdbcType=BIGINT},
+      doctor_id = #{doctorId,jdbcType=BIGINT}
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </update>
+</mapper>

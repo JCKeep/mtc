@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mtc.mapper.PostMapper">
+  <resultMap id="BaseResultMap" type="com.example.mtc.model.Post">
+    <id column="post_id" jdbcType="BIGINT" property="postId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="post_time" jdbcType="TIME" property="postTime" />
+    <result column="post_title" jdbcType="VARCHAR" property="postTitle" />
+    <result column="like_number" jdbcType="BIGINT" property="likeNumber" />
+    <result column="favorite_number" jdbcType="BIGINT" property="favoriteNumber" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.Post">
+    <result column="post_content" jdbcType="LONGVARCHAR" property="postContent" />
+    <result column="post_image" jdbcType="LONGVARBINARY" property="postImage" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    post_id, user_id, user_name, post_time, post_title, like_number, favorite_number
+  </sql>
+  <sql id="Blob_Column_List">
+    post_content, post_image
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_community_post
+    where post_id = #{postId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_community_post
+    where post_id = #{postId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.mtc.model.Post">
+    <selectKey keyProperty="postId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_post (user_id, user_name, post_time, 
+      post_title, like_number, favorite_number, 
+      post_content, post_image)
+    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{postTime,jdbcType=TIME}, 
+      #{postTitle,jdbcType=VARCHAR}, #{likeNumber,jdbcType=BIGINT}, #{favoriteNumber,jdbcType=BIGINT}, 
+      #{postContent,jdbcType=LONGVARCHAR}, #{postImage,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.mtc.model.Post">
+    <selectKey keyProperty="postId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_post
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="postTime != null">
+        post_time,
+      </if>
+      <if test="postTitle != null">
+        post_title,
+      </if>
+      <if test="likeNumber != null">
+        like_number,
+      </if>
+      <if test="favoriteNumber != null">
+        favorite_number,
+      </if>
+      <if test="postContent != null">
+        post_content,
+      </if>
+      <if test="postImage != null">
+        post_image,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="postTime != null">
+        #{postTime,jdbcType=TIME},
+      </if>
+      <if test="postTitle != null">
+        #{postTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="likeNumber != null">
+        #{likeNumber,jdbcType=BIGINT},
+      </if>
+      <if test="favoriteNumber != null">
+        #{favoriteNumber,jdbcType=BIGINT},
+      </if>
+      <if test="postContent != null">
+        #{postContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="postImage != null">
+        #{postImage,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.Post">
+    update t_community_post
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="postTime != null">
+        post_time = #{postTime,jdbcType=TIME},
+      </if>
+      <if test="postTitle != null">
+        post_title = #{postTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="likeNumber != null">
+        like_number = #{likeNumber,jdbcType=BIGINT},
+      </if>
+      <if test="favoriteNumber != null">
+        favorite_number = #{favoriteNumber,jdbcType=BIGINT},
+      </if>
+      <if test="postContent != null">
+        post_content = #{postContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="postImage != null">
+        post_image = #{postImage,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where post_id = #{postId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.mtc.model.Post">
+    update t_community_post
+    set user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      post_time = #{postTime,jdbcType=TIME},
+      post_title = #{postTitle,jdbcType=VARCHAR},
+      like_number = #{likeNumber,jdbcType=BIGINT},
+      favorite_number = #{favoriteNumber,jdbcType=BIGINT},
+      post_content = #{postContent,jdbcType=LONGVARCHAR},
+      post_image = #{postImage,jdbcType=LONGVARBINARY}
+    where post_id = #{postId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.Post">
+    update t_community_post
+    set user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      post_time = #{postTime,jdbcType=TIME},
+      post_title = #{postTitle,jdbcType=VARCHAR},
+      like_number = #{likeNumber,jdbcType=BIGINT},
+      favorite_number = #{favoriteNumber,jdbcType=BIGINT}
+    where post_id = #{postId,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.example.mtc.model.Post">
+    <id column="post_id" jdbcType="BIGINT" property="postId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="post_time" jdbcType="TIME" property="postTime" />
+    <result column="post_title" jdbcType="VARCHAR" property="postTitle" />
+    <result column="like_number" jdbcType="BIGINT" property="likeNumber" />
+    <result column="favorite_number" jdbcType="BIGINT" property="favoriteNumber" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.Post">
+    <result column="post_content" jdbcType="LONGVARCHAR" property="postContent" />
+    <result column="post_image" jdbcType="LONGVARBINARY" property="postImage" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    post_id, user_id, user_name, post_time, post_title, like_number, favorite_number
+  </sql>
+  <sql id="Blob_Column_List">
+    post_content, post_image
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_community_post
+    where post_id = #{postId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_community_post
+    where post_id = #{postId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.mtc.model.Post">
+    <selectKey keyProperty="postId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_post (user_id, user_name, post_time, 
+      post_title, like_number, favorite_number, 
+      post_content, post_image)
+    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{postTime,jdbcType=TIME}, 
+      #{postTitle,jdbcType=VARCHAR}, #{likeNumber,jdbcType=BIGINT}, #{favoriteNumber,jdbcType=BIGINT}, 
+      #{postContent,jdbcType=LONGVARCHAR}, #{postImage,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.mtc.model.Post">
+    <selectKey keyProperty="postId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_community_post
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="postTime != null">
+        post_time,
+      </if>
+      <if test="postTitle != null">
+        post_title,
+      </if>
+      <if test="likeNumber != null">
+        like_number,
+      </if>
+      <if test="favoriteNumber != null">
+        favorite_number,
+      </if>
+      <if test="postContent != null">
+        post_content,
+      </if>
+      <if test="postImage != null">
+        post_image,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="postTime != null">
+        #{postTime,jdbcType=TIME},
+      </if>
+      <if test="postTitle != null">
+        #{postTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="likeNumber != null">
+        #{likeNumber,jdbcType=BIGINT},
+      </if>
+      <if test="favoriteNumber != null">
+        #{favoriteNumber,jdbcType=BIGINT},
+      </if>
+      <if test="postContent != null">
+        #{postContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="postImage != null">
+        #{postImage,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.Post">
+    update t_community_post
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="postTime != null">
+        post_time = #{postTime,jdbcType=TIME},
+      </if>
+      <if test="postTitle != null">
+        post_title = #{postTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="likeNumber != null">
+        like_number = #{likeNumber,jdbcType=BIGINT},
+      </if>
+      <if test="favoriteNumber != null">
+        favorite_number = #{favoriteNumber,jdbcType=BIGINT},
+      </if>
+      <if test="postContent != null">
+        post_content = #{postContent,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="postImage != null">
+        post_image = #{postImage,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where post_id = #{postId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.mtc.model.Post">
+    update t_community_post
+    set user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      post_time = #{postTime,jdbcType=TIME},
+      post_title = #{postTitle,jdbcType=VARCHAR},
+      like_number = #{likeNumber,jdbcType=BIGINT},
+      favorite_number = #{favoriteNumber,jdbcType=BIGINT},
+      post_content = #{postContent,jdbcType=LONGVARCHAR},
+      post_image = #{postImage,jdbcType=LONGVARBINARY}
+    where post_id = #{postId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.Post">
+    update t_community_post
+    set user_id = #{userId,jdbcType=BIGINT},
+      user_name = #{userName,jdbcType=VARCHAR},
+      post_time = #{postTime,jdbcType=TIME},
+      post_title = #{postTitle,jdbcType=VARCHAR},
+      like_number = #{likeNumber,jdbcType=BIGINT},
+      favorite_number = #{favoriteNumber,jdbcType=BIGINT}
+    where post_id = #{postId,jdbcType=BIGINT}
+  </update>
+</mapper>

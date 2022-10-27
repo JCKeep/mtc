@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="Generator.properties"/>
+    <context id="MySqlcontext" targetRuntime="MyBatis3" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <commentGenerator type="com.example.mtc.util.MybatisCommentGenerator"/>
+        <jdbcConnection driverClass="${jdbc.driverClass}"
+                        connectionURL="${jdbc.connectionURL}"
+                        userId="${jdbc.userId}"
+                        password="${jdbc.password}">
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+        <javaModelGenerator targetPackage="com.example.mtc.model" targetProject="src/main/java"/>
+        <sqlMapGenerator targetPackage="mybatis.mapper" targetProject="src/main/resources"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.mtc.mapper"
+                             targetProject="src/main/java"/>
+        <table tableName="t_all_user" domainObjectName="User" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="user_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_background_administrator" domainObjectName="Admin" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="admin_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_personal_message" domainObjectName="Message" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="message_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_community_drug" domainObjectName="Drug" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="drug_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_community_food" domainObjectName="Food" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="food_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_community_doctorverify" domainObjectName="DoctorVerify" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="doctor_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_community_relation" domainObjectName="Relation" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="relation_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_community_chat" domainObjectName="Chat" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="chat_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_community_post" domainObjectName="Post" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="post_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_community_interaction" domainObjectName="Interaction" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="interaction_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_diet_record" domainObjectName="DietRecord" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="diet_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_health_medication" domainObjectName="HealthMedication" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="medication_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_health_record" domainObjectName="HealthRecord" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="health_record_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_health_suggest" domainObjectName="HealthSuggest" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="suggest_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_log_login" domainObjectName="loginLog" enableCountByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <generatedKey column="login_id" sqlStatement="MySql" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>

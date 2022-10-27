@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mtc.mapper.loginLogMapper">
+  <resultMap id="BaseResultMap" type="com.example.mtc.model.loginLog">
+    <id column="login_id" jdbcType="BIGINT" property="loginId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="login_time" jdbcType="TIME" property="loginTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    login_id, user_id, login_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_log_login
+    where login_id = #{loginId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_log_login
+    where login_id = #{loginId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.mtc.model.loginLog">
+    <selectKey keyProperty="loginId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_log_login (user_id, login_time)
+    values (#{userId,jdbcType=BIGINT}, #{loginTime,jdbcType=TIME})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.mtc.model.loginLog">
+    <selectKey keyProperty="loginId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_log_login
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="loginTime != null">
+        login_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=TIME},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.loginLog">
+    update t_log_login
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime,jdbcType=TIME},
+      </if>
+    </set>
+    where login_id = #{loginId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.loginLog">
+    update t_log_login
+    set user_id = #{userId,jdbcType=BIGINT},
+      login_time = #{loginTime,jdbcType=TIME}
+    where login_id = #{loginId,jdbcType=BIGINT}
+  </update>
+</mapper>
