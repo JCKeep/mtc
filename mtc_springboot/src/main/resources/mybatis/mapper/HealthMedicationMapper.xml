@@ -23,20 +23,19 @@
     where medication_id = #{medicationId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.HealthMedication">
-    <selectKey keyProperty="medicationId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_health_medication (user_id, drug_id, medication_date, 
-      medication_type, is_take)
-    values (#{userId,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT}, #{medicationDate,jdbcType=DATE}, 
-      #{medicationType,jdbcType=CHAR}, #{isTake,jdbcType=BIT})
+    insert into t_health_medication (medication_id, user_id, drug_id, 
+      medication_date, medication_type, is_take
+      )
+    values (#{medicationId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT}, 
+      #{medicationDate,jdbcType=DATE}, #{medicationType,jdbcType=CHAR}, #{isTake,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.HealthMedication">
-    <selectKey keyProperty="medicationId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into t_health_medication
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="medicationId != null">
+        medication_id,
+      </if>
       <if test="userId != null">
         user_id,
       </if>
@@ -54,106 +53,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
+      <if test="medicationId != null">
+        #{medicationId,jdbcType=BIGINT},
       </if>
-      <if test="drugId != null">
-        #{drugId,jdbcType=BIGINT},
-      </if>
-      <if test="medicationDate != null">
-        #{medicationDate,jdbcType=DATE},
-      </if>
-      <if test="medicationType != null">
-        #{medicationType,jdbcType=CHAR},
-      </if>
-      <if test="isTake != null">
-        #{isTake,jdbcType=BIT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.HealthMedication">
-    update t_health_medication
-    <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="drugId != null">
-        drug_id = #{drugId,jdbcType=BIGINT},
-      </if>
-      <if test="medicationDate != null">
-        medication_date = #{medicationDate,jdbcType=DATE},
-      </if>
-      <if test="medicationType != null">
-        medication_type = #{medicationType,jdbcType=CHAR},
-      </if>
-      <if test="isTake != null">
-        is_take = #{isTake,jdbcType=BIT},
-      </if>
-    </set>
-    where medication_id = #{medicationId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.HealthMedication">
-    update t_health_medication
-    set user_id = #{userId,jdbcType=BIGINT},
-      drug_id = #{drugId,jdbcType=BIGINT},
-      medication_date = #{medicationDate,jdbcType=DATE},
-      medication_type = #{medicationType,jdbcType=CHAR},
-      is_take = #{isTake,jdbcType=BIT}
-    where medication_id = #{medicationId,jdbcType=BIGINT}
-  </update>
-  <resultMap id="BaseResultMap" type="com.example.mtc.model.HealthMedication">
-    <id column="medication_id" jdbcType="BIGINT" property="medicationId" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="drug_id" jdbcType="BIGINT" property="drugId" />
-    <result column="medication_date" jdbcType="DATE" property="medicationDate" />
-    <result column="medication_type" jdbcType="CHAR" property="medicationType" />
-    <result column="is_take" jdbcType="BIT" property="isTake" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    medication_id, user_id, drug_id, medication_date, medication_type, is_take
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from t_health_medication
-    where medication_id = #{medicationId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_health_medication
-    where medication_id = #{medicationId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.example.mtc.model.HealthMedication">
-    <selectKey keyProperty="medicationId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_health_medication (user_id, drug_id, medication_date, 
-      medication_type, is_take)
-    values (#{userId,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT}, #{medicationDate,jdbcType=DATE}, 
-      #{medicationType,jdbcType=CHAR}, #{isTake,jdbcType=BIT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.example.mtc.model.HealthMedication">
-    <selectKey keyProperty="medicationId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_health_medication
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="drugId != null">
-        drug_id,
-      </if>
-      <if test="medicationDate != null">
-        medication_date,
-      </if>
-      <if test="medicationType != null">
-        medication_type,
-      </if>
-      <if test="isTake != null">
-        is_take,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
       </if>

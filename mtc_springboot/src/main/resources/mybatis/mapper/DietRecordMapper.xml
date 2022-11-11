@@ -22,20 +22,17 @@
     where diet_id = #{dietId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.DietRecord">
-    <selectKey keyProperty="dietId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_diet_record (food_id, user_id, diet_date, 
-      diet_type)
-    values (#{foodId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{dietDate,jdbcType=DATE}, 
-      #{dietType,jdbcType=CHAR})
+    insert into t_diet_record (diet_id, food_id, user_id, 
+      diet_date, diet_type)
+    values (#{dietId,jdbcType=BIGINT}, #{foodId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{dietDate,jdbcType=DATE}, #{dietType,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.DietRecord">
-    <selectKey keyProperty="dietId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into t_diet_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dietId != null">
+        diet_id,
+      </if>
       <if test="foodId != null">
         food_id,
       </if>
@@ -50,95 +47,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="foodId != null">
-        #{foodId,jdbcType=BIGINT},
+      <if test="dietId != null">
+        #{dietId,jdbcType=BIGINT},
       </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="dietDate != null">
-        #{dietDate,jdbcType=DATE},
-      </if>
-      <if test="dietType != null">
-        #{dietType,jdbcType=CHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.DietRecord">
-    update t_diet_record
-    <set>
-      <if test="foodId != null">
-        food_id = #{foodId,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="dietDate != null">
-        diet_date = #{dietDate,jdbcType=DATE},
-      </if>
-      <if test="dietType != null">
-        diet_type = #{dietType,jdbcType=CHAR},
-      </if>
-    </set>
-    where diet_id = #{dietId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.DietRecord">
-    update t_diet_record
-    set food_id = #{foodId,jdbcType=BIGINT},
-      user_id = #{userId,jdbcType=BIGINT},
-      diet_date = #{dietDate,jdbcType=DATE},
-      diet_type = #{dietType,jdbcType=CHAR}
-    where diet_id = #{dietId,jdbcType=BIGINT}
-  </update>
-  <resultMap id="BaseResultMap" type="com.example.mtc.model.DietRecord">
-    <id column="diet_id" jdbcType="BIGINT" property="dietId" />
-    <result column="food_id" jdbcType="BIGINT" property="foodId" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="diet_date" jdbcType="DATE" property="dietDate" />
-    <result column="diet_type" jdbcType="CHAR" property="dietType" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    diet_id, food_id, user_id, diet_date, diet_type
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from t_diet_record
-    where diet_id = #{dietId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_diet_record
-    where diet_id = #{dietId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.example.mtc.model.DietRecord">
-    <selectKey keyProperty="dietId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_diet_record (food_id, user_id, diet_date, 
-      diet_type)
-    values (#{foodId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{dietDate,jdbcType=DATE}, 
-      #{dietType,jdbcType=CHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.example.mtc.model.DietRecord">
-    <selectKey keyProperty="dietId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_diet_record
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="foodId != null">
-        food_id,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="dietDate != null">
-        diet_date,
-      </if>
-      <if test="dietType != null">
-        diet_type,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="foodId != null">
         #{foodId,jdbcType=BIGINT},
       </if>

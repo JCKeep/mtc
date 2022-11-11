@@ -1,7 +1,9 @@
 package com.example.mtc.mapper;
 
 import com.example.mtc.model.DoctorVerify;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface DoctorVerifyMapper {
     int deleteByPrimaryKey(Long doctorId);
 

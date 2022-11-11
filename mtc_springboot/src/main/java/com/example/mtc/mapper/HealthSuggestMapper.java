@@ -1,7 +1,9 @@
 package com.example.mtc.mapper;
 
 import com.example.mtc.model.HealthSuggest;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface HealthSuggestMapper {
     int deleteByPrimaryKey(Long suggestId);
 

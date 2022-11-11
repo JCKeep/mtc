@@ -28,20 +28,17 @@
     where suggest_id = #{suggestId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.HealthSuggest">
-    <selectKey keyProperty="suggestId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_health_suggest (health_data_type, health_data_range, suggest_content
-      )
-    values (#{healthDataType,jdbcType=CHAR}, #{healthDataRange,jdbcType=VARCHAR}, #{suggestContent,jdbcType=LONGVARCHAR}
-      )
+    insert into t_health_suggest (suggest_id, health_data_type, health_data_range, 
+      suggest_content)
+    values (#{suggestId,jdbcType=BIGINT}, #{healthDataType,jdbcType=CHAR}, #{healthDataRange,jdbcType=VARCHAR}, 
+      #{suggestContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.HealthSuggest">
-    <selectKey keyProperty="suggestId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into t_health_suggest
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="suggestId != null">
+        suggest_id,
+      </if>
       <if test="healthDataType != null">
         health_data_type,
       </if>
@@ -53,97 +50,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="healthDataType != null">
-        #{healthDataType,jdbcType=CHAR},
+      <if test="suggestId != null">
+        #{suggestId,jdbcType=BIGINT},
       </if>
-      <if test="healthDataRange != null">
-        #{healthDataRange,jdbcType=VARCHAR},
-      </if>
-      <if test="suggestContent != null">
-        #{suggestContent,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.HealthSuggest">
-    update t_health_suggest
-    <set>
-      <if test="healthDataType != null">
-        health_data_type = #{healthDataType,jdbcType=CHAR},
-      </if>
-      <if test="healthDataRange != null">
-        health_data_range = #{healthDataRange,jdbcType=VARCHAR},
-      </if>
-      <if test="suggestContent != null">
-        suggest_content = #{suggestContent,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where suggest_id = #{suggestId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.mtc.model.HealthSuggest">
-    update t_health_suggest
-    set health_data_type = #{healthDataType,jdbcType=CHAR},
-      health_data_range = #{healthDataRange,jdbcType=VARCHAR},
-      suggest_content = #{suggestContent,jdbcType=LONGVARCHAR}
-    where suggest_id = #{suggestId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.HealthSuggest">
-    update t_health_suggest
-    set health_data_type = #{healthDataType,jdbcType=CHAR},
-      health_data_range = #{healthDataRange,jdbcType=VARCHAR}
-    where suggest_id = #{suggestId,jdbcType=BIGINT}
-  </update>
-  <resultMap id="BaseResultMap" type="com.example.mtc.model.HealthSuggest">
-    <id column="suggest_id" jdbcType="BIGINT" property="suggestId" />
-    <result column="health_data_type" jdbcType="CHAR" property="healthDataType" />
-    <result column="health_data_range" jdbcType="VARCHAR" property="healthDataRange" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.HealthSuggest">
-    <result column="suggest_content" jdbcType="LONGVARCHAR" property="suggestContent" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    suggest_id, health_data_type, health_data_range
-  </sql>
-  <sql id="Blob_Column_List">
-    suggest_content
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_health_suggest
-    where suggest_id = #{suggestId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_health_suggest
-    where suggest_id = #{suggestId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.example.mtc.model.HealthSuggest">
-    <selectKey keyProperty="suggestId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_health_suggest (health_data_type, health_data_range, suggest_content
-      )
-    values (#{healthDataType,jdbcType=CHAR}, #{healthDataRange,jdbcType=VARCHAR}, #{suggestContent,jdbcType=LONGVARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.example.mtc.model.HealthSuggest">
-    <selectKey keyProperty="suggestId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_health_suggest
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="healthDataType != null">
-        health_data_type,
-      </if>
-      <if test="healthDataRange != null">
-        health_data_range,
-      </if>
-      <if test="suggestContent != null">
-        suggest_content,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="healthDataType != null">
         #{healthDataType,jdbcType=CHAR},
       </if>

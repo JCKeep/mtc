@@ -1,7 +1,9 @@
 package com.example.mtc.mapper;
 
 import com.example.mtc.model.DietRecord;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface DietRecordMapper {
     int deleteByPrimaryKey(Long dietId);
 

@@ -1,7 +1,9 @@
 package com.example.mtc.mapper;
 
 import com.example.mtc.model.Food;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface FoodMapper {
     int deleteByPrimaryKey(Long foodId);
 

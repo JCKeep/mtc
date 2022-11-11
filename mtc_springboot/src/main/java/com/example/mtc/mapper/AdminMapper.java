@@ -1,7 +1,9 @@
 package com.example.mtc.mapper;
 
 import com.example.mtc.model.Admin;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface AdminMapper {
     int deleteByPrimaryKey(Long adminId);
 

@@ -1,7 +1,9 @@
 package com.example.mtc.mapper;
 
 import com.example.mtc.model.loginLog;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface loginLogMapper {
     int deleteByPrimaryKey(Long loginId);
 

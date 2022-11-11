@@ -28,20 +28,17 @@
     where drug_id = #{drugId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.Drug">
-    <selectKey keyProperty="drugId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_community_drug (drug_name, drug_image, drug_detail
-      )
-    values (#{drugName,jdbcType=VARCHAR}, #{drugImage,jdbcType=LONGVARBINARY}, #{drugDetail,jdbcType=LONGVARCHAR}
-      )
+    insert into t_community_drug (drug_id, drug_name, drug_image, 
+      drug_detail)
+    values (#{drugId,jdbcType=BIGINT}, #{drugName,jdbcType=VARCHAR}, #{drugImage,jdbcType=LONGVARBINARY}, 
+      #{drugDetail,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.Drug">
-    <selectKey keyProperty="drugId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into t_community_drug
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="drugId != null">
+        drug_id,
+      </if>
       <if test="drugName != null">
         drug_name,
       </if>
@@ -53,96 +50,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="drugName != null">
-        #{drugName,jdbcType=VARCHAR},
+      <if test="drugId != null">
+        #{drugId,jdbcType=BIGINT},
       </if>
-      <if test="drugImage != null">
-        #{drugImage,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="drugDetail != null">
-        #{drugDetail,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.Drug">
-    update t_community_drug
-    <set>
-      <if test="drugName != null">
-        drug_name = #{drugName,jdbcType=VARCHAR},
-      </if>
-      <if test="drugImage != null">
-        drug_image = #{drugImage,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="drugDetail != null">
-        drug_detail = #{drugDetail,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where drug_id = #{drugId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.mtc.model.Drug">
-    update t_community_drug
-    set drug_name = #{drugName,jdbcType=VARCHAR},
-      drug_image = #{drugImage,jdbcType=LONGVARBINARY},
-      drug_detail = #{drugDetail,jdbcType=LONGVARCHAR}
-    where drug_id = #{drugId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.Drug">
-    update t_community_drug
-    set drug_name = #{drugName,jdbcType=VARCHAR}
-    where drug_id = #{drugId,jdbcType=BIGINT}
-  </update>
-  <resultMap id="BaseResultMap" type="com.example.mtc.model.Drug">
-    <id column="drug_id" jdbcType="BIGINT" property="drugId" />
-    <result column="drug_name" jdbcType="VARCHAR" property="drugName" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.Drug">
-    <result column="drug_image" jdbcType="LONGVARBINARY" property="drugImage" />
-    <result column="drug_detail" jdbcType="LONGVARCHAR" property="drugDetail" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    drug_id, drug_name
-  </sql>
-  <sql id="Blob_Column_List">
-    drug_image, drug_detail
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_community_drug
-    where drug_id = #{drugId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_community_drug
-    where drug_id = #{drugId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.example.mtc.model.Drug">
-    <selectKey keyProperty="drugId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_community_drug (drug_name, drug_image, drug_detail
-      )
-    values (#{drugName,jdbcType=VARCHAR}, #{drugImage,jdbcType=LONGVARBINARY}, #{drugDetail,jdbcType=LONGVARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.example.mtc.model.Drug">
-    <selectKey keyProperty="drugId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_community_drug
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="drugName != null">
-        drug_name,
-      </if>
-      <if test="drugImage != null">
-        drug_image,
-      </if>
-      <if test="drugDetail != null">
-        drug_detail,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="drugName != null">
         #{drugName,jdbcType=VARCHAR},
       </if>

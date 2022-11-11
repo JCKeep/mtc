@@ -1,7 +1,9 @@
 package com.example.mtc.mapper;
 
 import com.example.mtc.model.Message;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface MessageMapper {
     int deleteByPrimaryKey(Long messageId);
 

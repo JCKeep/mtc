@@ -29,20 +29,17 @@
     where chat_id = #{chatId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.Chat">
-    <selectKey keyProperty="chatId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_community_chat (relation_id, chat_time, chat_from, 
-      chat_content)
-    values (#{relationId,jdbcType=BIGINT}, #{chatTime,jdbcType=TIME}, #{chatFrom,jdbcType=CHAR}, 
-      #{chatContent,jdbcType=LONGVARCHAR})
+    insert into t_community_chat (chat_id, relation_id, chat_time, 
+      chat_from, chat_content)
+    values (#{chatId,jdbcType=BIGINT}, #{relationId,jdbcType=BIGINT}, #{chatTime,jdbcType=TIME}, 
+      #{chatFrom,jdbcType=CHAR}, #{chatContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.Chat">
-    <selectKey keyProperty="chatId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into t_community_chat
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="chatId != null">
+        chat_id,
+      </if>
       <if test="relationId != null">
         relation_id,
       </if>
@@ -57,109 +54,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="relationId != null">
-        #{relationId,jdbcType=BIGINT},
+      <if test="chatId != null">
+        #{chatId,jdbcType=BIGINT},
       </if>
-      <if test="chatTime != null">
-        #{chatTime,jdbcType=TIME},
-      </if>
-      <if test="chatFrom != null">
-        #{chatFrom,jdbcType=CHAR},
-      </if>
-      <if test="chatContent != null">
-        #{chatContent,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.Chat">
-    update t_community_chat
-    <set>
-      <if test="relationId != null">
-        relation_id = #{relationId,jdbcType=BIGINT},
-      </if>
-      <if test="chatTime != null">
-        chat_time = #{chatTime,jdbcType=TIME},
-      </if>
-      <if test="chatFrom != null">
-        chat_from = #{chatFrom,jdbcType=CHAR},
-      </if>
-      <if test="chatContent != null">
-        chat_content = #{chatContent,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where chat_id = #{chatId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.mtc.model.Chat">
-    update t_community_chat
-    set relation_id = #{relationId,jdbcType=BIGINT},
-      chat_time = #{chatTime,jdbcType=TIME},
-      chat_from = #{chatFrom,jdbcType=CHAR},
-      chat_content = #{chatContent,jdbcType=LONGVARCHAR}
-    where chat_id = #{chatId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.Chat">
-    update t_community_chat
-    set relation_id = #{relationId,jdbcType=BIGINT},
-      chat_time = #{chatTime,jdbcType=TIME},
-      chat_from = #{chatFrom,jdbcType=CHAR}
-    where chat_id = #{chatId,jdbcType=BIGINT}
-  </update>
-  <resultMap id="BaseResultMap" type="com.example.mtc.model.Chat">
-    <id column="chat_id" jdbcType="BIGINT" property="chatId" />
-    <result column="relation_id" jdbcType="BIGINT" property="relationId" />
-    <result column="chat_time" jdbcType="TIME" property="chatTime" />
-    <result column="chat_from" jdbcType="CHAR" property="chatFrom" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.Chat">
-    <result column="chat_content" jdbcType="LONGVARCHAR" property="chatContent" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    chat_id, relation_id, chat_time, chat_from
-  </sql>
-  <sql id="Blob_Column_List">
-    chat_content
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_community_chat
-    where chat_id = #{chatId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_community_chat
-    where chat_id = #{chatId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.example.mtc.model.Chat">
-    <selectKey keyProperty="chatId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_community_chat (relation_id, chat_time, chat_from, 
-      chat_content)
-    values (#{relationId,jdbcType=BIGINT}, #{chatTime,jdbcType=TIME}, #{chatFrom,jdbcType=CHAR}, 
-      #{chatContent,jdbcType=LONGVARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.example.mtc.model.Chat">
-    <selectKey keyProperty="chatId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_community_chat
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="relationId != null">
-        relation_id,
-      </if>
-      <if test="chatTime != null">
-        chat_time,
-      </if>
-      <if test="chatFrom != null">
-        chat_from,
-      </if>
-      <if test="chatContent != null">
-        chat_content,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="relationId != null">
         #{relationId,jdbcType=BIGINT},
       </if>

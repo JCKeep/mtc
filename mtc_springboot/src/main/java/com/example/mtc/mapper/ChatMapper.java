@@ -1,7 +1,9 @@
 package com.example.mtc.mapper;
 
 import com.example.mtc.model.Chat;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface ChatMapper {
     int deleteByPrimaryKey(Long chatId);
 

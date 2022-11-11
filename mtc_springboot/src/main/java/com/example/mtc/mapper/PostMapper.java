@@ -1,7 +1,9 @@
 package com.example.mtc.mapper;
 
 import com.example.mtc.model.Post;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface PostMapper {
     int deleteByPrimaryKey(Long postId);
 

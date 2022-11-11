@@ -27,24 +27,21 @@
     where health_record_id = #{healthRecordId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.HealthRecord">
-    <selectKey keyProperty="healthRecordId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_health_record (user_id, record_date, user_bloodsugar, 
-      user_low_bloodpressure, user_high_bloodpressure, 
+    insert into t_health_record (health_record_id, user_id, record_date, 
+      user_bloodsugar, user_low_bloodpressure, user_high_bloodpressure, 
       user_heartrate, user_weight, user_health_condition
       )
-    values (#{userId,jdbcType=BIGINT}, #{recordDate,jdbcType=DATE}, #{userBloodsugar,jdbcType=DECIMAL}, 
-      #{userLowBloodpressure,jdbcType=INTEGER}, #{userHighBloodpressure,jdbcType=INTEGER}, 
+    values (#{healthRecordId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{recordDate,jdbcType=DATE}, 
+      #{userBloodsugar,jdbcType=DECIMAL}, #{userLowBloodpressure,jdbcType=INTEGER}, #{userHighBloodpressure,jdbcType=INTEGER}, 
       #{userHeartrate,jdbcType=INTEGER}, #{userWeight,jdbcType=INTEGER}, #{userHealthCondition,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.HealthRecord">
-    <selectKey keyProperty="healthRecordId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into t_health_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="healthRecordId != null">
+        health_record_id,
+      </if>
       <if test="userId != null">
         user_id,
       </if>
@@ -71,144 +68,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
+      <if test="healthRecordId != null">
+        #{healthRecordId,jdbcType=BIGINT},
       </if>
-      <if test="recordDate != null">
-        #{recordDate,jdbcType=DATE},
-      </if>
-      <if test="userBloodsugar != null">
-        #{userBloodsugar,jdbcType=DECIMAL},
-      </if>
-      <if test="userLowBloodpressure != null">
-        #{userLowBloodpressure,jdbcType=INTEGER},
-      </if>
-      <if test="userHighBloodpressure != null">
-        #{userHighBloodpressure,jdbcType=INTEGER},
-      </if>
-      <if test="userHeartrate != null">
-        #{userHeartrate,jdbcType=INTEGER},
-      </if>
-      <if test="userWeight != null">
-        #{userWeight,jdbcType=INTEGER},
-      </if>
-      <if test="userHealthCondition != null">
-        #{userHealthCondition,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.HealthRecord">
-    update t_health_record
-    <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="recordDate != null">
-        record_date = #{recordDate,jdbcType=DATE},
-      </if>
-      <if test="userBloodsugar != null">
-        user_bloodsugar = #{userBloodsugar,jdbcType=DECIMAL},
-      </if>
-      <if test="userLowBloodpressure != null">
-        user_low_bloodpressure = #{userLowBloodpressure,jdbcType=INTEGER},
-      </if>
-      <if test="userHighBloodpressure != null">
-        user_high_bloodpressure = #{userHighBloodpressure,jdbcType=INTEGER},
-      </if>
-      <if test="userHeartrate != null">
-        user_heartrate = #{userHeartrate,jdbcType=INTEGER},
-      </if>
-      <if test="userWeight != null">
-        user_weight = #{userWeight,jdbcType=INTEGER},
-      </if>
-      <if test="userHealthCondition != null">
-        user_health_condition = #{userHealthCondition,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where health_record_id = #{healthRecordId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.HealthRecord">
-    update t_health_record
-    set user_id = #{userId,jdbcType=BIGINT},
-      record_date = #{recordDate,jdbcType=DATE},
-      user_bloodsugar = #{userBloodsugar,jdbcType=DECIMAL},
-      user_low_bloodpressure = #{userLowBloodpressure,jdbcType=INTEGER},
-      user_high_bloodpressure = #{userHighBloodpressure,jdbcType=INTEGER},
-      user_heartrate = #{userHeartrate,jdbcType=INTEGER},
-      user_weight = #{userWeight,jdbcType=INTEGER},
-      user_health_condition = #{userHealthCondition,jdbcType=VARCHAR}
-    where health_record_id = #{healthRecordId,jdbcType=BIGINT}
-  </update>
-  <resultMap id="BaseResultMap" type="com.example.mtc.model.HealthRecord">
-    <id column="health_record_id" jdbcType="BIGINT" property="healthRecordId" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="record_date" jdbcType="DATE" property="recordDate" />
-    <result column="user_bloodsugar" jdbcType="DECIMAL" property="userBloodsugar" />
-    <result column="user_low_bloodpressure" jdbcType="INTEGER" property="userLowBloodpressure" />
-    <result column="user_high_bloodpressure" jdbcType="INTEGER" property="userHighBloodpressure" />
-    <result column="user_heartrate" jdbcType="INTEGER" property="userHeartrate" />
-    <result column="user_weight" jdbcType="INTEGER" property="userWeight" />
-    <result column="user_health_condition" jdbcType="VARCHAR" property="userHealthCondition" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    health_record_id, user_id, record_date, user_bloodsugar, user_low_bloodpressure, 
-    user_high_bloodpressure, user_heartrate, user_weight, user_health_condition
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from t_health_record
-    where health_record_id = #{healthRecordId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_health_record
-    where health_record_id = #{healthRecordId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.example.mtc.model.HealthRecord">
-    <selectKey keyProperty="healthRecordId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_health_record (user_id, record_date, user_bloodsugar, 
-      user_low_bloodpressure, user_high_bloodpressure, 
-      user_heartrate, user_weight, user_health_condition
-      )
-    values (#{userId,jdbcType=BIGINT}, #{recordDate,jdbcType=DATE}, #{userBloodsugar,jdbcType=DECIMAL}, 
-      #{userLowBloodpressure,jdbcType=INTEGER}, #{userHighBloodpressure,jdbcType=INTEGER}, 
-      #{userHeartrate,jdbcType=INTEGER}, #{userWeight,jdbcType=INTEGER}, #{userHealthCondition,jdbcType=VARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.example.mtc.model.HealthRecord">
-    <selectKey keyProperty="healthRecordId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_health_record
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="recordDate != null">
-        record_date,
-      </if>
-      <if test="userBloodsugar != null">
-        user_bloodsugar,
-      </if>
-      <if test="userLowBloodpressure != null">
-        user_low_bloodpressure,
-      </if>
-      <if test="userHighBloodpressure != null">
-        user_high_bloodpressure,
-      </if>
-      <if test="userHeartrate != null">
-        user_heartrate,
-      </if>
-      <if test="userWeight != null">
-        user_weight,
-      </if>
-      <if test="userHealthCondition != null">
-        user_health_condition,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
       </if>
