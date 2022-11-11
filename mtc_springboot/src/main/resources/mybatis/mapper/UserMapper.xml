@@ -17,6 +17,7 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.User">
     <result column="user_portrait" jdbcType="LONGVARBINARY" property="userPortrait" />
   </resultMap>
+
   <sql id="Base_Column_List">
     user_id, user_name, user_email, user_sex, user_password, user_bloodtype, user_birthday, 
     user_height, user_type, user_permission, user_keyword
@@ -37,24 +38,23 @@
     where user_id = #{userId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.User">
-    <selectKey keyProperty="userId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_all_user (user_name, user_email, user_sex, 
-      user_password, user_bloodtype, user_birthday, 
-      user_height, user_type, user_permission, 
-      user_keyword, user_portrait)
-    values (#{userName,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, #{userSex,jdbcType=CHAR}, 
-      #{userPassword,jdbcType=VARCHAR}, #{userBloodtype,jdbcType=CHAR}, #{userBirthday,jdbcType=DATE}, 
-      #{userHeight,jdbcType=INTEGER}, #{userType,jdbcType=CHAR}, #{userPermission,jdbcType=VARCHAR}, 
-      #{userKeyword,jdbcType=VARCHAR}, #{userPortrait,jdbcType=LONGVARBINARY})
+    insert into t_all_user (user_id, user_name, user_email, 
+      user_sex, user_password, user_bloodtype, 
+      user_birthday, user_height, user_type, 
+      user_permission, user_keyword, user_portrait
+      )
+    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, 
+      #{userSex,jdbcType=CHAR}, #{userPassword,jdbcType=VARCHAR}, #{userBloodtype,jdbcType=CHAR}, 
+      #{userBirthday,jdbcType=DATE}, #{userHeight,jdbcType=INTEGER}, #{userType,jdbcType=CHAR}, 
+      #{userPermission,jdbcType=VARCHAR}, #{userKeyword,jdbcType=VARCHAR}, #{userPortrait,jdbcType=LONGVARBINARY}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.User">
-    <selectKey keyProperty="userId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into t_all_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
       <if test="userName != null">
         user_name,
       </if>
@@ -90,6 +90,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
       </if>
@@ -193,196 +196,19 @@
       user_keyword = #{userKeyword,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
-  <resultMap id="BaseResultMap" type="com.example.mtc.model.User">
-    <id column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
-    <result column="user_sex" jdbcType="CHAR" property="userSex" />
-    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
-    <result column="user_bloodtype" jdbcType="CHAR" property="userBloodtype" />
-    <result column="user_birthday" jdbcType="DATE" property="userBirthday" />
-    <result column="user_height" jdbcType="INTEGER" property="userHeight" />
-    <result column="user_type" jdbcType="CHAR" property="userType" />
-    <result column="user_permission" jdbcType="VARCHAR" property="userPermission" />
-    <result column="user_keyword" jdbcType="VARCHAR" property="userKeyword" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.User">
-    <result column="user_portrait" jdbcType="LONGVARBINARY" property="userPortrait" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    user_id, user_name, user_email, user_sex, user_password, user_bloodtype, user_birthday, 
-    user_height, user_type, user_permission, user_keyword
-  </sql>
-  <sql id="Blob_Column_List">
-    user_portrait
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
-    select 
+  <select id="selectAll" resultMap="ResultMapWithBLOBs">
+    select
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from t_all_user
-    where user_id = #{userId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_all_user
-    where user_id = #{userId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.example.mtc.model.User">
-    <selectKey keyProperty="userId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_all_user (user_name, user_email, user_sex, 
-      user_password, user_bloodtype, user_birthday, 
-      user_height, user_type, user_permission, 
-      user_keyword, user_portrait)
-    values (#{userName,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, #{userSex,jdbcType=CHAR}, 
-      #{userPassword,jdbcType=VARCHAR}, #{userBloodtype,jdbcType=CHAR}, #{userBirthday,jdbcType=DATE}, 
-      #{userHeight,jdbcType=INTEGER}, #{userType,jdbcType=CHAR}, #{userPermission,jdbcType=VARCHAR}, 
-      #{userKeyword,jdbcType=VARCHAR}, #{userPortrait,jdbcType=LONGVARBINARY})
-  </insert>
-  <insert id="insertSelective" parameterType="com.example.mtc.model.User">
-    <selectKey keyProperty="userId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_all_user
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userName != null">
-        user_name,
-      </if>
-      <if test="userEmail != null">
-        user_email,
-      </if>
-      <if test="userSex != null">
-        user_sex,
-      </if>
-      <if test="userPassword != null">
-        user_password,
-      </if>
-      <if test="userBloodtype != null">
-        user_bloodtype,
-      </if>
-      <if test="userBirthday != null">
-        user_birthday,
-      </if>
-      <if test="userHeight != null">
-        user_height,
-      </if>
-      <if test="userType != null">
-        user_type,
-      </if>
-      <if test="userPermission != null">
-        user_permission,
-      </if>
-      <if test="userKeyword != null">
-        user_keyword,
-      </if>
-      <if test="userPortrait != null">
-        user_portrait,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="userEmail != null">
-        #{userEmail,jdbcType=VARCHAR},
-      </if>
-      <if test="userSex != null">
-        #{userSex,jdbcType=CHAR},
-      </if>
-      <if test="userPassword != null">
-        #{userPassword,jdbcType=VARCHAR},
-      </if>
-      <if test="userBloodtype != null">
-        #{userBloodtype,jdbcType=CHAR},
-      </if>
-      <if test="userBirthday != null">
-        #{userBirthday,jdbcType=DATE},
-      </if>
-      <if test="userHeight != null">
-        #{userHeight,jdbcType=INTEGER},
-      </if>
-      <if test="userType != null">
-        #{userType,jdbcType=CHAR},
-      </if>
-      <if test="userPermission != null">
-        #{userPermission,jdbcType=VARCHAR},
-      </if>
-      <if test="userKeyword != null">
-        #{userKeyword,jdbcType=VARCHAR},
-      </if>
-      <if test="userPortrait != null">
-        #{userPortrait,jdbcType=LONGVARBINARY},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.User">
-    update t_all_user
-    <set>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="userEmail != null">
-        user_email = #{userEmail,jdbcType=VARCHAR},
-      </if>
-      <if test="userSex != null">
-        user_sex = #{userSex,jdbcType=CHAR},
-      </if>
-      <if test="userPassword != null">
-        user_password = #{userPassword,jdbcType=VARCHAR},
-      </if>
-      <if test="userBloodtype != null">
-        user_bloodtype = #{userBloodtype,jdbcType=CHAR},
-      </if>
-      <if test="userBirthday != null">
-        user_birthday = #{userBirthday,jdbcType=DATE},
-      </if>
-      <if test="userHeight != null">
-        user_height = #{userHeight,jdbcType=INTEGER},
-      </if>
-      <if test="userType != null">
-        user_type = #{userType,jdbcType=CHAR},
-      </if>
-      <if test="userPermission != null">
-        user_permission = #{userPermission,jdbcType=VARCHAR},
-      </if>
-      <if test="userKeyword != null">
-        user_keyword = #{userKeyword,jdbcType=VARCHAR},
-      </if>
-      <if test="userPortrait != null">
-        user_portrait = #{userPortrait,jdbcType=LONGVARBINARY},
-      </if>
-    </set>
-    where user_id = #{userId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.mtc.model.User">
-    update t_all_user
-    set user_name = #{userName,jdbcType=VARCHAR},
-      user_email = #{userEmail,jdbcType=VARCHAR},
-      user_sex = #{userSex,jdbcType=CHAR},
-      user_password = #{userPassword,jdbcType=VARCHAR},
-      user_bloodtype = #{userBloodtype,jdbcType=CHAR},
-      user_birthday = #{userBirthday,jdbcType=DATE},
-      user_height = #{userHeight,jdbcType=INTEGER},
-      user_type = #{userType,jdbcType=CHAR},
-      user_permission = #{userPermission,jdbcType=VARCHAR},
-      user_keyword = #{userKeyword,jdbcType=VARCHAR},
-      user_portrait = #{userPortrait,jdbcType=LONGVARBINARY}
-    where user_id = #{userId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.User">
-    update t_all_user
-    set user_name = #{userName,jdbcType=VARCHAR},
-      user_email = #{userEmail,jdbcType=VARCHAR},
-      user_sex = #{userSex,jdbcType=CHAR},
-      user_password = #{userPassword,jdbcType=VARCHAR},
-      user_bloodtype = #{userBloodtype,jdbcType=CHAR},
-      user_birthday = #{userBirthday,jdbcType=DATE},
-      user_height = #{userHeight,jdbcType=INTEGER},
-      user_type = #{userType,jdbcType=CHAR},
-      user_permission = #{userPermission,jdbcType=VARCHAR},
-      user_keyword = #{userKeyword,jdbcType=VARCHAR}
-    where user_id = #{userId,jdbcType=BIGINT}
-  </update>
+  <select id="selectByEmail" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_all_user
+    where user_email=#{email}
+  </select>
 </mapper>
