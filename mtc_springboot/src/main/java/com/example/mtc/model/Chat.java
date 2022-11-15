@@ -3,6 +3,7 @@ package com.example.mtc.model;
 import java.io.Serializable;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
 public class Chat implements Serializable {
   private Long chatId;
 
@@ -58,17 +59,15 @@ public class Chat implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(getClass().getSimpleName());
-    sb.append(" [");
-    sb.append("Hash = ").append(hashCode());
-    sb.append(", chatId=").append(chatId);
-    sb.append(", relationId=").append(relationId);
-    sb.append(", chatTime=").append(chatTime);
-    sb.append(", chatFrom=").append(chatFrom);
-    sb.append(", chatContent=").append(chatContent);
-    sb.append(", serialVersionUID=").append(serialVersionUID);
-    sb.append("]");
-    return sb.toString();
+    return getClass().getSimpleName() +
+            " [" +
+            "Hash = " + hashCode() +
+            ", chatId=" + chatId +
+            ", relationId=" + relationId +
+            ", chatTime=" + chatTime +
+            ", chatFrom=" + chatFrom +
+            ", chatContent=" + chatContent +
+            ", serialVersionUID=" + serialVersionUID +
+            "]";
   }
 }

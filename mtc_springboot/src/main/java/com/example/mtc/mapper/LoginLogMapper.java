@@ -4,6 +4,7 @@ import com.example.mtc.model.LoginLog;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
+@SuppressWarnings("ALL")
 public interface LoginLogMapper {
   int deleteByPrimaryKey(Long loginId);
 

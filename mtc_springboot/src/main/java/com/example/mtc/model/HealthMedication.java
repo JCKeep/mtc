@@ -3,6 +3,7 @@ package com.example.mtc.model;
 import java.io.Serializable;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
 public class HealthMedication implements Serializable {
   private Long medicationId;
 
@@ -68,18 +69,16 @@ public class HealthMedication implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(getClass().getSimpleName());
-    sb.append(" [");
-    sb.append("Hash = ").append(hashCode());
-    sb.append(", medicationId=").append(medicationId);
-    sb.append(", userId=").append(userId);
-    sb.append(", drugId=").append(drugId);
-    sb.append(", medicationDate=").append(medicationDate);
-    sb.append(", medicationType=").append(medicationType);
-    sb.append(", isTake=").append(isTake);
-    sb.append(", serialVersionUID=").append(serialVersionUID);
-    sb.append("]");
-    return sb.toString();
+    return getClass().getSimpleName() +
+            " [" +
+            "Hash = " + hashCode() +
+            ", medicationId=" + medicationId +
+            ", userId=" + userId +
+            ", drugId=" + drugId +
+            ", medicationDate=" + medicationDate +
+            ", medicationType=" + medicationType +
+            ", isTake=" + isTake +
+            ", serialVersionUID=" + serialVersionUID +
+            "]";
   }
 }

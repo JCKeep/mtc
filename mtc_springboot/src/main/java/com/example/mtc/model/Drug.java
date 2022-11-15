@@ -2,6 +2,7 @@ package com.example.mtc.model;
 
 import java.io.Serializable;
 
+@SuppressWarnings("ALL")
 public class Drug implements Serializable {
   private Long drugId;
 
@@ -47,16 +48,14 @@ public class Drug implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(getClass().getSimpleName());
-    sb.append(" [");
-    sb.append("Hash = ").append(hashCode());
-    sb.append(", drugId=").append(drugId);
-    sb.append(", drugName=").append(drugName);
-    sb.append(", drugImage=").append(drugImage);
-    sb.append(", drugDetail=").append(drugDetail);
-    sb.append(", serialVersionUID=").append(serialVersionUID);
-    sb.append("]");
-    return sb.toString();
+    return getClass().getSimpleName() +
+            " [" +
+            "Hash = " + hashCode() +
+            ", drugId=" + drugId +
+            ", drugName=" + drugName +
+            ", drugImage=" + String.valueOf(drugImage) +
+            ", drugDetail=" + drugDetail +
+            ", serialVersionUID=" + serialVersionUID +
+            "]";
   }
 }

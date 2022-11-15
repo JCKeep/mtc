@@ -4,6 +4,7 @@ import com.example.mtc.model.HealthRecord;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
+@SuppressWarnings("ALL")
 public interface HealthRecordMapper {
   int deleteByPrimaryKey(Long healthRecordId);
 

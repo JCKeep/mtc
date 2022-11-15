@@ -3,6 +3,7 @@ package com.example.mtc.model;
 import java.io.Serializable;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
 public class LoginLog implements Serializable {
   private Long loginId;
 
@@ -38,15 +39,13 @@ public class LoginLog implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(getClass().getSimpleName());
-    sb.append(" [");
-    sb.append("Hash = ").append(hashCode());
-    sb.append(", loginId=").append(loginId);
-    sb.append(", userId=").append(userId);
-    sb.append(", loginTime=").append(loginTime);
-    sb.append(", serialVersionUID=").append(serialVersionUID);
-    sb.append("]");
-    return sb.toString();
+    return getClass().getSimpleName() +
+            " [" +
+            "Hash = " + hashCode() +
+            ", loginId=" + loginId +
+            ", userId=" + userId +
+            ", loginTime=" + loginTime +
+            ", serialVersionUID=" + serialVersionUID +
+            "]";
   }
 }

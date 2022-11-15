@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
 public class HealthRecord implements Serializable {
   private Long healthRecordId;
 
@@ -99,21 +100,19 @@ public class HealthRecord implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(getClass().getSimpleName());
-    sb.append(" [");
-    sb.append("Hash = ").append(hashCode());
-    sb.append(", healthRecordId=").append(healthRecordId);
-    sb.append(", userId=").append(userId);
-    sb.append(", recordDate=").append(recordDate);
-    sb.append(", userBloodsugar=").append(userBloodsugar);
-    sb.append(", userLowBloodpressure=").append(userLowBloodpressure);
-    sb.append(", userHighBloodpressure=").append(userHighBloodpressure);
-    sb.append(", userHeartrate=").append(userHeartrate);
-    sb.append(", userWeight=").append(userWeight);
-    sb.append(", userHealthCondition=").append(userHealthCondition);
-    sb.append(", serialVersionUID=").append(serialVersionUID);
-    sb.append("]");
-    return sb.toString();
+    return getClass().getSimpleName() +
+            " [" +
+            "Hash = " + hashCode() +
+            ", healthRecordId=" + healthRecordId +
+            ", userId=" + userId +
+            ", recordDate=" + recordDate +
+            ", userBloodsugar=" + userBloodsugar +
+            ", userLowBloodpressure=" + userLowBloodpressure +
+            ", userHighBloodpressure=" + userHighBloodpressure +
+            ", userHeartrate=" + userHeartrate +
+            ", userWeight=" + userWeight +
+            ", userHealthCondition=" + userHealthCondition +
+            ", serialVersionUID=" + serialVersionUID +
+            "]";
   }
 }

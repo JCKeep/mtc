@@ -2,6 +2,7 @@ package com.example.mtc.model;
 
 import java.io.Serializable;
 
+@SuppressWarnings("ALL")
 public class DoctorVerify implements Serializable {
   private Long doctorId;
 
@@ -77,19 +78,17 @@ public class DoctorVerify implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(getClass().getSimpleName());
-    sb.append(" [");
-    sb.append("Hash = ").append(hashCode());
-    sb.append(", doctorId=").append(doctorId);
-    sb.append(", userId=").append(userId);
-    sb.append(", doctorIdnumber=").append(doctorIdnumber);
-    sb.append(", doctorHospital=").append(doctorHospital);
-    sb.append(", verifyState=").append(verifyState);
-    sb.append(", adminId=").append(adminId);
-    sb.append(", doctorQualification=").append(doctorQualification);
-    sb.append(", serialVersionUID=").append(serialVersionUID);
-    sb.append("]");
-    return sb.toString();
+    return getClass().getSimpleName() +
+            " [" +
+            "Hash = " + hashCode() +
+            ", doctorId=" + doctorId +
+            ", userId=" + userId +
+            ", doctorIdnumber=" + doctorIdnumber +
+            ", doctorHospital=" + doctorHospital +
+            ", verifyState=" + verifyState +
+            ", adminId=" + adminId +
+            ", doctorQualification=" + String.valueOf(doctorQualification) +
+            ", serialVersionUID=" + serialVersionUID +
+            "]";
   }
 }

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+@SuppressWarnings("ALL")
 @Mapper
 public interface UserMapper {
   int deleteByPrimaryKey(Long userId);

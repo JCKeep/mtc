@@ -10,6 +10,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/mtc/user")
+@SuppressWarnings("ALL")
 public class UserController {
   @Autowired
   private UserService userService;

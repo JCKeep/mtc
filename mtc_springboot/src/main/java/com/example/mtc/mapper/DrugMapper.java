@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
+@SuppressWarnings("ALL")
 public interface DrugMapper {
   int deleteByPrimaryKey(Long drugId);
 

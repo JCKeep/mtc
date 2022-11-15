@@ -1,8 +1,10 @@
 package com.example.mtc.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
 public class Post implements Serializable {
   private Long postId;
 
@@ -98,21 +100,19 @@ public class Post implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(getClass().getSimpleName());
-    sb.append(" [");
-    sb.append("Hash = ").append(hashCode());
-    sb.append(", postId=").append(postId);
-    sb.append(", userId=").append(userId);
-    sb.append(", userName=").append(userName);
-    sb.append(", postTime=").append(postTime);
-    sb.append(", postTitle=").append(postTitle);
-    sb.append(", likeNumber=").append(likeNumber);
-    sb.append(", favoriteNumber=").append(favoriteNumber);
-    sb.append(", postContent=").append(postContent);
-    sb.append(", postImage=").append(postImage);
-    sb.append(", serialVersionUID=").append(serialVersionUID);
-    sb.append("]");
-    return sb.toString();
+    return getClass().getSimpleName() +
+            " [" +
+            "Hash = " + hashCode() +
+            ", postId=" + postId +
+            ", userId=" + userId +
+            ", userName=" + userName +
+            ", postTime=" + postTime +
+            ", postTitle=" + postTitle +
+            ", likeNumber=" + likeNumber +
+            ", favoriteNumber=" + favoriteNumber +
+            ", postContent=" + postContent +
+            ", postImage=" + Arrays.toString(postImage) +
+            ", serialVersionUID=" + serialVersionUID +
+            "]";
   }
 }

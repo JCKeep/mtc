@@ -3,6 +3,7 @@ package com.example.mtc.model;
 import java.io.Serializable;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
 public class User implements Serializable {
   private Long userId;
 
@@ -128,24 +129,22 @@ public class User implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(getClass().getSimpleName());
-    sb.append(" [");
-    sb.append("Hash = ").append(hashCode());
-    sb.append(", userId=").append(userId);
-    sb.append(", userName=").append(userName);
-    sb.append(", userEmail=").append(userEmail);
-    sb.append(", userSex=").append(userSex);
-    sb.append(", userPassword=").append(userPassword);
-    sb.append(", userBloodtype=").append(userBloodtype);
-    sb.append(", userBirthday=").append(userBirthday);
-    sb.append(", userHeight=").append(userHeight);
-    sb.append(", userType=").append(userType);
-    sb.append(", userPermission=").append(userPermission);
-    sb.append(", userKeyword=").append(userKeyword);
-    sb.append(", userPortrait=").append(userPortrait);
-    sb.append(", serialVersionUID=").append(serialVersionUID);
-    sb.append("]");
-    return sb.toString();
+    return getClass().getSimpleName() +
+            " [" +
+            "Hash = " + hashCode() +
+            ", userId=" + userId +
+            ", userName=" + userName +
+            ", userEmail=" + userEmail +
+            ", userSex=" + userSex +
+            ", userPassword=" + userPassword +
+            ", userBloodtype=" + userBloodtype +
+            ", userBirthday=" + userBirthday +
+            ", userHeight=" + userHeight +
+            ", userType=" + userType +
+            ", userPermission=" + userPermission +
+            ", userKeyword=" + userKeyword +
+            ", userPortrait=" + String.valueOf(userPortrait) +
+            ", serialVersionUID=" + serialVersionUID +
+            "]";
   }
 }

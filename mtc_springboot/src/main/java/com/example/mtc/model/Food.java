@@ -2,6 +2,7 @@ package com.example.mtc.model;
 
 import java.io.Serializable;
 
+@SuppressWarnings("ALL")
 public class Food implements Serializable {
   private Long foodId;
 
@@ -87,20 +88,18 @@ public class Food implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(getClass().getSimpleName());
-    sb.append(" [");
-    sb.append("Hash = ").append(hashCode());
-    sb.append(", foodId=").append(foodId);
-    sb.append(", foodName=").append(foodName);
-    sb.append(", foodSuger=").append(foodSuger);
-    sb.append(", foodProtein=").append(foodProtein);
-    sb.append(", foodFat=").append(foodFat);
-    sb.append(", foodEnergy=").append(foodEnergy);
-    sb.append(", foodImage=").append(foodImage);
-    sb.append(", foodIntroduction=").append(foodIntroduction);
-    sb.append(", serialVersionUID=").append(serialVersionUID);
-    sb.append("]");
-    return sb.toString();
+    return getClass().getSimpleName() +
+            " [" +
+            "Hash = " + hashCode() +
+            ", foodId=" + foodId +
+            ", foodName=" + foodName +
+            ", foodSuger=" + foodSuger +
+            ", foodProtein=" + foodProtein +
+            ", foodFat=" + foodFat +
+            ", foodEnergy=" + foodEnergy +
+            ", foodImage=" + String.valueOf(foodImage) +
+            ", foodIntroduction=" + foodIntroduction +
+            ", serialVersionUID=" + serialVersionUID +
+            "]";
   }
 }

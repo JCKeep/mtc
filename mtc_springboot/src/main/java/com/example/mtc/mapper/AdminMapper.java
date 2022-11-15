@@ -4,6 +4,7 @@ import com.example.mtc.model.Admin;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
+@SuppressWarnings("ALL")
 public interface AdminMapper {
   int deleteByPrimaryKey(Long adminId);
 

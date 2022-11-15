@@ -4,6 +4,7 @@ import com.example.mtc.model.DietRecord;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
+@SuppressWarnings("ALL")
 public interface DietRecordMapper {
   int deleteByPrimaryKey(Long dietId);
 

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
+@SuppressWarnings("ALL")
 public interface FoodMapper {
   int deleteByPrimaryKey(Long foodId);
 

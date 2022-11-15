@@ -3,6 +3,7 @@ package com.example.mtc.mapper;
 import com.example.mtc.model.Relation;
 import org.apache.ibatis.annotations.Mapper;
 
+@SuppressWarnings("ALL")
 @Mapper
 public interface RelationMapper {
   int deleteByPrimaryKey(Long relationId);

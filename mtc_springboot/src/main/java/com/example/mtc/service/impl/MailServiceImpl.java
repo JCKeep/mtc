@@ -6,7 +6,9 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+
 @Service
+@SuppressWarnings("ALL")
 public class MailServiceImpl implements MailService {
   @Autowired
   private MailSender mailSender;

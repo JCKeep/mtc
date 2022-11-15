@@ -4,6 +4,7 @@ import com.example.mtc.model.Chat;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
+@SuppressWarnings("ALL")
 public interface ChatMapper {
   int deleteByPrimaryKey(Long chatId);
 

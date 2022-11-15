@@ -17,6 +17,7 @@ import java.util.Random;
 
 @Slf4j
 @Service
+@SuppressWarnings("ALL")
 public class UserServiceImpl implements UserService {
   static ConcurrentHashMap<String, String> m = new ConcurrentHashMap<>();
   static Random random = new Random();

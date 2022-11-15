@@ -4,6 +4,7 @@ import com.example.mtc.model.DoctorVerify;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
+@SuppressWarnings("ALL")
 public interface DoctorVerifyMapper {
   int deleteByPrimaryKey(Long doctorId);
 
