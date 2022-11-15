@@ -91,4 +91,41 @@
     set drug_name = #{drugName,jdbcType=VARCHAR}
     where drug_id = #{drugId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectInRangeWithNull" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    null, null
+    from t_community_drug
+    where drug_id between #{left,jdbcType=BIGINT} and #{right,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectInRange" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List"/>
+    from t_community_drug
+    where drug_id between #{left,jdbcType=BIGINT} and #{right,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByNameWithNull" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    null, null
+    from t_community_drug
+    where drug_name = #{drug_name,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByName" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List"/>
+    from t_community_drug
+    where drug_name = #{drug_name,jdbcType=VARCHAR}
+  </select>
+
 </mapper>

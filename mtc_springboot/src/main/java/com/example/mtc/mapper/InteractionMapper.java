@@ -5,15 +5,15 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface InteractionMapper {
-    int deleteByPrimaryKey(Long interactionId);
+  int deleteByPrimaryKey(Long interactionId);
 
-    int insert(Interaction record);
+  int insert(Interaction record);
 
-    int insertSelective(Interaction record);
+  int insertSelective(Interaction record);
 
-    Interaction selectByPrimaryKey(Long interactionId);
+  Interaction selectByPrimaryKey(Long interactionId);
 
-    int updateByPrimaryKeySelective(Interaction record);
+  int updateByPrimaryKeySelective(Interaction record);
 
-    int updateByPrimaryKey(Interaction record);
+  int updateByPrimaryKey(Interaction record);
 }

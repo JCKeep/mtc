@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.mtc.mapper.loginLogMapper">
-  <resultMap id="BaseResultMap" type="com.example.mtc.model.loginLog">
+<mapper namespace="com.example.mtc.mapper.LoginLogMapper">
+  <resultMap id="BaseResultMap" type="com.example.mtc.model.LoginLog">
     <id column="login_id" jdbcType="BIGINT" property="loginId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="login_time" jdbcType="TIME" property="loginTime" />
@@ -19,13 +19,13 @@
     delete from t_log_login
     where login_id = #{loginId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.example.mtc.model.loginLog">
+  <insert id="insert" parameterType="com.example.mtc.model.LoginLog">
     insert into t_log_login (login_id, user_id, login_time
       )
     values (#{loginId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{loginTime,jdbcType=TIME}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.example.mtc.model.loginLog">
+  <insert id="insertSelective" parameterType="com.example.mtc.model.LoginLog">
     insert into t_log_login
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="loginId != null">
@@ -50,7 +50,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.loginLog">
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.LoginLog">
     update t_log_login
     <set>
       <if test="userId != null">
@@ -62,7 +62,7 @@
     </set>
     where login_id = #{loginId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.loginLog">
+  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.LoginLog">
     update t_log_login
     set user_id = #{userId,jdbcType=BIGINT},
       login_time = #{loginTime,jdbcType=TIME}

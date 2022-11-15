@@ -1,22 +1,23 @@
 package com.example.mtc.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
-public class Relation implements Serializable {
-  private Long relationId;
+public class LoginLog implements Serializable {
+  private Long loginId;
 
   private Long userId;
 
-  private Long doctorId;
+  private Date loginTime;
 
   private static final long serialVersionUID = 1L;
 
-  public Long getRelationId() {
-    return relationId;
+  public Long getLoginId() {
+    return loginId;
   }
 
-  public void setRelationId(Long relationId) {
-    this.relationId = relationId;
+  public void setLoginId(Long loginId) {
+    this.loginId = loginId;
   }
 
   public Long getUserId() {
@@ -27,12 +28,12 @@ public class Relation implements Serializable {
     this.userId = userId;
   }
 
-  public Long getDoctorId() {
-    return doctorId;
+  public Date getLoginTime() {
+    return loginTime;
   }
 
-  public void setDoctorId(Long doctorId) {
-    this.doctorId = doctorId;
+  public void setLoginTime(Date loginTime) {
+    this.loginTime = loginTime;
   }
 
   @Override
@@ -41,9 +42,9 @@ public class Relation implements Serializable {
     sb.append(getClass().getSimpleName());
     sb.append(" [");
     sb.append("Hash = ").append(hashCode());
-    sb.append(", relationId=").append(relationId);
+    sb.append(", loginId=").append(loginId);
     sb.append(", userId=").append(userId);
-    sb.append(", doctorId=").append(doctorId);
+    sb.append(", loginTime=").append(loginTime);
     sb.append(", serialVersionUID=").append(serialVersionUID);
     sb.append("]");
     return sb.toString();

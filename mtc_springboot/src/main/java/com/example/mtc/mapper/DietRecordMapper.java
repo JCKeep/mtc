@@ -5,15 +5,15 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface DietRecordMapper {
-    int deleteByPrimaryKey(Long dietId);
+  int deleteByPrimaryKey(Long dietId);
 
-    int insert(DietRecord record);
+  int insert(DietRecord record);
 
-    int insertSelective(DietRecord record);
+  int insertSelective(DietRecord record);
 
-    DietRecord selectByPrimaryKey(Long dietId);
+  DietRecord selectByPrimaryKey(Long dietId);
 
-    int updateByPrimaryKeySelective(DietRecord record);
+  int updateByPrimaryKeySelective(DietRecord record);
 
-    int updateByPrimaryKey(DietRecord record);
+  int updateByPrimaryKey(DietRecord record);
 }

@@ -13,15 +13,15 @@ public class UserMapperTest {
   @Autowired
   private UserMapper userMapper;
 
-  @Test
-  void insertTest() {
-    User user = new User();
-    user.setUserName("jckeep");
-    user.setUserEmail("240701837@qq.com");
-
-    userMapper.insertSelective(user);
-
-    userMapper.selectAll().forEach(System.out::println);
-    System.out.println(userMapper.selectByEmail(user.getUserEmail()));
-  }
+//  @Test
+//  void insertTest() {
+//    User user = new User();
+//    user.setUserName("jckeep");
+//    user.setUserEmail("240701837@qq.com");
+//
+//    userMapper.insertSelective(user);
+//
+//    userMapper.selectAll().forEach(System.out::println);
+//    System.out.println(userMapper.selectByEmail(user.getUserEmail()));
+//  }
 }

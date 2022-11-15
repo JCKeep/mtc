@@ -5,15 +5,15 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface HealthRecordMapper {
-    int deleteByPrimaryKey(Long healthRecordId);
+  int deleteByPrimaryKey(Long healthRecordId);
 
-    int insert(HealthRecord record);
+  int insert(HealthRecord record);
 
-    int insertSelective(HealthRecord record);
+  int insertSelective(HealthRecord record);
 
-    HealthRecord selectByPrimaryKey(Long healthRecordId);
+  HealthRecord selectByPrimaryKey(Long healthRecordId);
 
-    int updateByPrimaryKeySelective(HealthRecord record);
+  int updateByPrimaryKeySelective(HealthRecord record);
 
-    int updateByPrimaryKey(HealthRecord record);
+  int updateByPrimaryKey(HealthRecord record);
 }

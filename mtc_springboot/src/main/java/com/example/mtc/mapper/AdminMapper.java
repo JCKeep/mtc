@@ -5,15 +5,15 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AdminMapper {
-    int deleteByPrimaryKey(Long adminId);
+  int deleteByPrimaryKey(Long adminId);
 
-    int insert(Admin record);
+  int insert(Admin record);
 
-    int insertSelective(Admin record);
+  int insertSelective(Admin record);
 
-    Admin selectByPrimaryKey(Long adminId);
+  Admin selectByPrimaryKey(Long adminId);
 
-    int updateByPrimaryKeySelective(Admin record);
+  int updateByPrimaryKeySelective(Admin record);
 
-    int updateByPrimaryKey(Admin record);
+  int updateByPrimaryKey(Admin record);
 }

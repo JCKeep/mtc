@@ -141,4 +141,41 @@
       food_energy = #{foodEnergy,jdbcType=REAL}
     where food_id = #{foodId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectInRangeWithNull" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    null, null
+    from t_community_food
+    where food_id between #{left,jdbcType=BIGINT} and #{right,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectInRange" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List"/>
+    from t_community_food
+    where food_id between #{left,jdbcType=BIGINT} and #{right,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByNameWithNull" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    null, null
+    from t_community_food
+    where food_name = #{food_name,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByName" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List"/>
+    from t_community_food
+    where food_name = #{food_name,jdbcType=VARCHAR}
+  </select>
+
 </mapper>

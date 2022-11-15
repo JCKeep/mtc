@@ -5,17 +5,17 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface HealthSuggestMapper {
-    int deleteByPrimaryKey(Long suggestId);
+  int deleteByPrimaryKey(Long suggestId);
 
-    int insert(HealthSuggest record);
+  int insert(HealthSuggest record);
 
-    int insertSelective(HealthSuggest record);
+  int insertSelective(HealthSuggest record);
 
-    HealthSuggest selectByPrimaryKey(Long suggestId);
+  HealthSuggest selectByPrimaryKey(Long suggestId);
 
-    int updateByPrimaryKeySelective(HealthSuggest record);
+  int updateByPrimaryKeySelective(HealthSuggest record);
 
-    int updateByPrimaryKeyWithBLOBs(HealthSuggest record);
+  int updateByPrimaryKeyWithBLOBs(HealthSuggest record);
 
-    int updateByPrimaryKey(HealthSuggest record);
+  int updateByPrimaryKey(HealthSuggest record);
 }

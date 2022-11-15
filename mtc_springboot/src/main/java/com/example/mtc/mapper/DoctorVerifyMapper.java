@@ -5,17 +5,17 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface DoctorVerifyMapper {
-    int deleteByPrimaryKey(Long doctorId);
+  int deleteByPrimaryKey(Long doctorId);
 
-    int insert(DoctorVerify record);
+  int insert(DoctorVerify record);
 
-    int insertSelective(DoctorVerify record);
+  int insertSelective(DoctorVerify record);
 
-    DoctorVerify selectByPrimaryKey(Long doctorId);
+  DoctorVerify selectByPrimaryKey(Long doctorId);
 
-    int updateByPrimaryKeySelective(DoctorVerify record);
+  int updateByPrimaryKeySelective(DoctorVerify record);
 
-    int updateByPrimaryKeyWithBLOBs(DoctorVerify record);
+  int updateByPrimaryKeyWithBLOBs(DoctorVerify record);
 
-    int updateByPrimaryKey(DoctorVerify record);
+  int updateByPrimaryKey(DoctorVerify record);
 }

@@ -5,17 +5,17 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ChatMapper {
-    int deleteByPrimaryKey(Long chatId);
+  int deleteByPrimaryKey(Long chatId);
 
-    int insert(Chat record);
+  int insert(Chat record);
 
-    int insertSelective(Chat record);
+  int insertSelective(Chat record);
 
-    Chat selectByPrimaryKey(Long chatId);
+  Chat selectByPrimaryKey(Long chatId);
 
-    int updateByPrimaryKeySelective(Chat record);
+  int updateByPrimaryKeySelective(Chat record);
 
-    int updateByPrimaryKeyWithBLOBs(Chat record);
+  int updateByPrimaryKeyWithBLOBs(Chat record);
 
-    int updateByPrimaryKey(Chat record);
+  int updateByPrimaryKey(Chat record);
 }

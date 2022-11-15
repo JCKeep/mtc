@@ -9,17 +9,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class DemoApplicationTests {
-	@Autowired
-	private AdminMapper adminMapper;
-	@Autowired
-	private MailService mailService;
-
-	@Test
-	void contextLoads() {
-	}
-
-	@Test
-	void mailTest() {
-		mailService.sendMail("2407018371@qq.com", "2407018371@qq.com", "test", "test");
-	}
+//	@Autowired
+//	private AdminMapper adminMapper;
+//	@Autowired
+//	private MailService mailService;
+//
+//	@Test
+//	void contextLoads() {
+//	}
+//
+//	@Test
+//	void mailTest() {
+//		mailService.sendMail("2407018371@qq.com", "2407018371@qq.com", "test", "test");
+//	}
 }

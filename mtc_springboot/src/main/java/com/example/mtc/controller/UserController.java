@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/mtc/user")
 public class UserController {
   @Autowired
   private UserService userService;
@@ -26,6 +27,7 @@ public class UserController {
   @ResponseBody
   public ResponseEntity<Boolean> register(@RequestBody Map<String, Object> json) {
     User user = new User();
+    user.setUserName((String) json.get("name"));
     user.setUserEmail((String) json.get("email"));
     user.setUserPassword((String) json.get("passwd"));
     return ResponseEntity.ok(userService.register(user, (String) json.get("code")));
