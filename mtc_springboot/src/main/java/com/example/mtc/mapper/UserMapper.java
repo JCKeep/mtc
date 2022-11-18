@@ -25,4 +25,5 @@ public interface UserMapper {
   List<User> selectAll();
 
   User selectByEmail(String email);
+  User selectByEmailWithNull(String email);
 }

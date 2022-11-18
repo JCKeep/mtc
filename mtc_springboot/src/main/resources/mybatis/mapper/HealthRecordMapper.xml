@@ -139,4 +139,55 @@
       user_health_condition = #{userHealthCondition,jdbcType=VARCHAR}
     where health_record_id = #{healthRecordId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_health_record
+    where user_id = #{userId,jdbcType=BIGINT}
+    <if test="start != null and end != null">
+      and record_date between #{start,jdbcType=DATE} and #{end,jdbcType=DATE}
+    </if>
+  </select>
+  
+  <delete id="deleteByUserId">
+    delete
+    from t_health_record
+    where user_id = #{userId,jdbcType=BIGINT}
+    <if test="start != null and end != null">
+      and record_date between #{start,jdbcType=DATE} and #{end,jdbcType=DATE}
+    </if>
+  </delete>
+
+  <update id="updateByUserIdSelective" parameterType="com.example.mtc.model.HealthRecord">
+    update t_health_record
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="recordDate != null">
+        record_date = #{recordDate,jdbcType=DATE},
+      </if>
+      <if test="userBloodsugar != null">
+        user_bloodsugar = #{userBloodsugar,jdbcType=DECIMAL},
+      </if>
+      <if test="userLowBloodpressure != null">
+        user_low_bloodpressure = #{userLowBloodpressure,jdbcType=INTEGER},
+      </if>
+      <if test="userHighBloodpressure != null">
+        user_high_bloodpressure = #{userHighBloodpressure,jdbcType=INTEGER},
+      </if>
+      <if test="userHeartrate != null">
+        user_heartrate = #{userHeartrate,jdbcType=INTEGER},
+      </if>
+      <if test="userWeight != null">
+        user_weight = #{userWeight,jdbcType=INTEGER},
+      </if>
+      <if test="userHealthCondition != null">
+        user_health_condition = #{userHealthCondition,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
 </mapper>

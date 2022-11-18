@@ -211,4 +211,13 @@
     from t_all_user
     where user_email=#{email}
   </select>
+
+  <select id="selectByEmailWithNull" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    user_id, null,
+    null, null, null, null, null,
+    null, null, null, null, null
+    from t_all_user
+    where user_email=#{email}
+  </select>
 </mapper>

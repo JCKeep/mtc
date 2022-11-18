@@ -73,4 +73,19 @@ public class UserServiceImpl implements UserService {
     mailService.sendMail("jckeep@foxmail.com", user.getUserEmail(), "Code", code);
     return code;
   }
+
+  @Override
+  public User getUserByEmailWithNull(String email) {
+    return userMapper.selectByEmailWithNull(email);
+  }
+
+  @Override
+  public User getUserByEmail(String email) {
+    return userMapper.selectByEmail(email);
+  }
+
+  @Override
+  public void updateUser(User user) {
+    userMapper.updateByPrimaryKeySelective(user);
+  }
 }

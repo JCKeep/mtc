@@ -1,9 +1,14 @@
 package com.example.mtc.model;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @SuppressWarnings("ALL")
 public class HealthRecord implements Serializable {
   private Long healthRecordId;

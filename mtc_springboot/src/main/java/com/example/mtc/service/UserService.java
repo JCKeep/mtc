@@ -8,4 +8,7 @@ public interface UserService {
   boolean login(User user);
   boolean register(User user, String code);
   String verifyCode(User user);
+  User getUserByEmailWithNull(String email);
+  User getUserByEmail(String email);
+  void updateUser(User user);
 }

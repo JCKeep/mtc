@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mtc.mapper.HealthMedicationMapper">
   <resultMap id="BaseResultMap" type="com.example.mtc.model.HealthMedication">
-    <id column="medication_id" jdbcType="BIGINT" property="medicationId" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="drug_id" jdbcType="BIGINT" property="drugId" />
-    <result column="medication_date" jdbcType="DATE" property="medicationDate" />
-    <result column="medication_type" jdbcType="CHAR" property="medicationType" />
-    <result column="is_take" jdbcType="BIT" property="isTake" />
+    <id column="medication_id" jdbcType="BIGINT" property="medicationId"/>
+    <result column="user_id" jdbcType="BIGINT" property="userId"/>
+    <result column="drug_id" jdbcType="BIGINT" property="drugId"/>
+    <result column="medication_date" jdbcType="DATE" property="medicationDate"/>
+    <result column="medication_type" jdbcType="CHAR" property="medicationType"/>
+    <result column="is_take" jdbcType="BIT" property="isTake"/>
   </resultMap>
   <sql id="Base_Column_List">
     medication_id, user_id, drug_id, medication_date, medication_type, is_take
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+    select
+    <include refid="Base_Column_List"/>
     from t_health_medication
     where medication_id = #{medicationId,jdbcType=BIGINT}
   </select>
@@ -23,12 +23,12 @@
     where medication_id = #{medicationId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.HealthMedication">
-    insert into t_health_medication (medication_id, user_id, drug_id, 
-      medication_date, medication_type, is_take
-      )
-    values (#{medicationId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT}, 
-      #{medicationDate,jdbcType=DATE}, #{medicationType,jdbcType=CHAR}, #{isTake,jdbcType=BIT}
-      )
+    insert into t_health_medication (medication_id, user_id, drug_id,
+    medication_date, medication_type, is_take
+    )
+    values (#{medicationId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{drugId,jdbcType=BIGINT},
+    #{medicationDate,jdbcType=DATE}, #{medicationType,jdbcType=CHAR}, #{isTake,jdbcType=BIT}
+    )
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.HealthMedication">
     insert into t_health_medication
@@ -97,10 +97,59 @@
   <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.HealthMedication">
     update t_health_medication
     set user_id = #{userId,jdbcType=BIGINT},
-      drug_id = #{drugId,jdbcType=BIGINT},
-      medication_date = #{medicationDate,jdbcType=DATE},
-      medication_type = #{medicationType,jdbcType=CHAR},
-      is_take = #{isTake,jdbcType=BIT}
+    drug_id = #{drugId,jdbcType=BIGINT},
+    medication_date = #{medicationDate,jdbcType=DATE},
+    medication_type = #{medicationType,jdbcType=CHAR},
+    is_take = #{isTake,jdbcType=BIT}
     where medication_id = #{medicationId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_health_medication
+    where user_id = #{userId,jdbcType=BIGINT}
+    <if test="start != null and end != null">
+      and medication_date between #{start,jdbcType=DATE} and #{end,jdbcType=DATE}
+    </if>
+    <if test="type != null">
+      and medication_type = #{type,jdbcType=CHAR}
+    </if>
+  </select>
+
+  <update id="updateByUserIdAndDateSelective" parameterType="com.example.mtc.model.HealthMedication">
+    update t_health_medication
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="drugId != null">
+        drug_id = #{drugId,jdbcType=BIGINT},
+      </if>
+      <if test="medicationDate != null">
+        medication_date = #{medicationDate,jdbcType=DATE},
+      </if>
+      <if test="medicationType != null">
+        medication_type = #{medicationType,jdbcType=CHAR},
+      </if>
+      <if test="isTake != null">
+        is_take = #{isTake,jdbcType=BIT},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+    and medication_date = #{medicationDate,jdbcType=DATE}
+    and medication_type = #{medicationType,jdbcType=CHAR}
+  </update>
+
+  <delete id="deleteByUserId">
+    delete from t_health_medication
+    where user_id = #{userId,jdbcType=BIGINT}
+    <if test="start != null and end != null">
+      and medication_date between #{start,jdbcType=DATE} and #{end,jdbcType=DATE}
+    </if>
+    <if test="type != null">
+      and medication_type = #{type,jdbcType=CHAR}
+    </if>
+  </delete>
+
 </mapper>

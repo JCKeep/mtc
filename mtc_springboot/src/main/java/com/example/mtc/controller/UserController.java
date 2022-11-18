@@ -2,6 +2,7 @@ package com.example.mtc.controller;
 
 import com.example.mtc.model.User;
 import com.example.mtc.service.UserService;
+import com.example.mtc.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,5 +41,13 @@ public class UserController {
     User user = new User();
     user.setUserEmail(email);
     return ResponseEntity.ok(userService.verifyCode(user));
+  }
+
+  @GetMapping("getuserinfo")
+  public JsonResult<User> getUser(@RequestParam("email") String email) {
+    User user = userService.getUserByEmail(email);
+    user.setUserId(null);
+    user.setUserPassword(null);
+    return JsonResult.success(user);
   }
 }
