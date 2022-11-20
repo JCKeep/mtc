@@ -21,7 +21,7 @@ public class CommunityController {
   @Autowired
   private CommunityService communityService;
 
-  @GetMapping("/food")
+  @PostMapping("/getFood")
   @ResponseBody
   public JsonResult<List<Food>> food(@RequestBody HashMap<String, Object> body) {
     Boolean op = (Boolean) body.get("option");
@@ -40,7 +40,7 @@ public class CommunityController {
     }
   }
 
-  @GetMapping("/drug")
+  @PostMapping("/getDrug")
   @ResponseBody
   public JsonResult<List<Drug>> drug(@RequestBody HashMap<String, Object> body) {
     Boolean op = (Boolean) body.get("option");

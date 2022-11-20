@@ -48,13 +48,13 @@ public class MedicationController {
     public Boolean isTake;
   }
 
-  @GetMapping("/medication")
+  @PostMapping("/getMedication")
   public JsonResult<List<HealthMedication>> get(@RequestBody MedicationRecordPeroid peroid) {
     return JsonResult.success(medicationService.get(userService.getUserByEmailWithNull(peroid.email).getUserId(),
             peroid.start, peroid.end, peroid.type));
   }
 
-  @PostMapping("/medication")
+  @PostMapping("/addMedication")
   public JsonResult<Integer> add(@RequestBody MedicationRecord record) {
     HealthMedication medication = new HealthMedication();
     medication.setMedicationDate(record.date);
@@ -66,7 +66,7 @@ public class MedicationController {
     return JsonResult.success();
   }
 
-  @PutMapping("/medication")
+  @PostMapping("/updateMedication")
   public JsonResult<Integer> update(@RequestBody MedicationRecord record) {
     HealthMedication medication = new HealthMedication();
     medication.setMedicationDate(record.date);
@@ -78,7 +78,7 @@ public class MedicationController {
     return JsonResult.success();
   }
 
-  @DeleteMapping("/medication")
+  @PostMapping("/deleteMedication")
   public JsonResult<Integer> delete(@RequestBody MedicationRecordPeroid peroid) {
     medicationService.delete(userService.getUserByEmailWithNull(peroid.email).getUserId(),
             peroid.start, peroid.end, peroid.type);

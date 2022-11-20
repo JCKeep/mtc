@@ -149,7 +149,7 @@ public class DietController {
     return JsonResult.success(userInfo);
   }
 
-  @GetMapping("/dietInf")
+  @PostMapping("/dietInf")
   public JsonResult<DietInfo> dietInformation(@RequestBody DietInfoRequest request) {
     List<DietRecord> diets = dietService.getByUserIdAndDate(Long.valueOf(request.userId), request.date, request.date);
     DietInfo info = new DietInfo(0.0F, 0.0F, 0.0F, 0.0F);
@@ -168,7 +168,7 @@ public class DietController {
     return JsonResult.success(info);
   }
 
-  @PostMapping("/record")
+  @PostMapping("/addRecord")
   public JsonResult<Integer> add(@RequestBody DietRequest dietRequest) {
     DietRecord record = new DietRecord();
     if (dietRequest.foodId == null || dietRequest.foodId == 0) {
@@ -186,7 +186,7 @@ public class DietController {
     return JsonResult.success();
   }
 
-  @GetMapping("/record")
+  @PostMapping("/getRecord")
   public JsonResult<List<DietDetails_t>> get(@RequestBody DietInfoRequest request) {
     List<DietRecord> diets = dietService.getByUserIdAndDate(Long.valueOf(request.userId), request.date, request.date);
     List<DietDetails_t> diets_t = new ArrayList<>();
@@ -200,13 +200,13 @@ public class DietController {
     return JsonResult.success(diets_t);
   }
 
-  @DeleteMapping("/record")
+  @GetMapping("/deleteRecord")
   public JsonResult<Integer> delete(@RequestParam("dietId") Long id) {
     dietService.delete(id);
     return JsonResult.success();
   }
 
-  @PutMapping("/record")
+  @PostMapping("/updateRecord")
   public JsonResult<Integer> update(@RequestBody DietRequest_t dietRequest) {
     DietRecord record = new DietRecord();
     record.setDietId(dietRequest.dietId);

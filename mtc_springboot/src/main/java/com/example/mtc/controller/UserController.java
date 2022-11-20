@@ -3,14 +3,16 @@ package com.example.mtc.controller;
 import com.example.mtc.model.User;
 import com.example.mtc.service.UserService;
 import com.example.mtc.util.JsonResult;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/mtc/user")
@@ -18,6 +20,24 @@ import java.util.Map;
 public class UserController {
   @Autowired
   private UserService userService;
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  private static class UserInfo {
+    public Long userId;
+    public String email;
+    public String name;
+    public String photo;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  private static class UserKeywordRequest {
+    public String email;
+    public List<String> keywords;
+  }
 
   @GetMapping("/login")
   @ResponseBody
@@ -27,6 +47,22 @@ public class UserController {
     user.setUserEmail(email);
     user.setUserPassword(passwd);
     return ResponseEntity.ok(userService.login(user));
+  }
+
+  @GetMapping("/loginWithUserId")
+  public JsonResult<UserInfo> long2(@RequestParam(name = "email") String email,
+                                @RequestParam(name = "passwd") String passwd) {
+    User user = new User();
+    user.setUserEmail(email);
+    user.setUserPassword(passwd);
+    Boolean b = userService.login(user);
+    if (b) {
+      User user1 = userService.getUserByEmail(email);
+      UserInfo userInfo = new UserInfo(user1.getUserId(), email, user1.getUserName(), user.getUserPortrait());
+      return JsonResult.success(userInfo);
+    } else {
+      return JsonResult.failure();
+    }
   }
 
   @PostMapping("update")
@@ -63,27 +99,58 @@ public class UserController {
   @GetMapping("/getuserinfo")
   public JsonResult<User> getUser(@RequestParam("email") String email) {
     User user = userService.getUserByEmail(email);
-    user.setUserId(null);
     user.setUserPassword(null);
     return JsonResult.success(user);
   }
 
+  @GetMapping("/keywords")
+  public JsonResult<Set<String>> getKeywords(@RequestParam("email") String email) {
+    User u = userService.getUserByEmail(email);
+    Set<String> keywords = new HashSet<>();
+    for (String word : u.getUserKeyword().split(",")) {
+      keywords.add(word);
+    }
+    return JsonResult.success(keywords);
+  }
+
+  @PostMapping("/keywords")
+  public JsonResult<Integer> addKeywords(@RequestBody UserKeywordRequest request) {
+    User user = userService.getUserByEmail(request.email);
+    Set<String> keywords = new HashSet<>();
+    for (String word : user.getUserKeyword().split(",")) {
+      keywords.add(word);
+    }
+    for (String word : request.keywords) {
+      keywords.add(word);
+    }
+    StringBuilder word = new StringBuilder();
+    int count = 0;
+    for (String w : keywords) {
+      if (count > 0) {
+        word.append(",");
+      }
+      word.append(w);
+      count += 1;
+    }
+    user.setUserKeyword(word.toString());
+    userService.updateUser(user);
+    return JsonResult.success();
+  }
+
   @PostMapping("/upload")
-  public JsonResult<Integer> upload(@RequestBody List<MultipartFile> files, @RequestParam("email") String email) {
-    User u = userService.getUserByEmailWithNull(email);
+  public JsonResult<Integer> upload(@RequestBody List<MultipartFile> files) {
     for (var now : files) {
       if (now.isEmpty()) {
         continue;
       }
       String fileName = now.getOriginalFilename();
       System.out.println(fileName);
-      File dest = new File("/usr/local/nginx/static/file", u.getUserId() + "-" + fileName);
+      File dest = new File("/usr/local/nginx/static/file", fileName);
       if (dest.exists()) {
         return JsonResult.failure();
       }
       try {
         now.transferTo(dest);
-        u.setUserPortrait("http://114.132.226.110/file/" + u.getUserId() + "-" + fileName);
       } catch (Exception e) {
         e.printStackTrace();
         return JsonResult.failure();

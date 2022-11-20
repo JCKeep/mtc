@@ -80,7 +80,7 @@ public class HealthController {
     return JsonResult.success();
   }
 
-  @GetMapping("/record")
+  @PostMapping("/getRecord")
   public JsonResult<List<HealthRecord>> getHealthData(@RequestBody HealthRecordPeriod tmp) {
     return JsonResult.success(healthDataService.getHealthData(userService.getUserByEmailWithNull(tmp.email).getUserId(),
             tmp.start, tmp.end));
@@ -91,7 +91,7 @@ public class HealthController {
     return JsonResult.success(70 + Math.abs(random.nextInt() % 31));
   }
 
-  @PostMapping("record")
+  @PostMapping("addRecord")
   public JsonResult<Integer> postHealthData(@RequestBody HealthRecordItem item) {
     Long userId = userService.getUserByEmailWithNull(item.email).getUserId();
 
@@ -101,7 +101,7 @@ public class HealthController {
     return JsonResult.success();
   }
 
-  @DeleteMapping("record")
+  @PostMapping("deleteRecord")
   public JsonResult<Integer> deleteHealthData(@RequestBody HealthRecordPeriod healthRecordPeriod) {
     healthDataService.deleteHealthData(userService.getUserByEmailWithNull(healthRecordPeriod.email).getUserId(),
             healthRecordPeriod.start, healthRecordPeriod.end);
@@ -127,7 +127,7 @@ public class HealthController {
     return JsonResult.success();
   }
 
-  @GetMapping(value = "export")
+  @PostMapping(value = "export")
   public JsonResult<String> exportHealthData(@RequestBody HealthRecordPeriod period) {
     Long id = userService.getUserByEmailWithNull(period.email).getUserId();
     List<HealthRecord> d = healthDataService.getHealthData(id,
