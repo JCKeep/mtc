@@ -6,7 +6,7 @@
     <result column="drug_name" jdbcType="VARCHAR" property="drugName" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.Drug">
-    <result column="drug_image" jdbcType="LONGVARBINARY" property="drugImage" />
+    <result column="drug_image" jdbcType="VARCHAR" property="drugImage" />
     <result column="drug_detail" jdbcType="LONGVARCHAR" property="drugDetail" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -30,7 +30,7 @@
   <insert id="insert" parameterType="com.example.mtc.model.Drug">
     insert into t_community_drug (drug_id, drug_name, drug_image, 
       drug_detail)
-    values (#{drugId,jdbcType=BIGINT}, #{drugName,jdbcType=VARCHAR}, #{drugImage,jdbcType=LONGVARBINARY}, 
+    values (#{drugId,jdbcType=BIGINT}, #{drugName,jdbcType=VARCHAR}, #{drugImage,jdbcType=VARCHAR},
       #{drugDetail,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.Drug">
@@ -57,7 +57,7 @@
         #{drugName,jdbcType=VARCHAR},
       </if>
       <if test="drugImage != null">
-        #{drugImage,jdbcType=LONGVARBINARY},
+        #{drugImage,jdbcType=VARCHAR},
       </if>
       <if test="drugDetail != null">
         #{drugDetail,jdbcType=LONGVARCHAR},
@@ -71,7 +71,7 @@
         drug_name = #{drugName,jdbcType=VARCHAR},
       </if>
       <if test="drugImage != null">
-        drug_image = #{drugImage,jdbcType=LONGVARBINARY},
+        drug_image = #{drugImage,jdbcType=VARCHAR},
       </if>
       <if test="drugDetail != null">
         drug_detail = #{drugDetail,jdbcType=LONGVARCHAR},
@@ -82,7 +82,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.mtc.model.Drug">
     update t_community_drug
     set drug_name = #{drugName,jdbcType=VARCHAR},
-      drug_image = #{drugImage,jdbcType=LONGVARBINARY},
+      drug_image = #{drugImage,jdbcType=VARCHAR},
       drug_detail = #{drugDetail,jdbcType=LONGVARCHAR}
     where drug_id = #{drugId,jdbcType=BIGINT}
   </update>

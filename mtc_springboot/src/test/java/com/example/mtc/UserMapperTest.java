@@ -10,18 +10,18 @@ import java.util.Date;
 
 @SpringBootTest
 public class UserMapperTest {
-  @Autowired
-  private UserMapper userMapper;
-
-  @Test
-  void insertTest() {
-    User user = new User();
-    user.setUserName("jckeep");
-    user.setUserEmail("769721625@qq.com");
-
-//    userMapper.insertSelective(user);
-
-//    userMapper.selectAll().forEach(System.out::println);
-    System.out.println(userMapper.selectByEmailWithNull(user.getUserEmail()));
-  }
+//  @Autowired
+//  private UserMapper userMapper;
+//
+//  @Test
+//  void insertTest() {
+//    User user = new User();
+//    user.setUserName("jckeep");
+//    user.setUserEmail("769721625@qq.com");
+//
+////    userMapper.insertSelective(user);
+//
+////    userMapper.selectAll().forEach(System.out::println);
+//    System.out.println(userMapper.selectByEmailWithNull(user.getUserEmail()));
+//  }
 }

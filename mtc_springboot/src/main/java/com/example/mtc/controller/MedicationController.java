@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/mtc")
 @SuppressWarnings("ALL")
-public class MedicationAndDietController {
+public class MedicationController {
   @Autowired
   private HealthMedicationService medicationService;
   @Autowired

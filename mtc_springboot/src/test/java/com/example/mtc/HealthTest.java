@@ -10,14 +10,14 @@ import java.util.Date;
 
 @SpringBootTest
 public class HealthTest {
-  @Autowired
-  private HealthRecordMapper healthRecordMapper;
-
-  @Test
-  void test() {
-    Date date = new Date(2022 - 1900, Calendar.NOVEMBER, 17);
-    Date date1 = new Date(2022 - 1900, Calendar.NOVEMBER, 17);
-    System.out.println(date);
-    System.out.println(healthRecordMapper.selectByUserId(1L, date, date1));
-  }
+//  @Autowired
+//  private HealthRecordMapper healthRecordMapper;
+//
+//  @Test
+//  void test() {
+//    Date date = new Date(2022 - 1900, Calendar.NOVEMBER, 17);
+//    Date date1 = new Date(2022 - 1900, Calendar.NOVEMBER, 17);
+//    System.out.println(date);
+//    System.out.println(healthRecordMapper.selectByUserId(1L, date, date1));
+//  }
 }

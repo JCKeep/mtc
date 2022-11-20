@@ -27,7 +27,7 @@ public class User implements Serializable {
 
   private String userKeyword;
 
-  private byte[] userPortrait;
+  private String userPortrait;
 
   private static final long serialVersionUID = 1L;
 
@@ -119,11 +119,11 @@ public class User implements Serializable {
     this.userKeyword = userKeyword;
   }
 
-  public byte[] getUserPortrait() {
+  public String getUserPortrait() {
     return userPortrait;
   }
 
-  public void setUserPortrait(byte[] userPortrait) {
+  public void setUserPortrait(String userPortrait) {
     this.userPortrait = userPortrait;
   }
 

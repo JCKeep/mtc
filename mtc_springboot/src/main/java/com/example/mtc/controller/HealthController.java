@@ -12,7 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -106,7 +110,7 @@ public class HealthController {
 
   @GetMapping("base")
   public JsonResult<BasicHealthData> getBasicHealthData(@RequestParam("email") String email) {
-    User user = userService.getUserByEmailWithNull(email);
+    User user = userService.getUserByEmail(email);
     return JsonResult.success(new BasicHealthData(null, user.getUserSex(),
             user.getUserBloodtype(), user.getUserBirthday(), user.getUserHeight()));
   }
@@ -123,11 +127,13 @@ public class HealthController {
     return JsonResult.success();
   }
 
-  @GetMapping(value = "export", produces = "text/csv")
-  public String exportHealthData(@RequestBody HealthRecordPeriod period) {
-    List<HealthRecord> d = healthDataService.getHealthData(userService.getUserByEmailWithNull(period.email).getUserId(),
+  @GetMapping(value = "export")
+  public JsonResult<String> exportHealthData(@RequestBody HealthRecordPeriod period) {
+    Long id = userService.getUserByEmailWithNull(period.email).getUserId();
+    List<HealthRecord> d = healthDataService.getHealthData(id,
             period.start, period.end);
-    StringBuilder stringBuilder = new StringBuilder("日期,血糖,舒张压,收缩压,心率,体重,健康指数\n");
+    StringBuilder stringBuilder =
+            new StringBuilder("Date,BloodSugar,LowPressure,HighPressure,HeartRate,Weight,HealthRate\n");
     for (HealthRecord item : d) {
       stringBuilder.append(item.getRecordDate().toString());
       stringBuilder.append(',');
@@ -164,7 +170,20 @@ public class HealthController {
       stringBuilder.append(70 + Math.abs(random.nextInt() % 31));
       stringBuilder.append('\n');
     }
-    System.out.println(stringBuilder);
-    return stringBuilder.toString();
+    String dir1 = "/usr/local/nginx/static/file/";
+    String dir = "C:\\Users\\jckeep\\Desktop\\";
+    String filename = dir1 + id + ".csv";
+    File file = new File(filename);
+    try {
+      file.createNewFile();
+      FileOutputStream outputStream = new FileOutputStream(file, false);
+      outputStream.write(stringBuilder.toString().getBytes(StandardCharsets.UTF_8));
+      outputStream.close();
+      System.out.println(stringBuilder);
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new RuntimeException(e);
+    }
+    return JsonResult.success("http://114.132.226.110/file/" + id + ".csv");
   }
 }

@@ -90,4 +90,14 @@
       diet_type = #{dietType,jdbcType=CHAR}
     where diet_id = #{dietId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByUserIdAndDate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_diet_record
+    where user_id = #{userId,jdbcType=BIGINT}
+    <if test="start != null and end != null">
+      and diet_date between #{start,jdbcType=DATE} and #{end,jdbcType=DATE}
+    </if>
+  </select>
 </mapper>

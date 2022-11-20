@@ -15,7 +15,7 @@
     <result column="user_keyword" jdbcType="VARCHAR" property="userKeyword"/>
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.User">
-    <result column="user_portrait" jdbcType="LONGVARBINARY" property="userPortrait"/>
+    <result column="user_portrait" jdbcType="VARCHAR" property="userPortrait"/>
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -46,7 +46,7 @@
     values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR},
     #{userSex,jdbcType=CHAR}, #{userPassword,jdbcType=VARCHAR}, #{userBloodtype,jdbcType=CHAR},
     #{userBirthday,jdbcType=DATE}, #{userHeight,jdbcType=INTEGER}, #{userType,jdbcType=CHAR},
-    #{userPermission,jdbcType=VARCHAR}, #{userKeyword,jdbcType=VARCHAR}, #{userPortrait,jdbcType=LONGVARBINARY}
+    #{userPermission,jdbcType=VARCHAR}, #{userKeyword,jdbcType=VARCHAR}, #{userPortrait,jdbcType=VARCHAR}
     )
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.User">
@@ -124,7 +124,7 @@
         #{userKeyword,jdbcType=VARCHAR},
       </if>
       <if test="userPortrait != null">
-        #{userPortrait,jdbcType=LONGVARBINARY},
+        #{userPortrait,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -162,7 +162,7 @@
         user_keyword = #{userKeyword,jdbcType=VARCHAR},
       </if>
       <if test="userPortrait != null">
-        user_portrait = #{userPortrait,jdbcType=LONGVARBINARY},
+        user_portrait = #{userPortrait,jdbcType=VARCHAR},
       </if>
     </set>
     where user_id = #{userId,jdbcType=BIGINT}
@@ -179,7 +179,7 @@
     user_type = #{userType,jdbcType=CHAR},
     user_permission = #{userPermission,jdbcType=VARCHAR},
     user_keyword = #{userKeyword,jdbcType=VARCHAR},
-    user_portrait = #{userPortrait,jdbcType=LONGVARBINARY}
+    user_portrait = #{userPortrait,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.User">

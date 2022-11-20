@@ -16,7 +16,7 @@ public class Food implements Serializable {
 
   private Float foodEnergy;
 
-  private byte[] foodImage;
+  private String foodImage;
 
   private String foodIntroduction;
 
@@ -70,11 +70,11 @@ public class Food implements Serializable {
     this.foodEnergy = foodEnergy;
   }
 
-  public byte[] getFoodImage() {
+  public String getFoodImage() {
     return foodImage;
   }
 
-  public void setFoodImage(byte[] foodImage) {
+  public void setFoodImage(String foodImage) {
     this.foodImage = foodImage;
   }
 

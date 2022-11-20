@@ -10,7 +10,7 @@
     <result column="food_energy" jdbcType="REAL" property="foodEnergy" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.Food">
-    <result column="food_image" jdbcType="LONGVARBINARY" property="foodImage" />
+    <result column="food_image" jdbcType="VARCHAR" property="foodImage" />
     <result column="food_introduction" jdbcType="LONGVARCHAR" property="foodIntroduction" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -37,7 +37,7 @@
       food_image, food_introduction)
     values (#{foodId,jdbcType=BIGINT}, #{foodName,jdbcType=VARCHAR}, #{foodSuger,jdbcType=REAL}, 
       #{foodProtein,jdbcType=REAL}, #{foodFat,jdbcType=REAL}, #{foodEnergy,jdbcType=REAL}, 
-      #{foodImage,jdbcType=LONGVARBINARY}, #{foodIntroduction,jdbcType=LONGVARCHAR})
+      #{foodImage,jdbcType=VARCHAR}, #{foodIntroduction,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.Food">
     insert into t_community_food
@@ -87,7 +87,7 @@
         #{foodEnergy,jdbcType=REAL},
       </if>
       <if test="foodImage != null">
-        #{foodImage,jdbcType=LONGVARBINARY},
+        #{foodImage,jdbcType=VARCHAR},
       </if>
       <if test="foodIntroduction != null">
         #{foodIntroduction,jdbcType=LONGVARCHAR},
@@ -113,7 +113,7 @@
         food_energy = #{foodEnergy,jdbcType=REAL},
       </if>
       <if test="foodImage != null">
-        food_image = #{foodImage,jdbcType=LONGVARBINARY},
+        food_image = #{foodImage,jdbcType=VARCHAR},
       </if>
       <if test="foodIntroduction != null">
         food_introduction = #{foodIntroduction,jdbcType=LONGVARCHAR},
@@ -128,7 +128,7 @@
       food_protein = #{foodProtein,jdbcType=REAL},
       food_fat = #{foodFat,jdbcType=REAL},
       food_energy = #{foodEnergy,jdbcType=REAL},
-      food_image = #{foodImage,jdbcType=LONGVARBINARY},
+      food_image = #{foodImage,jdbcType=VARCHAR},
       food_introduction = #{foodIntroduction,jdbcType=LONGVARCHAR}
     where food_id = #{foodId,jdbcType=BIGINT}
   </update>

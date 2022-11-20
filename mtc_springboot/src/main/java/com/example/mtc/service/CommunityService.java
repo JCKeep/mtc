@@ -14,4 +14,7 @@ public interface CommunityService {
 
   List<Drug> getDrugByRange(Long l, Long r, Boolean option);
   List<Drug> getDrugByName(String name, Boolean option);
+
+  Food getFoodById(Long id);
+  Drug getDrugByID(Long id);
 }

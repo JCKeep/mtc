@@ -8,7 +8,7 @@ public class Drug implements Serializable {
 
   private String drugName;
 
-  private byte[] drugImage;
+  private String drugImage;
 
   private String drugDetail;
 
@@ -30,11 +30,11 @@ public class Drug implements Serializable {
     this.drugName = drugName;
   }
 
-  public byte[] getDrugImage() {
+  public String getDrugImage() {
     return drugImage;
   }
 
-  public void setDrugImage(byte[] drugImage) {
+  public void setDrugImage(String drugImage) {
     this.drugImage = drugImage;
   }
 
