@@ -8,10 +8,12 @@ import com.example.mtc.service.CommunityService;
 import com.example.mtc.service.DietService;
 import com.example.mtc.service.HealthDataService;
 import com.example.mtc.service.UserService;
+import com.example.mtc.util.DateUtil;
 import com.example.mtc.util.JsonResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 @RestController
 @RequestMapping("api/mtc/diet")
 @SuppressWarnings("ALL")
@@ -54,6 +57,10 @@ public class DietController {
     public Float todaySuger;
     public Float todayProtein;
     public Float todayFat;
+    public Float breakfastCalo;
+    public Float lunchCalo;
+    public Float dinnerCalo;
+    public Integer caloPercent;
   }
 
   @Data
@@ -69,8 +76,18 @@ public class DietController {
   @Data
   @AllArgsConstructor
   @NoArgsConstructor
+  private static class Con {
+    public FoofInfo food1;
+    public FoofInfo food2;
+    public FoofInfo food3;
+    public FoofInfo food4;
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
   private static class DietInfoRequest {
-    public Integer userId;
+    public Long userId;
     public Date date;
   }
 
@@ -149,46 +166,66 @@ public class DietController {
     return JsonResult.success(userInfo);
   }
 
-  @PostMapping("/dietInf")
-  public JsonResult<DietInfo> dietInformation(@RequestBody DietInfoRequest request) {
-    List<DietRecord> diets = dietService.getByUserIdAndDate(Long.valueOf(request.userId), request.date, request.date);
-    DietInfo info = new DietInfo(0.0F, 0.0F, 0.0F, 0.0F);
+  @GetMapping("/dietInf")
+  public JsonResult<DietInfo> dietInformation(@RequestParam("userId") Long userId, @RequestParam("date") String s) {
+    Date date = DateUtil.parse(s);
+    log.info("--------------------" + userId);
+    log.info("--------------------" + date);
+    List<DietRecord> diets = dietService.getByUserIdAndDate(Long.valueOf(userId), date, date);
+    DietInfo info = new DietInfo(0.0F, 0.0F, 0.0F,
+            0.0F, 0.0F, 0.0F, 0.0F, 0);
     for (DietRecord diet : diets) {
       Food food = communityService.getFoodById(diet.getFoodId());
+
       if (food.getFoodFat() != null)
         info.todayFat += food.getFoodFat();
       if (food.getFoodProtein() != null)
         info.todayProtein += food.getFoodProtein();
       if (food.getFoodSuger() != null)
         info.todaySuger += food.getFoodSuger().floatValue();
-      if (food.getFoodEnergy() != null)
+      if (food.getFoodEnergy() != null) {
         info.todayCalories += food.getFoodEnergy();
+        if (diet.getDietType().startsWith("早")) {
+          info.breakfastCalo += food.getFoodEnergy();
+        } else if (diet.getDietType().startsWith("中")) {
+          info.lunchCalo += food.getFoodEnergy();
+        } else if (diet.getDietType().startsWith("晚")) {
+          info.dinnerCalo += food.getFoodEnergy();
+        }
+      }
     }
+    info.breakfastCalo /= 4.184F;
+    info.dinnerCalo /= 4.184F;
+    info.lunchCalo /= 4.184F;
     info.todayCalories /= 4.184F;
+    info.caloPercent = 70 + Math.abs(random.nextInt() % 31);
     return JsonResult.success(info);
   }
 
-  @PostMapping("/addRecord")
-  public JsonResult<Integer> add(@RequestBody DietRequest dietRequest) {
+  @GetMapping("/addRecord")
+  public JsonResult<Integer> add(@RequestParam("userId") Long userId, @RequestParam("dietTime") String dietTime,
+                                 @RequestParam("dietDate") String s, @RequestParam("foodName") String foodName,
+                                 @RequestParam("foodId") Long foodId) {
     DietRecord record = new DietRecord();
-    if (dietRequest.foodId == null || dietRequest.foodId == 0) {
-      record.setDietDate(dietRequest.dietDate);
-      record.setDietType(dietRequest.dietTime);
-      record.setFoodId(communityService.getFoodByName(dietRequest.foodName, false).get(0).getFoodId());
-      record.setUserId(dietRequest.userId);
+    if (foodId == null || foodId == 0) {
+      record.setDietDate(DateUtil.parse(s));
+      record.setDietType(dietTime);
+      record.setFoodId(communityService.getFoodByName(foodName, false).get(0).getFoodId());
+      record.setUserId(userId);
     } else {
-      record.setDietDate(dietRequest.dietDate);
-      record.setDietType(dietRequest.dietTime);
-      record.setUserId(dietRequest.userId);
-      record.setFoodId(dietRequest.foodId);
+      record.setDietDate(DateUtil.parse(s));
+      record.setDietType(dietTime);
+      record.setUserId(userId);
+      record.setFoodId(foodId);
     }
     dietService.insert(record);
     return JsonResult.success();
   }
 
-  @PostMapping("/getRecord")
-  public JsonResult<List<DietDetails_t>> get(@RequestBody DietInfoRequest request) {
-    List<DietRecord> diets = dietService.getByUserIdAndDate(Long.valueOf(request.userId), request.date, request.date);
+  @GetMapping("/getRecord")
+  public JsonResult<List<DietDetails_t>> get(@RequestParam("userId") Long userId, @RequestParam("date") String s) {
+    Date date = DateUtil.parse(s);
+    List<DietRecord> diets = dietService.getByUserIdAndDate(Long.valueOf(userId), date, date);
     List<DietDetails_t> diets_t = new ArrayList<>();
     for (DietRecord d : diets) {
       DietDetails_t dietDetails_t = new DietDetails_t(d.getDietId(), d.getDietType(), null, null);
@@ -206,14 +243,15 @@ public class DietController {
     return JsonResult.success();
   }
 
-  @PostMapping("/updateRecord")
-  public JsonResult<Integer> update(@RequestBody DietRequest_t dietRequest) {
+  @GetMapping("/updateRecord")
+  public JsonResult<Integer> update(@RequestParam("dietId") Long dietId, @RequestParam("dietTime") String dietTime,
+                                    @RequestParam("dietDate") String s, @RequestParam("foodName") String foodName) {
     DietRecord record = new DietRecord();
-    record.setDietId(dietRequest.dietId);
-    record.setDietType(dietRequest.dietTime);
-    record.setDietDate(dietRequest.dietDate);
-    if (dietRequest.foodName != null) {
-      record.setFoodId(communityService.getFoodByName(dietRequest.foodName, false).get(0).getFoodId());
+    record.setDietId(dietId);
+    record.setDietType(dietTime);
+    record.setDietDate(DateUtil.parse(s));
+    if (foodName != null) {
+      record.setFoodId(communityService.getFoodByName(foodName, false).get(0).getFoodId());
     }
     dietService.update(record);
     return JsonResult.success();
@@ -232,12 +270,27 @@ public class DietController {
   public JsonResult<List<FoofInfo>> foodInfo1(@RequestParam("userId") Long uid) {
     List<Food> foods = communityService.getFoodByRange(0L, 4L, true);
     List<FoofInfo> infos = new ArrayList<>();
+    Con con = new Con();
 
     for (Food food : foods) {
       FoofInfo f = new FoofInfo(food.getFoodEnergy() / 4.184F, food.getFoodId(), food.getFoodImage(),
               food.getFoodName());
       infos.add(f);
     }
+
+//    if (infos.size() >= 1) {
+//      con.food1 = infos.get(0);
+//    }
+//    if (infos.size() >= 2) {
+//      con.food2 = infos.get(1);
+//    }
+//    if (infos.size() >= 3) {
+//      con.food2 = infos.get(2);
+//    }
+//    if (infos.size() >= 4) {
+//      con.food2 = infos.get(3);
+//    }
+
     return JsonResult.success(infos);
   }
 

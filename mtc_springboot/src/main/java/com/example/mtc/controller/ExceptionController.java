@@ -20,8 +20,7 @@ public class ExceptionController {
     errorResult.put("code", 201);
     errorResult.put("msg", e.getMessage());
     errorResult.put("object", null);
-    log.info(e.getLocalizedMessage());
-    e.printStackTrace();
+    log.error(e.getMessage());
     return errorResult;
   }
 }
