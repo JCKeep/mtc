@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -141,7 +138,7 @@ public class DietController {
   @AllArgsConstructor
   @NoArgsConstructor
   private static class Diet_t {
-    public Date dietDate;
+    public String dietDate;
     public String dietTime;
     public String foodName;
     public Float foodWeight;
@@ -204,21 +201,47 @@ public class DietController {
 
   @GetMapping("/addRecord")
   public JsonResult<Integer> add(@RequestParam("userId") Long userId, @RequestParam("dietTime") String dietTime,
-                                 @RequestParam("dietDate") String s, @RequestParam("foodName") String foodName,
-                                 @RequestParam("foodId") Long foodId) {
+                                 @RequestParam("dietDate") String s, @RequestParam("foodWeight") Long weight,
+                                 @RequestParam("foodCalories") Float calories, @RequestParam("foodSugar") Float sugar,
+                                 @RequestParam("foodFat") Float fat, @RequestParam("foodProtein") Float protein,
+                                 @RequestParam("desc") String description, @RequestParam("foodName") String name) {
     DietRecord record = new DietRecord();
-    if (foodId == null || foodId == 0) {
-      record.setDietDate(DateUtil.parse(s));
-      record.setDietType(dietTime);
-      record.setFoodId(communityService.getFoodByName(foodName, false).get(0).getFoodId());
-      record.setUserId(userId);
-    } else {
-      record.setDietDate(DateUtil.parse(s));
-      record.setDietType(dietTime);
-      record.setUserId(userId);
-      record.setFoodId(foodId);
-    }
+    Food food = new Food();
+    Date date = DateUtil.parse(s);
+    String tmp = name + "_" + UUID.randomUUID().toString();
+    record.setDietDate(date);
+    record.setUserId(userId);
+    food.setFoodProtein(protein);
+    food.setFoodEnergy(calories * 4.184F);
+    food.setFoodIntroduction(description);
+    food.setFoodSuger(sugar);
+    food.setFoodFat(fat);
+    food.setFoodName(tmp);
+    food.setFoodWeight(Float.valueOf(weight));
+    communityService.addFood(food);
+    record.setDietType(dietTime);
+    record.setFoodId(communityService.getFoodByName(tmp, false).get(0).getFoodId());
     dietService.insert(record);
+
+
+//    DietRecord record = new DietRecord();
+//    if (foodId == null || foodId == 0) {
+//      record.setDietDate(DateUtil.parse(s));
+//      record.setDietType(dietTime);
+//      record.setFoodId(communityService.getFoodByName(foodName, false).get(0).getFoodId());
+//      record.setUserId(userId);
+//    } else if (foodName != null) {
+//      record.setDietDate(DateUtil.parse(s));
+//      record.setDietType(dietTime);
+//      record.setUserId(userId);
+//      record.setFoodId(foodId);
+//    } else {
+//
+//    }
+
+
+
+//    dietService.insert(record);
     return JsonResult.success();
   }
 
@@ -230,7 +253,7 @@ public class DietController {
     for (DietRecord d : diets) {
       DietDetails_t dietDetails_t = new DietDetails_t(d.getDietId(), d.getDietType(), null, null);
       Food food = communityService.getFoodById(d.getFoodId());
-      dietDetails_t.foodName = food.getFoodName();
+      dietDetails_t.foodName = food.getFoodName().split("_")[0];
       dietDetails_t.foodCalories = food.getFoodEnergy() / 4.184F;
       diets_t.add(dietDetails_t);
     }
@@ -245,15 +268,34 @@ public class DietController {
 
   @GetMapping("/updateRecord")
   public JsonResult<Integer> update(@RequestParam("dietId") Long dietId, @RequestParam("dietTime") String dietTime,
-                                    @RequestParam("dietDate") String s, @RequestParam("foodName") String foodName) {
-    DietRecord record = new DietRecord();
-    record.setDietId(dietId);
-    record.setDietType(dietTime);
-    record.setDietDate(DateUtil.parse(s));
-    if (foodName != null) {
-      record.setFoodId(communityService.getFoodByName(foodName, false).get(0).getFoodId());
-    }
-    dietService.update(record);
+                                    @RequestParam("dietDate") String s, @RequestParam("foodWeight") Long weight,
+                                    @RequestParam("foodCalories") Float calories, @RequestParam("foodSugar") Float sugar,
+                                    @RequestParam("foodFat") Float fat, @RequestParam("foodProtein") Float protein,
+                                    @RequestParam("desc") String description, @RequestParam("foodName") String name) {
+//    DietRecord record = new DietRecord();
+//    record.setDietId(dietId);
+//    record.setDietType(dietTime);
+//    record.setDietDate(DateUtil.parse(s));
+//    if (foodName != null) {
+//      record.setFoodId(communityService.getFoodByName(foodName, false).get(0).getFoodId());
+//    }
+//    dietService.update(record);
+
+    DietRecord diet = dietService.get(dietId);
+    diet.setDietType(dietTime);
+    diet.setDietDate(DateUtil.parse(s));
+    Food food = communityService.getFoodById(diet.getFoodId());
+    String tmp = name + "_" + UUID.randomUUID().toString();
+    food.setFoodFat(fat);
+    food.setFoodProtein(protein);
+    food.setFoodIntroduction(description);
+    food.setFoodEnergy(calories * 4.184F);
+    food.setFoodSuger(sugar);
+    food.setFoodWeight(Float.valueOf(weight));
+    food.setFoodName(tmp);
+    communityService.updateFood(food);
+    dietService.update(diet);
+
     return JsonResult.success();
   }
 
@@ -261,8 +303,9 @@ public class DietController {
   public JsonResult<FoodDetails> foodInfo(@RequestParam("foodId") Long fid) {
     Food food = communityService.getFoodById(fid);
     FoodDetails details =
-            new FoodDetails(food.getFoodName(), food.getFoodImage(), food.getFoodIntroduction(),
-                    food.getFoodEnergy() / 1.484F, food.getFoodProtein(), food.getFoodFat(), food.getFoodSuger());
+            new FoodDetails(food.getFoodName().split("_")[0],
+                    food.getFoodImage(), food.getFoodIntroduction(),
+              food.getFoodEnergy() / 1.484F, food.getFoodProtein(), food.getFoodFat(), food.getFoodSuger());
     return JsonResult.success(details);
   }
 
@@ -274,7 +317,7 @@ public class DietController {
 
     for (Food food : foods) {
       FoofInfo f = new FoofInfo(food.getFoodEnergy() / 4.184F, food.getFoodId(), food.getFoodImage(),
-              food.getFoodName());
+              food.getFoodName().split("_")[0]);
       infos.add(f);
     }
 
@@ -298,8 +341,10 @@ public class DietController {
   public JsonResult<Diet_t> infomation(@RequestParam("userId") Long uid, @RequestParam("dietId") Long did) {
     DietRecord record = dietService.get(did);
     Food food = communityService.getFoodById(record.getFoodId());
-    Diet_t diet_t = new Diet_t(record.getDietDate(), record.getDietType(), food.getFoodName(), null,
-            food.getFoodEnergy() / 4.184F, food.getFoodSuger(), food.getFoodIntroduction());
+    Diet_t diet_t = new Diet_t(DateUtil.parse(record.getDietDate()), record.getDietType(),
+            food.getFoodName().split("_")[0],
+            food.getFoodWeight(), food.getFoodEnergy() / 4.184F,
+            food.getFoodSuger(), food.getFoodIntroduction());
     return JsonResult.success(diet_t);
   }
 }

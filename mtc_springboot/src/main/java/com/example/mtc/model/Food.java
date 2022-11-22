@@ -19,11 +19,20 @@ public class Food implements Serializable {
   private String foodImage;
 
   private String foodIntroduction;
+  private Float foodWeight;
 
   private static final long serialVersionUID = 1L;
 
   public Long getFoodId() {
     return foodId;
+  }
+
+  public Float getFoodWeight() {
+    return foodWeight;
+  }
+
+  public void setFoodWeight(Float foodWeight) {
+    this.foodWeight = foodWeight;
   }
 
   public void setFoodId(Long foodId) {
@@ -97,6 +106,7 @@ public class Food implements Serializable {
             ", foodProtein=" + foodProtein +
             ", foodFat=" + foodFat +
             ", foodEnergy=" + foodEnergy +
+            ", foodWeight=" + foodWeight +
             ", foodImage=" + String.valueOf(foodImage) +
             ", foodIntroduction=" + foodIntroduction +
             ", serialVersionUID=" + serialVersionUID +

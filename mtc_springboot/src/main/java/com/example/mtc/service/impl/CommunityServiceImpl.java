@@ -116,6 +116,16 @@ public class CommunityServiceImpl implements CommunityService {
     return drugMapper.selectByPrimaryKey(id);
   }
 
+  @Override
+  public void addFood(Food food) {
+    foodMapper.insertSelective(food);
+  }
+
+  @Override
+  public void updateFood(Food food) {
+    foodMapper.updateByPrimaryKeyWithBLOBs(food);
+  }
+
   public static String getAuth() {
     String clientId = "5iRow8o85K4jG2cqNpFVd7Ck";
     String clientSecret = "AcThgkpbejXQA4VzazmGwXqDAE8GQev1";

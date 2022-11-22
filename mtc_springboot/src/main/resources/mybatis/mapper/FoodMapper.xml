@@ -8,13 +8,14 @@
     <result column="food_protein" jdbcType="REAL" property="foodProtein" />
     <result column="food_fat" jdbcType="REAL" property="foodFat" />
     <result column="food_energy" jdbcType="REAL" property="foodEnergy" />
+    <result column="food_weight" jdbcType="REAL" property="foodWeight" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.Food">
     <result column="food_image" jdbcType="VARCHAR" property="foodImage" />
     <result column="food_introduction" jdbcType="LONGVARCHAR" property="foodIntroduction" />
   </resultMap>
   <sql id="Base_Column_List">
-    food_id, food_name, food_suger, food_protein, food_fat, food_energy
+    food_id, food_name, food_suger, food_protein, food_fat, food_energy, food_weight
   </sql>
   <sql id="Blob_Column_List">
     food_image, food_introduction
@@ -33,10 +34,11 @@
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.Food">
     insert into t_community_food (food_id, food_name, food_suger, 
-      food_protein, food_fat, food_energy, 
+      food_protein, food_fat, food_energy, food_weight
       food_image, food_introduction)
     values (#{foodId,jdbcType=BIGINT}, #{foodName,jdbcType=VARCHAR}, #{foodSuger,jdbcType=REAL}, 
-      #{foodProtein,jdbcType=REAL}, #{foodFat,jdbcType=REAL}, #{foodEnergy,jdbcType=REAL}, 
+      #{foodProtein,jdbcType=REAL}, #{foodFat,jdbcType=REAL}, #{foodEnergy,jdbcType=REAL},
+      #{foodWeight,jdbcType=REAL},
       #{foodImage,jdbcType=VARCHAR}, #{foodIntroduction,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.Food">
@@ -66,6 +68,9 @@
       <if test="foodIntroduction != null">
         food_introduction,
       </if>
+      <if test="foodWeight != null">
+        food_weight
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="foodId != null">
@@ -92,6 +97,9 @@
       <if test="foodIntroduction != null">
         #{foodIntroduction,jdbcType=LONGVARCHAR},
       </if>
+      <if test="foodWeight != null">
+        #{foodWeight,jdbcType=REAL}
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.Food">
@@ -117,6 +125,9 @@
       </if>
       <if test="foodIntroduction != null">
         food_introduction = #{foodIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodWeight != null">
+        food_weight
       </if>
     </set>
     where food_id = #{foodId,jdbcType=BIGINT}

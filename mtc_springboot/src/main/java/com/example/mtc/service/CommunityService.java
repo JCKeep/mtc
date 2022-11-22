@@ -17,4 +17,7 @@ public interface CommunityService {
 
   Food getFoodById(Long id);
   Drug getDrugByID(Long id);
+
+  void addFood(Food food);
+  void updateFood(Food food);
 }
