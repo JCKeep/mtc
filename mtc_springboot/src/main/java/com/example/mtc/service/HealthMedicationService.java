@@ -8,7 +8,8 @@ import java.util.List;
 @SuppressWarnings("ALL")
 public interface HealthMedicationService {
   void add(HealthMedication medication);
-  List<HealthMedication> get(Long userId, Date start, Date end, String type);
+  List<HealthMedication> get(Long userId, Long drugId, Date start, Date end, String type);
   void update(HealthMedication medication);
-  void delete(Long userId, Date start, Date end, String type);
+  void delete(Long userId, Long drugId, Date start, Date end, String type);
+  void flushAll();
 }

@@ -22,7 +22,6 @@ public class CommunityController {
   private CommunityService communityService;
 
   @PostMapping("/getFood")
-  @ResponseBody
   public JsonResult<List<Food>> food(@RequestBody HashMap<String, Object> body) {
     Boolean op = (Boolean) body.get("option");
     String name = (String) body.get("name");
@@ -41,7 +40,6 @@ public class CommunityController {
   }
 
   @PostMapping("/getDrug")
-  @ResponseBody
   public JsonResult<List<Drug>> drug(@RequestBody HashMap<String, Object> body) {
     Boolean op = (Boolean) body.get("option");
     String name = (String) body.get("name");
@@ -60,7 +58,6 @@ public class CommunityController {
   }
 
   @GetMapping("/food/recognize")
-  @ResponseBody
   public JsonResult<JSONObject> recognizeFood(@RequestParam("path") String path) {
     JSONObject jsonObject = JSONObject.parseObject(communityService.foodRecognize(path));
     int result_num = jsonObject.getIntValue("result_num");
@@ -70,7 +67,6 @@ public class CommunityController {
   }
 
   @PostMapping("/food/recognize")
-  @ResponseBody
   public JsonResult<JSONObject> recognizeFood1(@RequestBody byte[] b) throws IOException {
     JSONObject jsonObject = JSONObject.parseObject(communityService.foodRecognize(b));
     int result_num = jsonObject.getIntValue("result_num");

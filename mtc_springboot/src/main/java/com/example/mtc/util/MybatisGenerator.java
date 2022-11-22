@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class MybatisGenerator {
   public static void main(String[] args) throws Exception {
     List<String> warnings = new ArrayList<>();

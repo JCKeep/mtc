@@ -20,7 +20,7 @@ public class JsonResult<T> {
     ;
 
     FAILURE = new JsonResult();
-    FAILURE.code = 200;
+    FAILURE.code = 201;
     FAILURE.msg = null;
     FAILURE.object = null;
   }

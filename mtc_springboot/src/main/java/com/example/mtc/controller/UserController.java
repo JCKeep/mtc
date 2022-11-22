@@ -2,6 +2,7 @@ package com.example.mtc.controller;
 
 import com.example.mtc.model.User;
 import com.example.mtc.service.UserService;
+import com.example.mtc.util.DateUtil;
 import com.example.mtc.util.JsonResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,6 +35,42 @@ public class UserController {
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
+  private static class UserInfoToUpdate {
+    public String name;
+    public String email;
+    public String sex;
+    public String bloodType;
+    public Date birthday;
+    public Long height;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  private static class UserPasswordChange {
+    public String userEmail;
+    public String userPasswordOld;
+    public String userPasswordNew;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  private class UserResponse {
+    private Long userId;
+    private String userName;
+    private String userEmail;
+    private String userSex;
+    private String userBloodtype;
+    private String userBirthday;
+    private Integer userHeight;
+    private String userType;
+    private String userPortrait;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
   private static class UserKeywordRequest {
     public String email;
     public List<String> keywords;
@@ -51,7 +88,7 @@ public class UserController {
 
   @GetMapping("/loginWithUserId")
   public JsonResult<UserInfo> long2(@RequestParam(name = "email") String email,
-                                @RequestParam(name = "passwd") String passwd) {
+                                    @RequestParam(name = "passwd") String passwd) {
     User user = new User();
     user.setUserEmail(email);
     user.setUserPassword(passwd);
@@ -66,10 +103,30 @@ public class UserController {
   }
 
   @PostMapping("update")
-  public JsonResult<Boolean> update(@RequestBody User user) {
-    user.setUserId(userService.getUserByEmailWithNull(user.getUserEmail()).getUserId());
+  public JsonResult<Boolean> update(@RequestBody UserInfoToUpdate info) {
+    User user = userService.getUserByEmail(info.email);
+    user.setUserBirthday(info.birthday);
+    user.setUserHeight(info.height.intValue());
+    user.setUserSex(info.sex);
+    user.setUserBloodtype(info.bloodType);
     userService.updateUser(user);
     return JsonResult.success();
+  }
+
+  @PostMapping("changePassword")
+  public JsonResult<Boolean> changePassword(@RequestBody UserPasswordChange passwordChange) {
+    User user = userService.getUserByEmail(passwordChange.userEmail);
+    System.out.println(user.getUserPassword());
+    System.out.println(passwordChange.userPasswordOld);
+    if (user.getUserPassword().equals(passwordChange.userPasswordOld)) {
+      System.out.println(user.getUserPassword().equals(passwordChange.userPasswordOld));
+      user.setUserPassword(passwordChange.getUserPasswordNew());
+      userService.updateUser(user);
+      return JsonResult.success();
+    } else {
+      System.out.println(user.getUserPassword().equals(passwordChange.userPasswordOld));
+      return JsonResult.failure();
+    }
   }
 
   @PostMapping("/register")
@@ -97,10 +154,12 @@ public class UserController {
   }
 
   @GetMapping("/getuserinfo")
-  public JsonResult<User> getUser(@RequestParam("email") String email) {
+  public JsonResult<UserResponse> getUser(@RequestParam("email") String email) {
     User user = userService.getUserByEmail(email);
-    user.setUserPassword(null);
-    return JsonResult.success(user);
+    UserResponse response = new UserResponse(user.getUserId(), user.getUserName(),
+            user.getUserEmail(), user.getUserSex(), user.getUserBloodtype(), DateUtil.parse(user.getUserBirthday()),
+            user.getUserHeight(), user.getUserType(), user.getUserPortrait());
+    return JsonResult.success(response);
   }
 
   @GetMapping("/keywords")

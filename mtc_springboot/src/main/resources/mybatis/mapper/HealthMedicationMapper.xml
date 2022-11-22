@@ -115,6 +115,9 @@
     <if test="type != null">
       and medication_type = #{type,jdbcType=CHAR}
     </if>
+    <if test="drugId != null">
+      and drug_id = #{drugId,jdbcType=BIGINT}
+    </if>
   </select>
 
   <update id="updateByUserIdAndDateSelective" parameterType="com.example.mtc.model.HealthMedication">
@@ -137,8 +140,7 @@
       </if>
     </set>
     where user_id = #{userId,jdbcType=BIGINT}
-    and medication_date = #{medicationDate,jdbcType=DATE}
-    and medication_type = #{medicationType,jdbcType=CHAR}
+    and drug_id = #{drugId,jdbcType=BIGINT}
   </update>
 
   <delete id="deleteByUserId">
@@ -151,5 +153,10 @@
       and medication_type = #{type,jdbcType=CHAR}
     </if>
   </delete>
+
+  <update id="flushAll">
+    update t_health_medication
+    set is_take = 0
+  </update>
 
 </mapper>

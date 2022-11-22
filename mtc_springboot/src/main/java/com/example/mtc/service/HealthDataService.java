@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public interface HealthDataService {
   List<HealthRecord> getHealthData(Long userId, Date start, Date end);
   List<HealthRecord> getHealthData(Long userId, int year, int month, int day);

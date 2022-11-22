@@ -4,6 +4,7 @@ import com.example.mtc.model.HealthRecord;
 import com.example.mtc.model.User;
 import com.example.mtc.service.HealthDataService;
 import com.example.mtc.service.UserService;
+import com.example.mtc.util.DateUtil;
 import com.example.mtc.util.JsonResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,8 @@ import java.util.Random;
 @RequestMapping("/api/mtc/health")
 @SuppressWarnings("ALL")
 public class HealthController {
+  private static final String DIR = "/usr/local/nginx/static/file/";
+  private static final String HTTP_DIR = "http://114.132.226.110/file/";
   private static final Random random = new Random();
   @Autowired
   private UserService userService;
@@ -73,6 +76,33 @@ public class HealthController {
     public Integer heartRate;
     public Integer weight;
     public String healthCondition;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  private static class HealthData {
+    public Integer lowBlood;
+    public Integer highBlood;
+    public Float bloodSugar;
+    public Float heartRate;
+    public String bloodType;
+    public Integer height;
+    public Integer age;
+    public Integer healthRate;
+
+  }
+
+  @GetMapping("/HealthCard")
+  public JsonResult<HealthData> healthDate(@RequestParam("email") String email, @RequestParam("date") String s) {
+    Date date = DateUtil.parse(s);
+    User user = userService.getUserByEmail(email);
+    HealthRecord record = healthDataService.getHealthData(user.getUserId(), date, date).get(0);
+    HealthData data = new HealthData(record.getUserLowBloodpressure(), record.getUserHighBloodpressure(),
+            record.getUserBloodsugar().floatValue(), record.getUserHeartrate().floatValue(),
+            user.getUserBloodtype(),user.getUserHeight(), new Date().getYear() - user.getUserBirthday().getYear(),
+            70 + Math.abs(random.nextInt() % 31));
+    return JsonResult.success(data);
   }
 
   @GetMapping("/suggest")
@@ -170,9 +200,7 @@ public class HealthController {
       stringBuilder.append(70 + Math.abs(random.nextInt() % 31));
       stringBuilder.append('\n');
     }
-    String dir1 = "/usr/local/nginx/static/file/";
-    String dir = "C:\\Users\\jckeep\\Desktop\\";
-    String filename = dir1 + id + ".csv";
+    String filename = DIR + id + ".csv";
     File file = new File(filename);
     try {
       file.createNewFile();
@@ -184,6 +212,6 @@ public class HealthController {
       e.printStackTrace();
       throw new RuntimeException(e);
     }
-    return JsonResult.success("http://114.132.226.110/file/" + id + ".csv");
+    return JsonResult.success(HTTP_DIR + id + ".csv");
   }
 }

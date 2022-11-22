@@ -6,7 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HttpUtil {
+@SuppressWarnings("ALL")
+public final class HttpUtil {
 
   public static String post(String requestUrl, String accessToken, String params)
           throws Exception {

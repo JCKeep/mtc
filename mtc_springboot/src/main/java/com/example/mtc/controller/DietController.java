@@ -144,6 +144,8 @@ public class DietController {
     public Float foodWeight;
     public Float foodCalories;
     public Float foodSugar;
+    public Float foodFat;
+    public Float foodProtein;
     public String desc;
   }
 
@@ -206,6 +208,11 @@ public class DietController {
                                  @RequestParam("foodFat") Float fat, @RequestParam("foodProtein") Float protein,
                                  @RequestParam("desc") String description, @RequestParam("foodName") String name) {
     DietRecord record = new DietRecord();
+    if (calories == -1F) calories = null;
+    if (sugar == -1F) sugar = null;
+    if (fat == -1F) fat = null;
+    if (protein == -1F) protein = null;
+    if (weight == -1F) weight = null;
     Food food = new Food();
     Date date = DateUtil.parse(s);
     String tmp = name + "_" + UUID.randomUUID().toString();
@@ -223,25 +230,6 @@ public class DietController {
     record.setFoodId(communityService.getFoodByName(tmp, false).get(0).getFoodId());
     dietService.insert(record);
 
-
-//    DietRecord record = new DietRecord();
-//    if (foodId == null || foodId == 0) {
-//      record.setDietDate(DateUtil.parse(s));
-//      record.setDietType(dietTime);
-//      record.setFoodId(communityService.getFoodByName(foodName, false).get(0).getFoodId());
-//      record.setUserId(userId);
-//    } else if (foodName != null) {
-//      record.setDietDate(DateUtil.parse(s));
-//      record.setDietType(dietTime);
-//      record.setUserId(userId);
-//      record.setFoodId(foodId);
-//    } else {
-//
-//    }
-
-
-
-//    dietService.insert(record);
     return JsonResult.success();
   }
 
@@ -272,16 +260,12 @@ public class DietController {
                                     @RequestParam("foodCalories") Float calories, @RequestParam("foodSugar") Float sugar,
                                     @RequestParam("foodFat") Float fat, @RequestParam("foodProtein") Float protein,
                                     @RequestParam("desc") String description, @RequestParam("foodName") String name) {
-//    DietRecord record = new DietRecord();
-//    record.setDietId(dietId);
-//    record.setDietType(dietTime);
-//    record.setDietDate(DateUtil.parse(s));
-//    if (foodName != null) {
-//      record.setFoodId(communityService.getFoodByName(foodName, false).get(0).getFoodId());
-//    }
-//    dietService.update(record);
-
     DietRecord diet = dietService.get(dietId);
+    if (calories == -1F) calories = null;
+    if (sugar == -1F) sugar = null;
+    if (fat == -1F) fat = null;
+    if (protein == -1F) protein = null;
+    if (weight == -1F) weight = null;
     diet.setDietType(dietTime);
     diet.setDietDate(DateUtil.parse(s));
     Food food = communityService.getFoodById(diet.getFoodId());
@@ -305,7 +289,7 @@ public class DietController {
     FoodDetails details =
             new FoodDetails(food.getFoodName().split("_")[0],
                     food.getFoodImage(), food.getFoodIntroduction(),
-              food.getFoodEnergy() / 1.484F, food.getFoodProtein(), food.getFoodFat(), food.getFoodSuger());
+                    food.getFoodEnergy() / 1.484F, food.getFoodProtein(), food.getFoodFat(), food.getFoodSuger());
     return JsonResult.success(details);
   }
 
@@ -321,19 +305,6 @@ public class DietController {
       infos.add(f);
     }
 
-//    if (infos.size() >= 1) {
-//      con.food1 = infos.get(0);
-//    }
-//    if (infos.size() >= 2) {
-//      con.food2 = infos.get(1);
-//    }
-//    if (infos.size() >= 3) {
-//      con.food2 = infos.get(2);
-//    }
-//    if (infos.size() >= 4) {
-//      con.food2 = infos.get(3);
-//    }
-
     return JsonResult.success(infos);
   }
 
@@ -344,7 +315,7 @@ public class DietController {
     Diet_t diet_t = new Diet_t(DateUtil.parse(record.getDietDate()), record.getDietType(),
             food.getFoodName().split("_")[0],
             food.getFoodWeight(), food.getFoodEnergy() / 4.184F,
-            food.getFoodSuger(), food.getFoodIntroduction());
+            food.getFoodSuger(), food.getFoodFat(), food.getFoodProtein(), food.getFoodIntroduction());
     return JsonResult.success(diet_t);
   }
 }

@@ -21,8 +21,8 @@ public class HMSI implements HealthMedicationService {
   }
 
   @Override
-  public List<HealthMedication> get(Long userId, Date start, Date end, String type) {
-    return healthMedicationMapper.selectByUserId(userId, start, end, type);
+  public List<HealthMedication> get(Long userId, Long drugId, Date start, Date end, String type) {
+    return healthMedicationMapper.selectByUserId(userId, drugId, start, end, type);
   }
 
   @Override
@@ -31,7 +31,12 @@ public class HMSI implements HealthMedicationService {
   }
 
   @Override
-  public void delete(Long userId, Date start, Date end, String type) {
-    healthMedicationMapper.deleteByUserId(userId, start, end, type);
+  public void delete(Long userId, Long drugId, Date start, Date end, String type) {
+    healthMedicationMapper.deleteByUserId(userId, drugId, start, end, type);
+  }
+
+  @Override
+  public void flushAll() {
+    healthMedicationMapper.flushAll();
   }
 }

@@ -8,6 +8,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 
 import java.util.Properties;
 
+@SuppressWarnings("ALL")
 public class MybatisCommentGenerator implements CommentGenerator {
   @Override
   public void addConfigurationProperties(Properties properties) {

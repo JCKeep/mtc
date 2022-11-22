@@ -2,7 +2,8 @@ package com.example.mtc.util;
 
 import java.io.*;
 
-public class FileUtil {
+@SuppressWarnings("ALL")
+public final class FileUtil {
   public static String readFileAsString(String filePath) throws IOException {
     File file = new File(filePath);
     if (!file.exists()) {
@@ -29,10 +30,9 @@ public class FileUtil {
     if (!file.exists()) {
       throw new FileNotFoundException(filePath);
     } else {
-      ByteArrayOutputStream bos = new ByteArrayOutputStream((int) file.length());
-      BufferedInputStream in = null;
 
-      try {
+      try (ByteArrayOutputStream bos = new ByteArrayOutputStream((int) file.length())) {
+        BufferedInputStream in = null;
         in = new BufferedInputStream(new FileInputStream(file));
         short bufSize = 1024;
         byte[] buffer = new byte[bufSize];
@@ -41,18 +41,7 @@ public class FileUtil {
           bos.write(buffer, 0, len1);
         }
 
-        byte[] var7 = bos.toByteArray();
-        return var7;
-      } finally {
-        try {
-          if (in != null) {
-            in.close();
-          }
-        } catch (IOException var14) {
-          var14.printStackTrace();
-        }
-
-        bos.close();
+        return bos.toByteArray();
       }
     }
   }

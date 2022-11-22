@@ -11,14 +11,14 @@ import java.util.List;
 public interface HealthMedicationMapper {
   int deleteByPrimaryKey(Long medicationId);
 
-  int deleteByUserId(Long userId, Date start, Date end, String type);
+  int deleteByUserId(Long userId, Long drugId, Date start, Date end, String type);
 
   int insert(HealthMedication record);
 
   int insertSelective(HealthMedication record);
 
   HealthMedication selectByPrimaryKey(Long medicationId);
-  List<HealthMedication> selectByUserId(Long userId, Date start, Date end, String type);
+  List<HealthMedication> selectByUserId(Long userId, Long drugId, Date start, Date end, String type);
 
 
   int updateByPrimaryKeySelective(HealthMedication record);
@@ -26,4 +26,6 @@ public interface HealthMedicationMapper {
   int updateByUserIdAndDateSelective(HealthMedication record);
 
   int updateByPrimaryKey(HealthMedication record);
+
+  int flushAll();
 }

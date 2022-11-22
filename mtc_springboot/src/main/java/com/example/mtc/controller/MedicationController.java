@@ -1,6 +1,7 @@
 package com.example.mtc.controller;
 
 import com.example.mtc.model.HealthMedication;
+import com.example.mtc.model.User;
 import com.example.mtc.service.CommunityService;
 import com.example.mtc.service.HealthMedicationService;
 import com.example.mtc.service.UserService;
@@ -10,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -26,6 +28,8 @@ public class MedicationController {
   private UserService userService;
   @Autowired
   private CommunityService communityService;
+  @Autowired
+  private StringRedisTemplate stringRedisTemplate;
 
   @Data
   @AllArgsConstructor
@@ -48,10 +52,76 @@ public class MedicationController {
     public Boolean isTake;
   }
 
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  private static class MedicationRecord1 {
+    public String type;
+    public String email;
+    public Long drugId;
+    public Integer option;
+  }
+
+  @PostMapping("/medication/modify")
+  public JsonResult<Integer> m1(@RequestBody MedicationRecord1 record) {
+    if (record.drugId == null || record.email == null) {
+      return JsonResult.failure("drugId or email is empty");
+    }
+    User user = userService.getUserByEmailWithNull(record.email);
+    System.out.println(record.option);
+    switch (record.option) {
+      case -1: {
+        medicationService.delete(user.getUserId(), record.drugId, null, null, record.type);
+        break;
+      }
+      case  0: {
+        try {
+          HealthMedication medication1 =
+                  medicationService.get(user.getUserId(), record.drugId, null, null, record.type).get(0);
+          System.out.println(medication1);
+          medication1.setIsTake(true);
+          medicationService.update(medication1);
+        } catch (Exception e) {
+          HealthMedication medication1 = new HealthMedication();
+          medication1.setMedicationType(record.type);
+          medication1.setDrugId(record.drugId);
+          medication1.setUserId(user.getUserId());
+          medication1.setIsTake(true);
+          medicationService.add(medication1);
+        }
+        break;
+      }
+      case  1: {
+        try {
+          HealthMedication medication1 =
+                  medicationService.get(user.getUserId(), record.drugId, null, null, record.type).get(0);
+          System.out.println(medication1);
+          medication1.setIsTake(false);
+          medicationService.update(medication1);
+        } catch (Exception e) {
+          HealthMedication medication1 = new HealthMedication();
+          medication1.setMedicationType(record.type);
+          medication1.setDrugId(record.drugId);
+          medication1.setUserId(user.getUserId());
+          medication1.setIsTake(false);
+          medicationService.add(medication1);
+        }
+        break;
+      }
+    }
+    return JsonResult.success();
+  }
+
+  @GetMapping("/medication/get")
+  public JsonResult<List<HealthMedication>> get1(@RequestBody MedicationRecord1 record) {
+    return JsonResult.success(medicationService.get(userService.getUserByEmailWithNull(record.email).getUserId(),
+            null, null, null, record.type));
+  }
+
   @PostMapping("/getMedication")
   public JsonResult<List<HealthMedication>> get(@RequestBody MedicationRecordPeroid peroid) {
     return JsonResult.success(medicationService.get(userService.getUserByEmailWithNull(peroid.email).getUserId(),
-            peroid.start, peroid.end, peroid.type));
+           null, peroid.start, peroid.end, peroid.type));
   }
 
   @PostMapping("/addMedication")
@@ -81,7 +151,7 @@ public class MedicationController {
   @PostMapping("/deleteMedication")
   public JsonResult<Integer> delete(@RequestBody MedicationRecordPeroid peroid) {
     medicationService.delete(userService.getUserByEmailWithNull(peroid.email).getUserId(),
-            peroid.start, peroid.end, peroid.type);
+            null, peroid.start, peroid.end, peroid.type);
     return JsonResult.success();
   }
 }
