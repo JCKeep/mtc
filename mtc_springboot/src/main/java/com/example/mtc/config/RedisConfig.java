@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Configuration
+@SuppressWarnings("ALL")
 public class RedisConfig {
     @Autowired
     private LettuceConnectionFactory lettuceConnectionFactory;

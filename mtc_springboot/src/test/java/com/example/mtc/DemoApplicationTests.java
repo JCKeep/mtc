@@ -19,17 +19,17 @@ class DemoApplicationTests {
 //	private MailService mailService;
 //
 
-  @Autowired
-  private StringRedisTemplate stringRedisTemplate;
-
-	@Test
-	void contextLoads() {
-    Date date = DateUtil.parse("2022-1-1");
-    System.out.println(date);
-    System.out.println((date.getYear() + 1900) + ", " + (date.getMonth() + 1) + ", " + date.getDate());
-
-    stringRedisTemplate.opsForValue().set("SPRING", "BOOT");
-  }
+//  @Autowired
+//  private StringRedisTemplate stringRedisTemplate;
+//
+//	@Test
+//	void contextLoads() {
+//    Date date = DateUtil.parse("2022-1-1");
+//    System.out.println(date);
+//    System.out.println((date.getYear() + 1900) + ", " + (date.getMonth() + 1) + ", " + date.getDate());
+//
+//    stringRedisTemplate.opsForValue().set("SPRING", "BOOT");
+//  }
 //
 //	@Test
 //	void mailTest() {

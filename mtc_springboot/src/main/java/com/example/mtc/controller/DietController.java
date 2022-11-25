@@ -42,6 +42,7 @@ public class DietController {
     public Integer userHeight;
     public Integer userWeight;
     public Float userBoold;
+    public String userSex;
     public String userPortrait;
     public Integer userAge;
   }
@@ -161,7 +162,7 @@ public class DietController {
       s = records.get(0).getUserBloodsugar().floatValue();
     }
     UserInfo userInfo = new UserInfo(user.getUserName(), user.getUserHeight(), w,
-            s, user.getUserPortrait(), 18);
+            s, user.getUserSex(), user.getUserPortrait(), 18);
     return JsonResult.success(userInfo);
   }
 
@@ -289,7 +290,8 @@ public class DietController {
     FoodDetails details =
             new FoodDetails(food.getFoodName().split("_")[0],
                     food.getFoodImage(), food.getFoodIntroduction(),
-                    food.getFoodEnergy() / 1.484F, food.getFoodProtein(), food.getFoodFat(), food.getFoodSuger());
+                    food.getFoodEnergy() / 1.484F, food.getFoodProtein(),
+                    food.getFoodFat(), food.getFoodSuger());
     return JsonResult.success(details);
   }
 

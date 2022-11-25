@@ -30,6 +30,7 @@ public class HealthController {
   private static final String DIR = "/usr/local/nginx/static/file/";
   private static final String HTTP_DIR = "http://114.132.226.110/file/";
   private static final Random random = new Random();
+  private static final Double MIDDLE_VALUE = 21.2;
   @Autowired
   private UserService userService;
   @Autowired
@@ -48,6 +49,7 @@ public class HealthController {
   @NoArgsConstructor
   @AllArgsConstructor
   private static class BasicHealthData {
+    public String name;
     public String email;
     public String sex;
     public String bloodType;
@@ -112,18 +114,53 @@ public class HealthController {
 
   @PostMapping("/getRecord")
   public JsonResult<List<HealthRecord>> getHealthData(@RequestBody HealthRecordPeriod tmp) {
-    return JsonResult.success(healthDataService.getHealthData(userService.getUserByEmailWithNull(tmp.email).getUserId(),
-            tmp.start, tmp.end));
+    List<HealthRecord> records = healthDataService.getHealthData(
+            userService.getUserByEmailWithNull(tmp.email).getUserId(),
+            tmp.start, tmp.end);
+
+    for (int i = 0; i < records.size(); i++) {
+      System.out.println(DateUtil.parse(records.get(i).getRecordDate()));
+      records.get(i).setRecordDate(
+              DateUtil.parse(DateUtil.parse(records.get(i).getRecordDate())));
+    }
+
+    return JsonResult.success(records);
   }
 
   @GetMapping("rating")
   public JsonResult<Integer> getHealthRating(@RequestParam("email") String email) {
-    return JsonResult.success(70 + Math.abs(random.nextInt() % 31));
+    Date start = new Date();
+    User user = userService.getUserByEmail(email);
+    List<HealthRecord> records = healthDataService.getHealthData(user.getUserId(),
+            start, start);
+
+    Double rate = 80.0;
+    System.out.println(rate.intValue());
+    if (records.size() > 0 && records.get(0).getUserWeight() != null && user.getUserHeight() != null) {
+      Double h = Double.valueOf(user.getUserHeight()) / 100.0;
+      Double w = Double.valueOf(records.get(0).getUserWeight());
+      rate = w / (h * h);
+      if (rate > MIDDLE_VALUE) {
+        rate -= 2 * (rate - MIDDLE_VALUE);
+      }
+      rate = rate / MIDDLE_VALUE * 100;
+      if (rate < 0) {
+        rate = 60.0;
+      }
+    }
+    return JsonResult.success(rate.intValue());
   }
 
   @PostMapping("addRecord")
   public JsonResult<Integer> postHealthData(@RequestBody HealthRecordItem item) {
     Long userId = userService.getUserByEmailWithNull(item.email).getUserId();
+
+    System.out.println(item.date);
+    item.date = DateUtil.parse(DateUtil.parse(item.date));
+
+    if (healthDataService.getHealthData(userId, item.date, item.date).size() > 0) {
+      healthDataService.deleteHealthData(userId, item.date, item.date);
+    }
 
     healthDataService.addHealthData(userId, item.date, item.bloodSugar, item.lowBloodpressure,
             item.highBloodpressure, item.heartRate, item.weight, item.healthCondition);
@@ -133,7 +170,8 @@ public class HealthController {
 
   @PostMapping("deleteRecord")
   public JsonResult<Integer> deleteHealthData(@RequestBody HealthRecordPeriod healthRecordPeriod) {
-    healthDataService.deleteHealthData(userService.getUserByEmailWithNull(healthRecordPeriod.email).getUserId(),
+    healthDataService.deleteHealthData(
+            userService.getUserByEmailWithNull(healthRecordPeriod.email).getUserId(),
             healthRecordPeriod.start, healthRecordPeriod.end);
     return JsonResult.success();
   }
@@ -141,13 +179,14 @@ public class HealthController {
   @GetMapping("base")
   public JsonResult<BasicHealthData> getBasicHealthData(@RequestParam("email") String email) {
     User user = userService.getUserByEmail(email);
-    return JsonResult.success(new BasicHealthData(null, user.getUserSex(),
+    return JsonResult.success(new BasicHealthData(user.getUserName(), null, user.getUserSex(),
             user.getUserBloodtype(), user.getUserBirthday(), user.getUserHeight()));
   }
 
   @PostMapping("base")
   public JsonResult<Integer> addBasichealthData(@RequestBody BasicHealthData basicHealthData) {
     User user = userService.getUserByEmailWithNull(basicHealthData.email);
+    user.setUserName(basicHealthData.name);
     user.setUserSex(basicHealthData.sex);
     user.setUserHeight(basicHealthData.height);
     user.setUserBloodtype(basicHealthData.bloodType);
@@ -159,7 +198,8 @@ public class HealthController {
 
   @PostMapping(value = "export")
   public JsonResult<String> exportHealthData(@RequestBody HealthRecordPeriod period) {
-    Long id = userService.getUserByEmailWithNull(period.email).getUserId();
+    User user = userService.getUserByEmail(period.email);
+    Long id = user.getUserId();
     List<HealthRecord> d = healthDataService.getHealthData(id,
             period.start, period.end);
     StringBuilder stringBuilder =
@@ -197,7 +237,21 @@ public class HealthController {
         stringBuilder.append(item.getUserWeight().toString());
         stringBuilder.append(',');
       }
-      stringBuilder.append(70 + Math.abs(random.nextInt() % 31));
+      Double rate = 80.0;
+      System.out.println(rate.intValue());
+      if (item.getUserWeight() != null && user.getUserHeight() != null) {
+        Double h = Double.valueOf(user.getUserHeight()) / 100.0;
+        Double w = Double.valueOf(item.getUserWeight());
+        rate = w / (h * h);
+        if (rate > MIDDLE_VALUE) {
+          rate -= 2 * (rate - MIDDLE_VALUE);
+        }
+        rate = rate / MIDDLE_VALUE * 100;
+        if (rate < 0) {
+          rate = 60.0;
+        }
+      }
+      stringBuilder.append(rate.intValue());
       stringBuilder.append('\n');
     }
     String filename = DIR + id + ".csv";

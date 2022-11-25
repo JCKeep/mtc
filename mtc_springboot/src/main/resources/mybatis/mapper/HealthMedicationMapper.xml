@@ -122,30 +122,20 @@
 
   <update id="updateByUserIdAndDateSelective" parameterType="com.example.mtc.model.HealthMedication">
     update t_health_medication
-    <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="drugId != null">
-        drug_id = #{drugId,jdbcType=BIGINT},
-      </if>
-      <if test="medicationDate != null">
-        medication_date = #{medicationDate,jdbcType=DATE},
-      </if>
-      <if test="medicationType != null">
-        medication_type = #{medicationType,jdbcType=CHAR},
-      </if>
-      <if test="isTake != null">
-        is_take = #{isTake,jdbcType=BIT},
-      </if>
-    </set>
+    set user_id = #{userId,jdbcType=BIGINT},
+    drug_id = #{drugId,jdbcType=BIGINT},
+    medication_date = #{medicationDate,jdbcType=DATE},
+    medication_type = #{medicationType,jdbcType=CHAR},
+    is_take = #{isTake,jdbcType=BIT}
     where user_id = #{userId,jdbcType=BIGINT}
     and drug_id = #{drugId,jdbcType=BIGINT}
+    and medication_type = #{medicationType,jdbcType=CHAR}
   </update>
 
   <delete id="deleteByUserId">
     delete from t_health_medication
     where user_id = #{userId,jdbcType=BIGINT}
+    and drug_id = #{drugId,jdbcType=BIGINT}
     <if test="start != null and end != null">
       and medication_date between #{start,jdbcType=DATE} and #{end,jdbcType=DATE}
     </if>

@@ -1,10 +1,13 @@
 package com.example.mtc.controller;
 
+import com.example.mtc.model.Drug;
+import com.example.mtc.model.Food;
 import com.example.mtc.model.HealthMedication;
 import com.example.mtc.model.User;
 import com.example.mtc.service.CommunityService;
 import com.example.mtc.service.HealthMedicationService;
 import com.example.mtc.service.UserService;
+import com.example.mtc.util.DateUtil;
 import com.example.mtc.util.JsonResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -22,6 +27,7 @@ import java.util.List;
 @RequestMapping("/api/mtc")
 @SuppressWarnings("ALL")
 public class MedicationController {
+  private static final String STATE_HASH = "MEDICATION_STATE";
   @Autowired
   private HealthMedicationService medicationService;
   @Autowired
@@ -62,6 +68,20 @@ public class MedicationController {
     public Integer option;
   }
 
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  private static class MedicationRecord2 {
+    public Long medicationId;
+    public Long userId;
+    public Long drugId;
+    public String drugName;
+    public String medicationDate;
+    public String medicationType;
+    public Boolean isTake;
+    public String medicationUsage;
+  }
+
   @PostMapping("/medication/modify")
   public JsonResult<Integer> m1(@RequestBody MedicationRecord1 record) {
     if (record.drugId == null || record.email == null) {
@@ -78,16 +98,21 @@ public class MedicationController {
         try {
           HealthMedication medication1 =
                   medicationService.get(user.getUserId(), record.drugId, null, null, record.type).get(0);
-          System.out.println(medication1);
+//          System.out.println("1" + medication1);
           medication1.setIsTake(true);
+//          System.out.println("2" + medication1);
           medicationService.update(medication1);
+//          System.out.println("exist");
         } catch (Exception e) {
+          e.printStackTrace();
           HealthMedication medication1 = new HealthMedication();
           medication1.setMedicationType(record.type);
           medication1.setDrugId(record.drugId);
           medication1.setUserId(user.getUserId());
           medication1.setIsTake(true);
+//          System.out.println("3" + medication1);
           medicationService.add(medication1);
+//          System.out.println("not exist");
         }
         break;
       }
@@ -112,10 +137,20 @@ public class MedicationController {
     return JsonResult.success();
   }
 
-  @GetMapping("/medication/get")
-  public JsonResult<List<HealthMedication>> get1(@RequestBody MedicationRecord1 record) {
-    return JsonResult.success(medicationService.get(userService.getUserByEmailWithNull(record.email).getUserId(),
-            null, null, null, record.type));
+  @PostMapping("/medication/get")
+  public JsonResult<List<MedicationRecord2>> get1(@RequestBody MedicationRecord1 record) {
+    List<HealthMedication> medication = medicationService.get(userService.getUserByEmailWithNull(record.email).getUserId(),
+            null, null, null, record.type);
+    List<MedicationRecord2> medicationRecord2s = new ArrayList<>();
+    for (HealthMedication md : medication) {
+      Drug drug = communityService.getDrugByID(md.getDrugId());
+      MedicationRecord2 m2 = new MedicationRecord2(md.getMedicationId(),
+              md.getUserId(), md.getDrugId(), drug.getDrugName(),
+              DateUtil.parse( md.getMedicationDate()),
+              md.getMedicationType(), md.getIsTake(), drug.getDrugDetail());
+      medicationRecord2s.add(m2);
+    }
+    return JsonResult.success(medicationRecord2s);
   }
 
   @PostMapping("/getMedication")
@@ -127,11 +162,13 @@ public class MedicationController {
   @PostMapping("/addMedication")
   public JsonResult<Integer> add(@RequestBody MedicationRecord record) {
     HealthMedication medication = new HealthMedication();
+    Long id = userService.getUserByEmailWithNull(record.email).getUserId();
     medication.setMedicationDate(record.date);
     medication.setMedicationType(record.type);
     medication.setIsTake(record.isTake);
-    medication.setUserId(userService.getUserByEmailWithNull(record.email).getUserId());
+    medication.setUserId(id);
     medication.setDrugId(communityService.getDrugByName(record.drugName, false).get(0).getDrugId());
+//    if (medicationService.get())
     medicationService.add(medication);
     return JsonResult.success();
   }
@@ -152,6 +189,22 @@ public class MedicationController {
   public JsonResult<Integer> delete(@RequestBody MedicationRecordPeroid peroid) {
     medicationService.delete(userService.getUserByEmailWithNull(peroid.email).getUserId(),
             null, peroid.start, peroid.end, peroid.type);
+    return JsonResult.success();
+  }
+
+  @GetMapping("/state")
+  public JsonResult<Boolean> getState(@RequestParam("email") String email) {
+    User user = userService.getUserByEmailWithNull(email);
+    Boolean flag = Boolean.valueOf((String) stringRedisTemplate.opsForHash().get(STATE_HASH,
+            String.valueOf(user.getUserId())));
+    return JsonResult.success(flag);
+  }
+
+  @PostMapping("/state")
+  public JsonResult<Boolean> setState(@RequestBody HashMap<String, Object> body) {
+    User user = userService.getUserByEmailWithNull((String) body.get("email"));
+    stringRedisTemplate.opsForHash().put(STATE_HASH, String.valueOf(user.getUserId()),
+           String.valueOf((Boolean) body.get("state")));
     return JsonResult.success();
   }
 }

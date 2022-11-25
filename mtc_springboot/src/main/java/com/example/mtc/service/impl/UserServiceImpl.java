@@ -99,5 +99,21 @@ public class UserServiceImpl implements UserService {
     userMapper.deleteByPrimaryKey(userId);
   }
 
+  @Override
+  public Boolean changePasswd(User user, String code) {
+    String c = m.get(user.getUserEmail());
+    if (c == null || !c.equals(code)) {
+      return Boolean.FALSE;
+    }
+    try {
+      userMapper.updateByPrimaryKeySelective(user);
+      m.remove(user.getUserEmail());
+      return Boolean.TRUE;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return Boolean.FALSE;
+    }
+  }
+
 
 }

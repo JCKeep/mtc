@@ -1,6 +1,8 @@
 package com.example.mtc.controller;
 
+import com.example.mtc.model.HealthRecord;
 import com.example.mtc.model.User;
+import com.example.mtc.service.HealthDataService;
 import com.example.mtc.service.UserService;
 import com.example.mtc.util.DateUtil;
 import com.example.mtc.util.JsonResult;
@@ -21,6 +23,8 @@ import java.util.*;
 public class UserController {
   @Autowired
   private UserService userService;
+  @Autowired
+  private HealthDataService healthDataService;
 
   @Data
   @NoArgsConstructor
@@ -42,6 +46,9 @@ public class UserController {
     public String bloodType;
     public Date birthday;
     public Long height;
+    public String userEmail;
+    public String code;
+    public String userPasswordNew;
   }
 
   @Data
@@ -66,6 +73,9 @@ public class UserController {
     private Integer userHeight;
     private String userType;
     private String userPortrait;
+    private Integer userWeight;
+    private Float userBlood;
+    private Integer userAge;
   }
 
   @Data
@@ -104,12 +114,24 @@ public class UserController {
 
   @PostMapping("update")
   public JsonResult<Boolean> update(@RequestBody UserInfoToUpdate info) {
-    User user = userService.getUserByEmail(info.email);
-    user.setUserBirthday(info.birthday);
-    user.setUserHeight(info.height.intValue());
-    user.setUserSex(info.sex);
-    user.setUserBloodtype(info.bloodType);
-    userService.updateUser(user);
+    User user = null;
+    if (info.email != null) {
+      user = userService.getUserByEmail(info.email);
+      user.setUserBirthday(info.birthday);
+      user.setUserHeight(info.height.intValue());
+      user.setUserSex(info.sex);
+      user.setUserBloodtype(info.bloodType);
+      userService.updateUser(user);
+    } else if (info.userEmail != null) {
+      user = userService.getUserByEmail(info.userEmail);
+      user.setUserEmail(info.userEmail);
+      user.setUserPassword(info.userPasswordNew);
+      if (userService.changePasswd(user, info.code)) {
+        return JsonResult.success();
+      } else {
+        return JsonResult.failure();
+      }
+    }
     return JsonResult.success();
   }
 
@@ -156,9 +178,23 @@ public class UserController {
   @GetMapping("/getuserinfo")
   public JsonResult<UserResponse> getUser(@RequestParam("email") String email) {
     User user = userService.getUserByEmail(email);
+    Date date = new Date();
+    List<HealthRecord> records = healthDataService.getHealthData(user.getUserId(), date, date);
+    Integer a;
+    Float c;
+
+    if (records.size() == 0) {
+      a = null;
+      c = null;
+    } else {
+      a = records.get(0).getUserWeight();
+      c = records.get(0).getUserBloodsugar().floatValue();
+    }
+
     UserResponse response = new UserResponse(user.getUserId(), user.getUserName(),
             user.getUserEmail(), user.getUserSex(), user.getUserBloodtype(), DateUtil.parse(user.getUserBirthday()),
-            user.getUserHeight(), user.getUserType(), user.getUserPortrait());
+            user.getUserHeight(), user.getUserType(), user.getUserPortrait(), a, c,
+            date.getYear() - user.getUserBirthday().getYear());
     return JsonResult.success(response);
   }
 
@@ -170,6 +206,30 @@ public class UserController {
       keywords.add(word);
     }
     return JsonResult.success(keywords);
+  }
+
+  @PostMapping("/delKeywords")
+  public JsonResult<Boolean> delKeywords(@RequestBody UserKeywordRequest request) {
+    User user = userService.getUserByEmail(request.email);
+    Set<String> keywords = new HashSet<>();
+    for (String word : user.getUserKeyword().split(",")) {
+      keywords.add(word);
+    }
+    for (String word : request.keywords) {
+      keywords.remove(word);
+    }
+    StringBuilder word = new StringBuilder();
+    int count = 0;
+    for (String w : keywords) {
+      if (count > 0) {
+        word.append(",");
+      }
+      word.append(w);
+      count += 1;
+    }
+    user.setUserKeyword(word.toString());
+    userService.updateUser(user);
+    return JsonResult.success();
   }
 
   @PostMapping("/keywords")
@@ -197,7 +257,8 @@ public class UserController {
   }
 
   @PostMapping("/upload")
-  public JsonResult<Integer> upload(@RequestBody List<MultipartFile> files) {
+  public JsonResult<String> upload(@RequestBody List<MultipartFile> files) {
+    String path = null;
     for (var now : files) {
       if (now.isEmpty()) {
         continue;
@@ -205,8 +266,9 @@ public class UserController {
       String fileName = now.getOriginalFilename();
       System.out.println(fileName);
       File dest = new File("/usr/local/nginx/static/file", fileName);
+      path = "http://114.132.226.110/file/" + fileName;
       if (dest.exists()) {
-        return JsonResult.failure();
+        return JsonResult.success(path);
       }
       try {
         now.transferTo(dest);
@@ -215,6 +277,21 @@ public class UserController {
         return JsonResult.failure();
       }
     }
+    return JsonResult.success(path);
+  }
+
+  @PostMapping("/setPortrait")
+  public JsonResult<Boolean> setPortrait(@RequestBody HashMap<String, Object> body) {
+    User user = userService.getUserByEmail((String) body.get("email"));
+    user.setUserPortrait((String) body.get("address"));
+    userService.updateUser(user);
     return JsonResult.success();
   }
+
+  @GetMapping("id")
+  public JsonResult<Long> getUserId(@RequestParam("email") String email) {
+    return JsonResult.success(userService.getUserByEmailWithNull(email).getUserId());
+  }
+
+
 }
