@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-@SuppressWarnings("ALL")
 public class MailServiceImpl implements MailService {
   @Autowired
   private MailSender mailSender;

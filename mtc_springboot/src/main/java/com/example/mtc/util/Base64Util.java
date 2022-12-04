@@ -1,6 +1,5 @@
 package com.example.mtc.util;
 
-@SuppressWarnings("ALL")
 public final class Base64Util {
   private static final char last2byte = (char) Integer.parseInt("00000011", 2);
   private static final char last4byte = (char) Integer.parseInt("00001111", 2);

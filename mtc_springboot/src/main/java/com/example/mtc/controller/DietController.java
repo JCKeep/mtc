@@ -59,6 +59,7 @@ public class DietController {
     public Float lunchCalo;
     public Float dinnerCalo;
     public Integer caloPercent;
+    public Integer recomdIn;
   }
 
   @Data
@@ -169,11 +170,9 @@ public class DietController {
   @GetMapping("/dietInf")
   public JsonResult<DietInfo> dietInformation(@RequestParam("userId") Long userId, @RequestParam("date") String s) {
     Date date = DateUtil.parse(s);
-    log.info("--------------------" + userId);
-    log.info("--------------------" + date);
     List<DietRecord> diets = dietService.getByUserIdAndDate(Long.valueOf(userId), date, date);
     DietInfo info = new DietInfo(0.0F, 0.0F, 0.0F,
-            0.0F, 0.0F, 0.0F, 0.0F, 0);
+            0.0F, 0.0F, 0.0F, 0.0F, 0, 2500);
     for (DietRecord diet : diets) {
       Food food = communityService.getFoodById(diet.getFoodId());
 
@@ -194,11 +193,23 @@ public class DietController {
         }
       }
     }
-    info.breakfastCalo /= 4.184F;
-    info.dinnerCalo /= 4.184F;
-    info.lunchCalo /= 4.184F;
-    info.todayCalories /= 4.184F;
-    info.caloPercent = 70 + Math.abs(random.nextInt() % 31);
+
+    List<HealthRecord> record = healthDataService.getHealthData(userId, date, date);
+    User user = userService.getUserById(Math.toIntExact(userId));
+
+    if (record.size() > 0 && user.getUserHeight() != null && user.getUserBirthday() != null) {
+      if (user.getUserSex().equals("男")) {
+        Float d = (66 + 13.7F * record.get(0).getUserWeight() +
+                5 * user.getUserHeight() - 6.8F * (user.getUserBirthday().getYear() - date.getYear()));
+        info.recomdIn = d.intValue();
+      } else {
+        Float d = (65.5F + 9.6F * record.get(0).getUserWeight() +
+                1.8F * user.getUserHeight() - 4.7F * (user.getUserBirthday().getYear() - date.getYear()));
+        info.recomdIn = d.intValue();
+      }
+    }
+
+    info.caloPercent = ((Float) (info.todayCalories / info.recomdIn)).intValue();
     return JsonResult.success(info);
   }
 
@@ -214,13 +225,14 @@ public class DietController {
     if (fat == -1F) fat = null;
     if (protein == -1F) protein = null;
     if (weight == -1F) weight = null;
+    if (description.equals("-1")) description = null;
     Food food = new Food();
     Date date = DateUtil.parse(s);
     String tmp = name + "_" + UUID.randomUUID().toString();
     record.setDietDate(date);
     record.setUserId(userId);
     food.setFoodProtein(protein);
-    food.setFoodEnergy(calories * 4.184F);
+    food.setFoodEnergy(calories);
     food.setFoodIntroduction(description);
     food.setFoodSuger(sugar);
     food.setFoodFat(fat);
@@ -243,7 +255,7 @@ public class DietController {
       DietDetails_t dietDetails_t = new DietDetails_t(d.getDietId(), d.getDietType(), null, null);
       Food food = communityService.getFoodById(d.getFoodId());
       dietDetails_t.foodName = food.getFoodName().split("_")[0];
-      dietDetails_t.foodCalories = food.getFoodEnergy() / 4.184F;
+      dietDetails_t.foodCalories = food.getFoodEnergy();
       diets_t.add(dietDetails_t);
     }
     return JsonResult.success(diets_t);
@@ -267,6 +279,7 @@ public class DietController {
     if (fat == -1F) fat = null;
     if (protein == -1F) protein = null;
     if (weight == -1F) weight = null;
+    if (description.equals("-1")) description = null;
     diet.setDietType(dietTime);
     diet.setDietDate(DateUtil.parse(s));
     Food food = communityService.getFoodById(diet.getFoodId());
@@ -274,7 +287,7 @@ public class DietController {
     food.setFoodFat(fat);
     food.setFoodProtein(protein);
     food.setFoodIntroduction(description);
-    food.setFoodEnergy(calories * 4.184F);
+    food.setFoodEnergy(calories);
     food.setFoodSuger(sugar);
     food.setFoodWeight(Float.valueOf(weight));
     food.setFoodName(tmp);
@@ -290,19 +303,19 @@ public class DietController {
     FoodDetails details =
             new FoodDetails(food.getFoodName().split("_")[0],
                     food.getFoodImage(), food.getFoodIntroduction(),
-                    food.getFoodEnergy() / 1.484F, food.getFoodProtein(),
+                    food.getFoodEnergy(), food.getFoodProtein(),
                     food.getFoodFat(), food.getFoodSuger());
     return JsonResult.success(details);
   }
 
   @GetMapping("/recommand")
   public JsonResult<List<FoofInfo>> foodInfo1(@RequestParam("userId") Long uid) {
-    List<Food> foods = communityService.getFoodByRange(0L, 4L, true);
+    Long l = Math.abs((random.nextLong() % 9));
+    List<Food> foods = communityService.getFoodByRange(l, l + 4, true);
     List<FoofInfo> infos = new ArrayList<>();
-    Con con = new Con();
 
     for (Food food : foods) {
-      FoofInfo f = new FoofInfo(food.getFoodEnergy() / 4.184F, food.getFoodId(), food.getFoodImage(),
+      FoofInfo f = new FoofInfo(food.getFoodEnergy(), food.getFoodId(), food.getFoodImage(),
               food.getFoodName().split("_")[0]);
       infos.add(f);
     }
@@ -316,7 +329,7 @@ public class DietController {
     Food food = communityService.getFoodById(record.getFoodId());
     Diet_t diet_t = new Diet_t(DateUtil.parse(record.getDietDate()), record.getDietType(),
             food.getFoodName().split("_")[0],
-            food.getFoodWeight(), food.getFoodEnergy() / 4.184F,
+            food.getFoodWeight(), food.getFoodEnergy(),
             food.getFoodSuger(), food.getFoodFat(), food.getFoodProtein(), food.getFoodIntroduction());
     return JsonResult.success(diet_t);
   }

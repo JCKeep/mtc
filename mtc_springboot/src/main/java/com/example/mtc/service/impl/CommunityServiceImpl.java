@@ -126,6 +126,26 @@ public class CommunityServiceImpl implements CommunityService {
     foodMapper.updateByPrimaryKeyWithBLOBs(food);
   }
 
+  @Override
+  public void updateDrug(Drug drug) {
+    drugMapper.updateByPrimaryKeySelective(drug);
+  }
+
+  @Override
+  public void deleteDrug(Long id) {
+    drugMapper.deleteByPrimaryKey(id);
+  }
+
+  @Override
+  public void deleteFood(Long id) {
+    foodMapper.deleteByPrimaryKey(id);
+  }
+
+  @Override
+  public void addDrug(Drug drug) {
+    drugMapper.insertSelective(drug);
+  }
+
   public static String getAuth() {
     String clientId = "5iRow8o85K4jG2cqNpFVd7Ck";
     String clientSecret = "AcThgkpbejXQA4VzazmGwXqDAE8GQev1";

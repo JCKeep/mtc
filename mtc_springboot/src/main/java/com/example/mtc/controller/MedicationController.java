@@ -1,7 +1,6 @@
 package com.example.mtc.controller;
 
 import com.example.mtc.model.Drug;
-import com.example.mtc.model.Food;
 import com.example.mtc.model.HealthMedication;
 import com.example.mtc.model.User;
 import com.example.mtc.service.CommunityService;
@@ -98,11 +97,8 @@ public class MedicationController {
         try {
           HealthMedication medication1 =
                   medicationService.get(user.getUserId(), record.drugId, null, null, record.type).get(0);
-//          System.out.println("1" + medication1);
           medication1.setIsTake(true);
-//          System.out.println("2" + medication1);
           medicationService.update(medication1);
-//          System.out.println("exist");
         } catch (Exception e) {
           e.printStackTrace();
           HealthMedication medication1 = new HealthMedication();
@@ -110,9 +106,7 @@ public class MedicationController {
           medication1.setDrugId(record.drugId);
           medication1.setUserId(user.getUserId());
           medication1.setIsTake(true);
-//          System.out.println("3" + medication1);
           medicationService.add(medication1);
-//          System.out.println("not exist");
         }
         break;
       }
@@ -168,7 +162,6 @@ public class MedicationController {
     medication.setIsTake(record.isTake);
     medication.setUserId(id);
     medication.setDrugId(communityService.getDrugByName(record.drugName, false).get(0).getDrugId());
-//    if (medicationService.get())
     medicationService.add(medication);
     return JsonResult.success();
   }

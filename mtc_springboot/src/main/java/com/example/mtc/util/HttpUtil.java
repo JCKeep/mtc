@@ -2,8 +2,10 @@ package com.example.mtc.util;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 @SuppressWarnings("ALL")
@@ -57,5 +59,17 @@ public final class HttpUtil {
     }
     in.close();
     return result.toString();
+  }
+
+  public final byte[] getUrl(String u) throws IOException {
+    URL url = new URL(u);
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    connection.setRequestMethod("GET");
+    connection.setDoOutput(true);
+    connection.setDoInput(true);
+
+    connection.connect();
+    BufferedReader in = null;
+    return null;
   }
 }

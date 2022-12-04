@@ -20,4 +20,8 @@ public interface CommunityService {
 
   void addFood(Food food);
   void updateFood(Food food);
+  void updateDrug(Drug drug);
+  void deleteDrug(Long id);
+  void deleteFood(Long id);
+  void addDrug(Drug drug);
 }
