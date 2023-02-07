@@ -5,9 +5,10 @@
     <id column="relation_id" jdbcType="BIGINT" property="relationId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="doctor_id" jdbcType="BIGINT" property="doctorId" />
+    <result column="relation_state" jdbcType="INTEGER" property="relationState"/>
   </resultMap>
   <sql id="Base_Column_List">
-    relation_id, user_id, doctor_id
+    relation_id, user_id, doctor_id, relation_state
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -20,9 +21,10 @@
     where relation_id = #{relationId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.Relation">
-    insert into t_community_relation (relation_id, user_id, doctor_id
+    insert into t_community_relation (relation_id, user_id, doctor_id, relation_state
       )
-    values (#{relationId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{doctorId,jdbcType=BIGINT}
+    values (#{relationId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+            #{doctorId,jdbcType=BIGINT}, #{relationState,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.Relation">
@@ -37,6 +39,9 @@
       <if test="doctorId != null">
         doctor_id,
       </if>
+      <if test="relationState != null">
+        relation_state,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="relationId != null">
@@ -47,6 +52,9 @@
       </if>
       <if test="doctorId != null">
         #{doctorId,jdbcType=BIGINT},
+      </if>
+      <if test="relationState != null">
+        #{relationState,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -59,13 +67,17 @@
       <if test="doctorId != null">
         doctor_id = #{doctorId,jdbcType=BIGINT},
       </if>
+      <if test="relationState != null">
+        relation_state = #{relationState,jdbcType=INT},
+      </if>
     </set>
     where relation_id = #{relationId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.Relation">
     update t_community_relation
     set user_id = #{userId,jdbcType=BIGINT},
-      doctor_id = #{doctorId,jdbcType=BIGINT}
+      doctor_id = #{doctorId,jdbcType=BIGINT},
+      relation_state = #{relationState,jdbcType=INTEGER}
     where relation_id = #{relationId,jdbcType=BIGINT}
   </update>
 </mapper>

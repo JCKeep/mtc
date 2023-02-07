@@ -1,6 +1,7 @@
 package com.example.mtc.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @SuppressWarnings("ALL")
 public class Message implements Serializable {
@@ -8,9 +9,9 @@ public class Message implements Serializable {
 
   private Long userId;
 
-  private String messageFrom;
+  private Long messageFrom;
 
-  private String messageType;
+  private Date messageDate;
 
   private String messageContent;
 
@@ -32,20 +33,20 @@ public class Message implements Serializable {
     this.userId = userId;
   }
 
-  public String getMessageFrom() {
+  public Long getMessageFrom() {
     return messageFrom;
   }
 
-  public void setMessageFrom(String messageFrom) {
+  public void setMessageFrom(Long messageFrom) {
     this.messageFrom = messageFrom;
   }
 
-  public String getMessageType() {
-    return messageType;
+  public Date getMessageType() {
+    return messageDate;
   }
 
-  public void setMessageType(String messageType) {
-    this.messageType = messageType;
+  public void setMessageType(Date messageType) {
+    this.messageDate = messageType;
   }
 
   public String getMessageContent() {
@@ -64,7 +65,7 @@ public class Message implements Serializable {
             ", messageId=" + messageId +
             ", userId=" + userId +
             ", messageFrom=" + messageFrom +
-            ", messageType=" + messageType +
+            ", messageType=" + messageDate +
             ", messageContent=" + messageContent +
             ", serialVersionUID=" + serialVersionUID +
             "]";

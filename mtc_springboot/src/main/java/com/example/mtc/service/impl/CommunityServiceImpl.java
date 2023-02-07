@@ -11,6 +11,7 @@ import com.example.mtc.util.FileUtil;
 import com.example.mtc.util.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -31,9 +32,29 @@ public class CommunityServiceImpl implements CommunityService {
   private static String authHost = "https://aip.baidubce.com/oauth/2.0/token?";
 
   @Autowired
+  private StringRedisTemplate stringRedisTemplate;
+
+  @Autowired
   private DrugMapper drugMapper;
   @Autowired
   private FoodMapper foodMapper;
+
+
+  public static String parseUserMessageListRedisListKey(Long uid1, Long uid2) throws Exception {
+    if (uid1 == uid2) {
+      throw new Exception();
+    }
+
+    if (uid1 > uid2) {
+      Long tmp = uid1;
+      uid1 = uid2;
+      uid2 = tmp;
+    }
+
+    return "MESSAGE_LIST_" + uid1 + "_" + uid2;
+  }
+
+
 
   @Override
   public List<Food> getFoodByRange(Long l, Long r, Boolean option) {
@@ -78,6 +99,20 @@ public class CommunityServiceImpl implements CommunityService {
       String imgPara = URLEncoder.encode(imgStr, StandardCharsets.UTF_8);
 
       String para = "image=" + imgPara + "&top_num=" + 5;
+
+      String result = HttpUtil.post(url, accessToken, para);
+      log.info("food recognize ok");
+      return result;
+    } catch (Exception e) {
+      log.info("Reading photo error");
+    }
+    return null;
+  }
+
+  @Override
+  public String foodRecognizeByURL(String u) {
+    try {
+      String para = "url=" + u + "&top_num=" + 5;
 
       String result = HttpUtil.post(url, accessToken, para);
       log.info("food recognize ok");

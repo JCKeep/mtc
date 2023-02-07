@@ -52,6 +52,7 @@ public class CommunityController {
   @NoArgsConstructor
   @AllArgsConstructor
   private static class FoodInfo {
+    public Long foodid;
     public String foodname;
     public String foodpic;
     public Float foodsugar;
@@ -88,7 +89,8 @@ public class CommunityController {
   }
 
   @PostMapping("/getDrug")
-  public JsonResult<List<DrugInner>> drug(@RequestBody HashMap<String, Object> body) {
+  public JsonResult<List<DrugInner>> drug(
+          @RequestBody HashMap<String, Object> body) {
     Boolean op = (Boolean) body.get("option");
     String name = (String) body.get("name");
     Long l = Long.valueOf((Integer) body.get("left"));
@@ -104,7 +106,8 @@ public class CommunityController {
     if (name != null) {
       drugList = communityService.getDrugByName(name, op);
       for (Drug drug : drugList) {
-        drugInnerList.add(new DrugInner(drug.getDrugId(), drug.getDrugName(), drug.getDrugImage(), drug.getDrugDetail(),
+        drugInnerList.add(new DrugInner(drug.getDrugId(), drug.getDrugName(),
+                drug.getDrugImage(), drug.getDrugDetail(),
                 types));
       }
       return JsonResult.success(drugInnerList);
@@ -115,23 +118,27 @@ public class CommunityController {
       drugList = communityService.getDrugByRange(l, r, op);
 
       for (Drug drug : drugList) {
-        drugInnerList.add(new DrugInner(drug.getDrugId(), drug.getDrugName(), drug.getDrugImage(), drug.getDrugDetail(),
+        drugInnerList.add(new DrugInner(drug.getDrugId(), drug.getDrugName(),
+                drug.getDrugImage(), drug.getDrugDetail(),
                 types));
       }
       return JsonResult.success(drugInnerList);
     }
   }
 
-  @GetMapping("/drug/infomation")
+  @GetMapping("/drug/information")
   public JsonResult<DrugInfo> drugInfo(@RequestParam("drugid") Long id) {
     Drug drug = communityService.getDrugByID(id);
-    DrugInfo drugInfo = new DrugInfo(drug.getDrugId(), drug.getDrugName(), drug.getDrugImage(), drug.getDrugDetail());
+    DrugInfo drugInfo = new DrugInfo(drug.getDrugId(), drug.getDrugName(),
+            drug.getDrugImage(), drug.getDrugDetail());
     return JsonResult.success(drugInfo);
   }
 
   @GetMapping("/drug/edit")
-  public JsonResult<Boolean> drugEdit(@RequestParam("drugid") Long id, @RequestParam("drugname") String name,
-                                      @RequestParam("drugpic") String pic, @RequestParam("drugdetail") String detail) {
+  public JsonResult<Boolean> drugEdit(@RequestParam("drugid") Long id,
+                                      @RequestParam("drugname") String name,
+                                      @RequestParam("drugpic") String pic,
+                                      @RequestParam("drugdetail") String detail) {
     Drug drug = new Drug();
     drug.setDrugId(id);
     drug.setDrugName(name);
@@ -148,7 +155,8 @@ public class CommunityController {
   }
 
   @GetMapping("/drug/add")
-  public JsonResult<Boolean> drugAdd(@RequestParam("drugname") String name, @RequestParam("drugpic") String pic,
+  public JsonResult<Boolean> drugAdd(@RequestParam("drugname") String name,
+                                     @RequestParam("drugpic") String pic,
                                      @RequestParam("drugdetail") String detail) {
     Drug drug = new Drug();
     drug.setDrugName(name);
@@ -160,10 +168,12 @@ public class CommunityController {
 
   @GetMapping("/drug/getlist")
   public JsonResult<List<DrugInfo>> drugList() {
-    List<Drug> drugList = communityService.getDrugByRange(0L, 0x7fffffffL, true);
+    List<Drug> drugList =
+            communityService.getDrugByRange(0L, 0x7fffffffL, true);
     List<DrugInfo> drugInfoList = new ArrayList<>();
     for (Drug drug : drugList) {
-      drugInfoList.add(new DrugInfo(drug.getDrugId(), drug.getDrugName(), drug.getDrugImage(), drug.getDrugDetail()));
+      drugInfoList.add(new DrugInfo(drug.getDrugId(), drug.getDrugName(),
+              drug.getDrugImage(), drug.getDrugDetail()));
     }
     return JsonResult.success(drugInfoList);
   }
@@ -171,17 +181,22 @@ public class CommunityController {
   @GetMapping("/food/information")
   public JsonResult<FoodInfo> foodinfo(@RequestParam("foodid") Long id) {
     Food food = communityService.getFoodById(id);
-    FoodInfo foodInfo = new FoodInfo(food.getFoodName(), food.getFoodImage(), food.getFoodSuger(),
-            food.getFoodProtein(), food.getFoodFat(), food.getFoodEnergy(), food.getFoodIntroduction());
+    FoodInfo foodInfo = new FoodInfo(food.getFoodId(), food.getFoodName(),
+            food.getFoodImage(), food.getFoodSuger(), food.getFoodProtein(),
+            food.getFoodFat(), food.getFoodEnergy(), food.getFoodIntroduction());
     return JsonResult.success(foodInfo);
   }
 
   @GetMapping("/food/edit")
-  public JsonResult<Boolean> foodEdit(@RequestParam("foodid") Long id, @RequestParam("foodname") String name,
-                                      @RequestParam("foodpic") String pic, @RequestParam("foodsugar") Float sugar,
-                                      @RequestParam("foodprotein") Float protein, @RequestParam("foodfat") Float fat,
+  public JsonResult<Boolean> foodEdit(@RequestParam("foodid") Long id,
+                                      @RequestParam("foodname") String name,
+                                      @RequestParam("foodpic") String pic,
+                                      @RequestParam("foodsugar") Float sugar,
+                                      @RequestParam("foodprotein") Float protein,
+                                      @RequestParam("foodfat") Float fat,
                                       @RequestParam("foodenergy") Float energy,
-                                      @RequestParam("foodintroduction") String introduction) {
+                                      @RequestParam("foodintroduction")
+                                        String introduction) {
     Food food = new Food();
     food.setFoodId(id);
     food.setFoodName(name);
@@ -202,10 +217,14 @@ public class CommunityController {
   }
 
   @GetMapping("/food/add")
-  public JsonResult<Boolean> foodAdd(@RequestParam("foodname") String name, @RequestParam("foodpic") String pic,
-                                     @RequestParam("foodsugar") Float sugar, @RequestParam("foodprotein") Float protein,
-                                     @RequestParam("foodfat") Float fat, @RequestParam("foodenergy") Float energy,
-                                     @RequestParam("foodintroduction") String introduction) {
+  public JsonResult<Boolean> foodAdd(@RequestParam("foodname") String name,
+                                     @RequestParam("foodpic") String pic,
+                                     @RequestParam("foodsugar") Float sugar,
+                                     @RequestParam("foodprotein") Float protein,
+                                     @RequestParam("foodfat") Float fat,
+                                     @RequestParam("foodenergy") Float energy,
+                                     @RequestParam("foodintroduction")
+                                       String introduction) {
     Food food = new Food();
     food.setFoodName(name);
     food.setFoodSuger(sugar);
@@ -220,18 +239,22 @@ public class CommunityController {
 
   @GetMapping("/food/getlist")
   public JsonResult<List<FoodInfo>> foodInfoJsonResult() {
-    List<Food> foodList = communityService.getFoodByRange(1L, 0x7fffffffL, true);
+    List<Food> foodList =
+            communityService.getFoodByRange(1L, 0x7fffffffL, true);
     List<FoodInfo> foodInfoList = new ArrayList<>();
     for (Food food : foodList) {
-      foodInfoList.add(new FoodInfo(food.getFoodName(), food.getFoodImage(), food.getFoodSuger(),
-              food.getFoodProtein(), food.getFoodFat(), food.getFoodEnergy(), food.getFoodIntroduction()));
+      foodInfoList.add(new FoodInfo(food.getFoodId(), food.getFoodName(),
+              food.getFoodImage(), food.getFoodSuger(), food.getFoodProtein(),
+              food.getFoodFat(), food.getFoodEnergy(), food.getFoodIntroduction()));
     }
     return JsonResult.success(foodInfoList);
   }
 
   @GetMapping("/food/recognize")
-  public JsonResult<JSONObject> recognizeFood(@RequestParam("path") String path) {
-    JSONObject jsonObject = JSONObject.parseObject(communityService.foodRecognize(path));
+  public JsonResult<JSONObject>
+  recognizeFood(@RequestParam("path") String path) {
+    JSONObject jsonObject =
+            JSONObject.parseObject(communityService.foodRecognize(path));
     int result_num = jsonObject.getIntValue("result_num");
     if (result_num > 0 && result_num <= 5)
       return JsonResult.success("success", jsonObject);
@@ -239,8 +262,10 @@ public class CommunityController {
   }
 
   @PostMapping("/food/recognize")
-  public JsonResult<JSONObject> recognizeFood1(@RequestBody byte[] b) throws IOException {
-    JSONObject jsonObject = JSONObject.parseObject(communityService.foodRecognize(b));
+  public JsonResult<JSONObject> recognizeFood1(@RequestBody byte[] b)
+          throws IOException {
+    JSONObject jsonObject =
+            JSONObject.parseObject(communityService.foodRecognize(b));
     int result_num = jsonObject.getIntValue("result_num");
     if (result_num > 0 && result_num <= 5)
       return JsonResult.success("success", jsonObject);
@@ -248,7 +273,8 @@ public class CommunityController {
   }
 
   @PostMapping("/food/uploadByImage")
-  public JsonResult<Long> rec(@RequestBody List<MultipartFile> files) throws IOException {
+  public JsonResult<Long> rec(@RequestBody List<MultipartFile> files)
+          throws IOException {
     for (MultipartFile file : files) {
       if (file.isEmpty()) {
         continue;
@@ -261,10 +287,10 @@ public class CommunityController {
         JSONArray result = jsonObject.getJSONArray("result");
         log.info("food_name: " + result.getJSONObject(0).get("name"));
         for (int i = 0; i < result_num; i++) {
-          Food o = communityService.getFoodByName((String) result.getJSONObject(i).get("name"),
-                  false).get(0);
-          if (o != null) {
-            return JsonResult.success(o.getFoodId());
+          List<Food> o = communityService.getFoodByName((String) result.getJSONObject(i).get("name"),
+                  false);
+          if (o.size() > 0) {
+            return JsonResult.success(o.get(0).getFoodId());
           }
         }
       }
@@ -272,8 +298,27 @@ public class CommunityController {
     return JsonResult.failure();
   }
 
-  @PostMapping("/food/uploadByLink")
+  @GetMapping("/food/uploadByLink")
   public JsonResult<Long> rec1(@RequestParam String link) {
-    return null;
+    JSONObject jsonObject = JSONObject.parseObject(communityService.foodRecognizeByURL(link));
+    System.out.println(jsonObject);
+    int result_num = jsonObject.getIntValue("result_num");
+    log.info(String.valueOf(result_num));
+    if (result_num > 0) {
+      JSONArray result = jsonObject.getJSONArray("result");
+      log.info("food_name: " + result.getJSONObject(0).get("name"));
+      for (int i = 0; i < result_num; i++) {
+        List<Food> o = communityService.getFoodByName((String) result.getJSONObject(i).get("name"),
+                false);
+        if (o.size() > 0) {
+          return JsonResult.success(o.get(0).getFoodId());
+        }
+      }
+    }
+
+    return JsonResult.failure();
   }
+
+
+
 }

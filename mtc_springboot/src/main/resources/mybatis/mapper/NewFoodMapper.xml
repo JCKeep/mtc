@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mtc.service.DietFoodService">
+  <resultMap id="BaseResultMap" type="com.example.mtc.model.NewFood">
+    <id column="food_id" jdbcType="BIGINT" property="foodId" />
+    <result column="food_name" jdbcType="VARCHAR" property="foodName" />
+    <result column="food_suger" jdbcType="REAL" property="foodSuger" />
+    <result column="food_protein" jdbcType="REAL" property="foodProtein" />
+    <result column="food_fat" jdbcType="REAL" property="foodFat" />
+    <result column="food_energy" jdbcType="REAL" property="foodEnergy" />
+    <result column="food_weight" jdbcType="REAL" property="foodWeight" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.NewFood">
+    <result column="food_image" jdbcType="VARCHAR" property="foodImage" />
+    <result column="food_introduction" jdbcType="LONGVARCHAR" property="foodIntroduction" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    food_id, food_name, food_suger, food_protein, food_fat, food_energy, food_weight
+  </sql>
+  <sql id="Blob_Column_List">
+    food_image, food_introduction
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_community_food
+    where food_id = #{foodId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_community_food
+    where food_id = #{foodId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.mtc.model.NewFood">
+    insert into t_community_food (food_id, food_name, food_suger,
+    food_protein, food_fat, food_energy, food_weight
+    food_image, food_introduction)
+    values (#{foodId,jdbcType=BIGINT}, #{foodName,jdbcType=VARCHAR}, #{foodSuger,jdbcType=REAL},
+    #{foodProtein,jdbcType=REAL}, #{foodFat,jdbcType=REAL}, #{foodEnergy,jdbcType=REAL},
+    #{foodWeight,jdbcType=REAL},
+    #{foodImage,jdbcType=VARCHAR}, #{foodIntroduction,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.mtc.model.NewFood">
+    insert into t_community_food
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="foodId != null">
+        food_id,
+      </if>
+      <if test="foodName != null">
+        food_name,
+      </if>
+      <if test="foodSuger != null">
+        food_suger,
+      </if>
+      <if test="foodProtein != null">
+        food_protein,
+      </if>
+      <if test="foodFat != null">
+        food_fat,
+      </if>
+      <if test="foodEnergy != null">
+        food_energy,
+      </if>
+      <if test="foodImage != null">
+        food_image,
+      </if>
+      <if test="foodIntroduction != null">
+        food_introduction,
+      </if>
+      <if test="foodWeight != null">
+        food_weight
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="foodId != null">
+        #{foodId,jdbcType=BIGINT},
+      </if>
+      <if test="foodName != null">
+        #{foodName,jdbcType=VARCHAR},
+      </if>
+      <if test="foodSuger != null">
+        #{foodSuger,jdbcType=REAL},
+      </if>
+      <if test="foodProtein != null">
+        #{foodProtein,jdbcType=REAL},
+      </if>
+      <if test="foodFat != null">
+        #{foodFat,jdbcType=REAL},
+      </if>
+      <if test="foodEnergy != null">
+        #{foodEnergy,jdbcType=REAL},
+      </if>
+      <if test="foodImage != null">
+        #{foodImage,jdbcType=VARCHAR},
+      </if>
+      <if test="foodIntroduction != null">
+        #{foodIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodWeight != null">
+        #{foodWeight,jdbcType=REAL}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.mtc.model.NewFood">
+    update t_community_food
+    <set>
+      <if test="foodName != null">
+        food_name = #{foodName,jdbcType=VARCHAR},
+      </if>
+      <if test="foodSuger != null">
+        food_suger = #{foodSuger,jdbcType=REAL},
+      </if>
+      <if test="foodProtein != null">
+        food_protein = #{foodProtein,jdbcType=REAL},
+      </if>
+      <if test="foodFat != null">
+        food_fat = #{foodFat,jdbcType=REAL},
+      </if>
+      <if test="foodEnergy != null">
+        food_energy = #{foodEnergy,jdbcType=REAL},
+      </if>
+      <if test="foodImage != null">
+        food_image = #{foodImage,jdbcType=VARCHAR},
+      </if>
+      <if test="foodIntroduction != null">
+        food_introduction = #{foodIntroduction,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foodWeight != null">
+        food_weight
+      </if>
+    </set>
+    where food_id = #{foodId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.mtc.model.Food">
+    update t_community_food
+    set food_name = #{foodName,jdbcType=VARCHAR},
+    food_suger = #{foodSuger,jdbcType=REAL},
+    food_protein = #{foodProtein,jdbcType=REAL},
+    food_fat = #{foodFat,jdbcType=REAL},
+    food_energy = #{foodEnergy,jdbcType=REAL},
+    food_image = #{foodImage,jdbcType=VARCHAR},
+    food_introduction = #{foodIntroduction,jdbcType=LONGVARCHAR}
+    where food_id = #{foodId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.NewFood">
+    update t_community_food
+    set food_name = #{foodName,jdbcType=VARCHAR},
+    food_suger = #{foodSuger,jdbcType=REAL},
+    food_protein = #{foodProtein,jdbcType=REAL},
+    food_fat = #{foodFat,jdbcType=REAL},
+    food_energy = #{foodEnergy,jdbcType=REAL}
+    where food_id = #{foodId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectInRangeWithNull" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    null, null
+    from t_community_food
+    where food_id between #{left,jdbcType=BIGINT} and #{right,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectInRange" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List"/>
+    from t_community_food
+    where food_id between #{left,jdbcType=BIGINT} and #{right,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByNameWithNull" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    null, null
+    from t_community_food
+    where food_name = #{food_name,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByName" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List"/>
+    from t_community_food
+    where food_name = #{food_name,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

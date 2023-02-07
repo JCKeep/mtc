@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,7 +93,6 @@ public class HealthController {
     public Integer height;
     public Integer age;
     public Integer healthRate;
-
   }
 
   @GetMapping("/HealthCard")
@@ -267,5 +267,48 @@ public class HealthController {
       throw new RuntimeException(e);
     }
     return JsonResult.success(HTTP_DIR + id + ".csv");
+  }
+
+  @GetMapping("/predict")
+  public JsonResult<List<Float>> predict(@RequestParam("userId") Long id) {
+    Date nowt = new Date();
+    Date prev = DateUtils.addDays(nowt, -7);
+    System.out.println(nowt + "\n" + prev);
+
+    List<HealthRecord> records = healthDataService.getHealthData(id, prev, nowt);
+    List<Float> values = List.of(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+    System.out.println(records.size());
+
+    Float sum = 0.0F;
+    Integer count = 0;
+    Float defaultv = null;
+    for (int i = 0; i < 7; i++) {
+      Date d = DateUtils.addDays(prev, i);
+      HealthRecord record = null;
+      for (HealthRecord record1 : records) {
+        if (record1.getRecordDate().equals(d)) {
+          record = record1;
+          count += 1;
+          if (count == 1) {
+            defaultv = record.getUserBloodsugar().floatValue();
+          }
+          break;
+        }
+      }
+      if (record != null) {
+        sum += record.getUserBloodsugar().floatValue();
+        values.set(i, sum / count);
+      } else if (defaultv != null) {
+        values.set(i, defaultv);
+      }
+    }
+
+    for (int i = 0; i < values.size(); i++) {
+      if (values.get(i) == 0.0F && defaultv != null) {
+        values.set(i, defaultv);
+      }
+    }
+
+    return JsonResult.success(values);
   }
 }

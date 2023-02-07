@@ -11,13 +11,11 @@ public interface CommunityService {
   List<Food> getFoodByName(String name, Boolean option);
   String foodRecognize(String path);
   String foodRecognize(byte[] p);
-
+  String foodRecognizeByURL(String url);
   List<Drug> getDrugByRange(Long l, Long r, Boolean option);
   List<Drug> getDrugByName(String name, Boolean option);
-
   Food getFoodById(Long id);
   Drug getDrugByID(Long id);
-
   void addFood(Food food);
   void updateFood(Food food);
   void updateDrug(Drug drug);

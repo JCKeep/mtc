@@ -105,7 +105,8 @@ public class UserController {
     Boolean b = userService.login(user);
     if (b) {
       User user1 = userService.getUserByEmail(email);
-      UserInfo userInfo = new UserInfo(user1.getUserId(), email, user1.getUserName(), user.getUserPortrait());
+      UserInfo userInfo = new UserInfo(user1.getUserId(), email,
+              user1.getUserName(), user.getUserPortrait());
       return JsonResult.success(userInfo);
     } else {
       return JsonResult.failure();
@@ -293,5 +294,14 @@ public class UserController {
     return JsonResult.success(userService.getUserByEmailWithNull(email).getUserId());
   }
 
+  @PostMapping("changestate")
+  public JsonResult<?> changeUserState(Long userId) {
+    userService.changeUserState(userId);
+    return JsonResult.success();
+  }
 
+  @GetMapping("type")
+  public JsonResult<?> getUserType(Long userId) {
+    return JsonResult.success(userService.getUserType(userId));
+  }
 }

@@ -26,4 +26,5 @@ public interface UserMapper {
 
   User selectByEmail(String email);
   User selectByEmailWithNull(String email);
+  void updateUserState(Long userId, Integer state);
 }

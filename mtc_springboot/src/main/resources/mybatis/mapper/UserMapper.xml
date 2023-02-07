@@ -13,6 +13,7 @@
     <result column="user_type" jdbcType="CHAR" property="userType"/>
     <result column="user_permission" jdbcType="VARCHAR" property="userPermission"/>
     <result column="user_keyword" jdbcType="VARCHAR" property="userKeyword"/>
+    <result column="user_state" jdbcType="INTEGER" property="userState"/>
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.User">
     <result column="user_portrait" jdbcType="VARCHAR" property="userPortrait"/>
@@ -20,7 +21,7 @@
 
   <sql id="Base_Column_List">
     user_id, user_name, user_email, user_sex, user_password, user_bloodtype, user_birthday,
-    user_height, user_type, user_permission, user_keyword
+    user_height, user_type, user_permission, user_keyword, user_state
   </sql>
   <sql id="Blob_Column_List">
     user_portrait
@@ -220,4 +221,10 @@
     from t_all_user
     where user_email=#{email}
   </select>
+
+  <update id="updateUserState">
+    update t_all_user
+    set user_state = #{state,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
 </mapper>

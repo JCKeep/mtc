@@ -29,10 +29,20 @@ public class User implements Serializable {
 
   private String userPortrait;
 
+  private Integer userState;
+
   private static final long serialVersionUID = 1L;
 
   public Long getUserId() {
     return userId;
+  }
+
+  public Integer getUserState() {
+    return userState;
+  }
+
+  public void setUserState(Integer userState) {
+    this.userState = userState;
   }
 
   public void setUserId(Long userId) {
@@ -144,6 +154,7 @@ public class User implements Serializable {
             ", userPermission=" + userPermission +
             ", userKeyword=" + userKeyword +
             ", userPortrait=" + String.valueOf(userPortrait) +
+            ", userState=" + String.valueOf(userState) +
             ", serialVersionUID=" + serialVersionUID +
             "]";
   }

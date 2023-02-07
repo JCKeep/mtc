@@ -1,14 +1,18 @@
 package com.example.mtc;
 
-import com.example.mtc.mapper.FoodMapper;
-import com.example.mtc.mapper.HealthMedicationMapper;
-import com.example.mtc.model.HealthMedication;
+import com.example.mtc.service.DietFoodService;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Date;
+
 @SpringBootTest
 public class FoodMapperTest {
+  @Autowired
+  private DietFoodService foodMapper;
+
 //  @Autowired
 //  private FoodMapper foodMapper;
 //  @Autowired
@@ -22,4 +26,12 @@ public class FoodMapperTest {
 //    healthMedication.setIsTake(true);
 //    medicationMapper.updateByUserIdAndDateSelective(healthMedication);
 //  }
+
+  @Test
+  void newFoodTest() {
+    System.out.println(foodMapper.selectByPrimaryKey(10L));
+    Date date = new Date();
+    Date prev = DateUtils.addDays(date, -7);
+    System.out.println(date + "\n" + prev);
+  }
 }

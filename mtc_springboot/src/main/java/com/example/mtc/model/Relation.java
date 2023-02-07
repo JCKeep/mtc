@@ -10,6 +10,8 @@ public class Relation implements Serializable {
 
   private Long doctorId;
 
+  private Integer relationState;
+
   private static final long serialVersionUID = 1L;
 
   public Long getRelationId() {
@@ -36,6 +38,14 @@ public class Relation implements Serializable {
     this.doctorId = doctorId;
   }
 
+  public Integer getRelationState() {
+    return relationState;
+  }
+
+  public void setRelationState(Integer relationState) {
+    this.relationState = relationState;
+  }
+
   @Override
   public String toString() {
     return getClass().getSimpleName() +
@@ -44,6 +54,7 @@ public class Relation implements Serializable {
             ", relationId=" + relationId +
             ", userId=" + userId +
             ", doctorId=" + doctorId +
+            ", relationState=" + relationState +
             ", serialVersionUID=" + serialVersionUID +
             "]";
   }

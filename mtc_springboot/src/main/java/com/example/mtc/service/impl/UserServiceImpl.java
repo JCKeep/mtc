@@ -35,6 +35,9 @@ public class UserServiceImpl implements UserService {
     if (u == null) {
       return Boolean.FALSE;
     } else {
+      if (u.getUserState() != 1) {
+        return Boolean.FALSE;
+      }
       if (u.getUserPassword().equals(user.getUserPassword())) {
         LoginLog loginLog = new LoginLog();
         loginLog.setUserId(u.getUserId());
@@ -115,5 +118,20 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  @Override
+  public void changeUserState(Long userId) {
+    User user = userMapper.selectByPrimaryKey(userId);
+    userMapper.updateUserState(userId, user.getUserState() ^ 1);
+  }
 
+  @Override
+  public Integer getUserType(Long userId) {
+    User user = userMapper.selectByPrimaryKey(userId);
+
+    if (user.getUserType().equals("00")) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 }

@@ -1,6 +1,5 @@
 package com.example.mtc.mapper;
 
-import com.example.mtc.model.Drug;
 import com.example.mtc.model.Food;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

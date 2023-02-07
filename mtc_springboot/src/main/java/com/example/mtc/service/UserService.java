@@ -16,4 +16,7 @@ public interface UserService {
   void delete(Long userId);
 
   Boolean changePasswd(User user, String code);
+
+  void changeUserState(Long userId);
+  Integer getUserType(Long userId);
 }

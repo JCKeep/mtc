@@ -4,20 +4,20 @@
   <resultMap id="BaseResultMap" type="com.example.mtc.model.Message">
     <id column="message_id" jdbcType="BIGINT" property="messageId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="message_from" jdbcType="VARCHAR" property="messageFrom" />
-    <result column="message_type" jdbcType="VARCHAR" property="messageType" />
+    <result column="message_from" jdbcType="BIGINT" property="messageFrom" />
+    <result column="message_date" jdbcType="DATE" property="messageDate" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.Message">
     <result column="message_content" jdbcType="LONGVARCHAR" property="messageContent" />
   </resultMap>
   <sql id="Base_Column_List">
-    message_id, user_id, message_from, message_type
+    message_id, user_id, message_from, message_date
   </sql>
   <sql id="Blob_Column_List">
     message_content
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
-    select 
+    select
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
@@ -29,10 +29,10 @@
     where message_id = #{messageId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.example.mtc.model.Message">
-    insert into t_personal_message (message_id, user_id, message_from, 
-      message_type, message_content)
-    values (#{messageId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{messageFrom,jdbcType=VARCHAR}, 
-      #{messageType,jdbcType=VARCHAR}, #{messageContent,jdbcType=LONGVARCHAR})
+    insert into t_personal_message (message_id, user_id, message_from,
+      message_date, message_content)
+    values (#{messageId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{messageFrom,jdbcType=BIGINT},
+      #{messageDate,jdbcType=DATE}, #{messageContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.Message">
     insert into t_personal_message
@@ -46,8 +46,8 @@
       <if test="messageFrom != null">
         message_from,
       </if>
-      <if test="messageType != null">
-        message_type,
+      <if test="messageDate != null">
+        message_date,
       </if>
       <if test="messageContent != null">
         message_content,
@@ -61,10 +61,10 @@
         #{userId,jdbcType=BIGINT},
       </if>
       <if test="messageFrom != null">
-        #{messageFrom,jdbcType=VARCHAR},
+        #{messageFrom,jdbcType=BIGINT},
       </if>
-      <if test="messageType != null">
-        #{messageType,jdbcType=VARCHAR},
+      <if test="messageDate != null">
+        #{messageDate,jdbcType=DATE},
       </if>
       <if test="messageContent != null">
         #{messageContent,jdbcType=LONGVARCHAR},
@@ -78,10 +78,10 @@
         user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="messageFrom != null">
-        message_from = #{messageFrom,jdbcType=VARCHAR},
+        message_from = #{messageFrom,jdbcType=BIGINT},
       </if>
-      <if test="messageType != null">
-        message_type = #{messageType,jdbcType=VARCHAR},
+      <if test="messageDate != null">
+        message_date = #{messageDate,jdbcType=DATE},
       </if>
       <if test="messageContent != null">
         message_content = #{messageContent,jdbcType=LONGVARCHAR},
@@ -92,16 +92,39 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.mtc.model.Message">
     update t_personal_message
     set user_id = #{userId,jdbcType=BIGINT},
-      message_from = #{messageFrom,jdbcType=VARCHAR},
-      message_type = #{messageType,jdbcType=VARCHAR},
+      message_from = #{messageFrom,jdbcType=BIGINT},
+      message_date = #{messageDate,jdbcType=DATE},
       message_content = #{messageContent,jdbcType=LONGVARCHAR}
     where message_id = #{messageId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.Message">
     update t_personal_message
     set user_id = #{userId,jdbcType=BIGINT},
-      message_from = #{messageFrom,jdbcType=VARCHAR},
-      message_type = #{messageType,jdbcType=VARCHAR}
+      message_from = #{messageFrom,jdbcType=BIGINT},
+      message_date = #{messageDate,jdbcType=DATE}
     where message_id = #{messageId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectMessage" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_personal_message
+    where (user_id = #{myId,jdbcType=BIGINT} and message_from = #{uid,jdbcType=BIGINT})
+       or (user_id = #{uid,jdbcType=BIGINT} and message_from = #{myId,jdbcType=BIGINT})
+    order by t_personal_message.message_date
+  </select>
+
+  <select id="peekMsg" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_personal_message
+    where (user_id = #{myId,jdbcType=BIGINT} and message_from = #{uid,jdbcType=BIGINT})
+    or (user_id = #{uid,jdbcType=BIGINT} and message_from = #{myId,jdbcType=BIGINT})
+    order by t_personal_message.message_date desc
+    limit 1
+  </select>
 </mapper>
