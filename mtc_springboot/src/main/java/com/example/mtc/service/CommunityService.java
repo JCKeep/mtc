@@ -1,5 +1,7 @@
 package com.example.mtc.service;
 
+import com.example.mtc.controller.CommunityController;
+import com.example.mtc.model.DoctorVerify;
 import com.example.mtc.model.Drug;
 import com.example.mtc.model.Food;
 
@@ -22,4 +24,25 @@ public interface CommunityService {
   void deleteDrug(Long id);
   void deleteFood(Long id);
   void addDrug(Drug drug);
+
+  List<CommunityController.DList> dlist(Long userId);
+  List<CommunityController.UList> ulist(Long userId);
+
+  void binding(Long userId, Long doctorId, Integer type);
+
+  Long getDoctorId(Long userId);
+
+  DoctorVerify getVerify(Long userId);
+  DoctorVerify getVerifyByKey(Long doctorId);
+  void addDoctorVerify(DoctorVerify doctorVerify);
+
+  List<CommunityController.DoctorInfoB> dibList();
+
+  void doctorChangeState(Long userId);
+
+  void doctorChangeState1(Long userId);
+
+  void doctorChangeState2(Long userId);
+
+  void deleteDV(Long userId);
 }

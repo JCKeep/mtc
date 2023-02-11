@@ -1,5 +1,6 @@
 package com.example.mtc.service.impl;
 
+import com.example.mtc.controller.UserController;
 import com.example.mtc.mapper.LoginLogMapper;
 import com.example.mtc.mapper.UserMapper;
 import com.example.mtc.model.LoginLog;
@@ -10,9 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Date;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -129,9 +132,30 @@ public class UserServiceImpl implements UserService {
     User user = userMapper.selectByPrimaryKey(userId);
 
     if (user.getUserType().equals("00")) {
+      return 0;
+    } else if (user.getUserType().equals("01")) {
       return 1;
     } else {
-      return 0;
+      return 2;
     }
+  }
+
+  @Override
+  public List<UserController.UserL> getUserList() {
+    return
+    userMapper.selectAll()
+            .stream()
+            .map(user -> {
+              UserController.UserL userL = new UserController.UserL();
+
+              userL.setUseremail(user.getUserEmail());
+              userL.setUserid(user.getUserId());
+              userL.setUserpic(user.getUserPortrait());
+              userL.setUsername(user.getUserName());
+              userL.setUserstate(user.getUserState());
+
+              return userL;
+            })
+            .collect(Collectors.toList());
   }
 }

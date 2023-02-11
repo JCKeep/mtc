@@ -1,7 +1,10 @@
 package com.example.mtc.service;
 
 
+import com.example.mtc.controller.UserController;
 import com.example.mtc.model.User;
+
+import java.util.List;
 
 @SuppressWarnings("ALL")
 public interface UserService {
@@ -19,4 +22,6 @@ public interface UserService {
 
   void changeUserState(Long userId);
   Integer getUserType(Long userId);
+
+  List<UserController.UserL> getUserList();
 }

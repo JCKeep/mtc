@@ -80,4 +80,42 @@
       relation_state = #{relationState,jdbcType=INTEGER}
     where relation_id = #{relationId,jdbcType=BIGINT}
   </update>
+  
+  <select id="getUserCount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from t_community_relation
+    where doctor_id = #{doctorId,jdbcType=BIGINT} and relation_state = 0
+  </select>
+
+  <select id="getBindingStatus" resultType="java.lang.Integer">
+    select relation_state
+    from t_community_relation
+    where doctor_id = #{doctorId,jdbcType=BIGINT} and user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <select id="getUsers" resultType="java.lang.Long">
+    select user_id
+    from t_community_relation
+    where doctor_id = #{doctorId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="delete">
+    delete from t_community_relation
+    where user_id = #{userId,jdbcType=BIGINT}
+      and doctor_id = #{doctorId,jdbcType=BIGINT}
+  </delete>
+
+  <update id="update">
+    update t_community_relation
+    set
+    relation_state = #{value,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=BIGINT}
+    and doctor_id = #{doctorId,jdbcType=BIGINT}
+  </update>
+
+  <delete id="deleteRev">
+    delete from t_community_relation
+    where doctor_id = #{doctorId,jdbcType=BIGINT}
+  </delete>
 </mapper>

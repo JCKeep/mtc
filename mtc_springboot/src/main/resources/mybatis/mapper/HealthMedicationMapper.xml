@@ -146,7 +146,7 @@
 
   <update id="flushAll">
     update t_health_medication
-    set is_take = 0
+    set is_take = 1
   </update>
 
 </mapper>

@@ -3,6 +3,8 @@ package com.example.mtc.mapper;
 import com.example.mtc.model.DoctorVerify;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 @SuppressWarnings("ALL")
 public interface DoctorVerifyMapper {
@@ -19,4 +21,12 @@ public interface DoctorVerifyMapper {
   int updateByPrimaryKeyWithBLOBs(DoctorVerify record);
 
   int updateByPrimaryKey(DoctorVerify record);
+
+  List<DoctorVerify> selectAll();
+
+  DoctorVerify selectByUserId(Long userId);
+
+  List<DoctorVerify> selectAllToVerify();
+
+  DoctorVerify selectByUserId1(Long userId);
 }

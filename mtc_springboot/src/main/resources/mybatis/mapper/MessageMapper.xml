@@ -5,7 +5,7 @@
     <id column="message_id" jdbcType="BIGINT" property="messageId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="message_from" jdbcType="BIGINT" property="messageFrom" />
-    <result column="message_date" jdbcType="DATE" property="messageDate" />
+    <result column="message_date" jdbcType="TIMESTAMP" property="messageDate" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.Message">
     <result column="message_content" jdbcType="LONGVARCHAR" property="messageContent" />
@@ -32,7 +32,7 @@
     insert into t_personal_message (message_id, user_id, message_from,
       message_date, message_content)
     values (#{messageId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{messageFrom,jdbcType=BIGINT},
-      #{messageDate,jdbcType=DATE}, #{messageContent,jdbcType=LONGVARCHAR})
+      #{messageDate,jdbcType=TIMESTAMP}, #{messageContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.Message">
     insert into t_personal_message
@@ -64,7 +64,7 @@
         #{messageFrom,jdbcType=BIGINT},
       </if>
       <if test="messageDate != null">
-        #{messageDate,jdbcType=DATE},
+        #{messageDate,jdbcType=TIMESTAMP},
       </if>
       <if test="messageContent != null">
         #{messageContent,jdbcType=LONGVARCHAR},
@@ -81,7 +81,7 @@
         message_from = #{messageFrom,jdbcType=BIGINT},
       </if>
       <if test="messageDate != null">
-        message_date = #{messageDate,jdbcType=DATE},
+        message_date = #{messageDate,jdbcType=TIMESTAMP},
       </if>
       <if test="messageContent != null">
         message_content = #{messageContent,jdbcType=LONGVARCHAR},
@@ -101,7 +101,7 @@
     update t_personal_message
     set user_id = #{userId,jdbcType=BIGINT},
       message_from = #{messageFrom,jdbcType=BIGINT},
-      message_date = #{messageDate,jdbcType=DATE}
+      message_date = #{messageDate,jdbcType=TIMESTAMP}
     where message_id = #{messageId,jdbcType=BIGINT}
   </update>
 

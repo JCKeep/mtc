@@ -2,9 +2,11 @@ package com.example.mtc.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.mtc.model.Drug;
-import com.example.mtc.model.Food;
+import com.example.mtc.mapper.DoctorVerifyMapper;
+import com.example.mtc.model.*;
 import com.example.mtc.service.CommunityService;
+import com.example.mtc.service.MessageService;
+import com.example.mtc.service.UserService;
 import com.example.mtc.util.JsonResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +29,11 @@ import java.util.List;
 public class CommunityController {
   @Autowired
   private CommunityService communityService;
+
+  @Autowired
+  private UserService userService;
+  @Autowired
+  private MessageService messageService;
 
   @Data
   @NoArgsConstructor
@@ -60,6 +68,84 @@ public class CommunityController {
     public Float foodfat;
     public Float foodenergy;
     public String foodintroduction;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class DList{
+    private Long userId;
+    private Long doctorId;
+    private String userImage;
+    private String userName;
+    private String userHospital;
+    private Integer userCount;
+    private Integer userBindingStatus;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class UList {
+    private Long userId;
+    private String userImage;
+    private String userName;
+    private String userSex;
+    private Integer userAge;
+    private Integer userBindingStatus;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  private static class UD {
+    private Long userId;
+    private Long doctorId;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  private static class DoctorInfo {
+    private Integer userIdentity;
+    private String name;
+    private String idNumber;
+    private String sex;
+    private String address;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  private static class DoctorInfoV {
+    private String email;
+    private Integer userIdentity;
+    private String name;
+    private String idNumber;
+    private String sex;
+    private String address;
+    private String qualificationsUrl;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class DoctorInfoB {
+    private Long userId;
+    private String email;
+    private String name;
+    private String idNumber;
+    private String sex;
+    private String address;
+    private String qualificationsUrl;
+    private Integer userBindingStatus;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  private static class DoctorInfoBV {
+    private Long userid;
   }
 
   @PostMapping("/getFood")
@@ -319,6 +405,103 @@ public class CommunityController {
     return JsonResult.failure();
   }
 
+  @GetMapping("/binding/doctorId")
+  public JsonResult<?> getId(Long userId) {
+    return JsonResult.success(communityService.getDoctorId(userId));
+  }
 
+  @GetMapping("/binding/dlist")
+  public  JsonResult<?> dlist(Long userId, Integer userIdentity) {
+    return JsonResult.success(communityService.dlist(userId));
+  }
+
+  @GetMapping("/binding/ulist")
+  public JsonResult<?> ulist(Long userId, Integer userIdentity) {
+    return JsonResult.success(communityService.ulist(userId));
+  }
+
+  @PostMapping("/binding/request")
+  public JsonResult<?> binding1(@RequestBody UD ud) {
+    communityService.binding(ud.userId, ud.doctorId, 0);
+    return JsonResult.success();
+  }
+
+  @PostMapping("/binding/remove")
+  public JsonResult<?> binding2(@RequestBody UD ud) {
+    communityService.binding(ud.userId, ud.doctorId, 1);
+    return JsonResult.success();
+  }
+
+  @PostMapping("/binding/accept")
+  public JsonResult<?> binding3(@RequestBody UD ud) {
+    communityService.binding(ud.userId, ud.doctorId, 2);
+    DoctorVerify dv = communityService.getVerifyByKey(ud.doctorId);
+    Message message = new Message();
+    message.setMessageType(new Date());
+    message.setMessageFrom(dv.getUserId());
+    message.setMessageContent("我已同意你的绑定申请");
+    message.setUserId(ud.getUserId());
+    messageService.send(message);
+    return JsonResult.success();
+  }
+
+  @GetMapping("/doctor/info")
+  public JsonResult<?> doctorInfo(String email) {
+    User user = userService.getUserByEmail(email);
+    DoctorVerify doctorVerify = communityService.getVerify(user.getUserId());
+
+    DoctorInfo doctorInfo = new DoctorInfo();
+    doctorInfo.sex = user.getUserSex();
+    doctorInfo.name = user.getUserName();
+    doctorInfo.userIdentity = userService.getUserType(user.getUserId());
+    if (doctorVerify != null) {
+      doctorInfo.address = doctorVerify.getDoctorHospital();
+      doctorInfo.idNumber = doctorVerify.getDoctorIdnumber();
+    }
+
+    return JsonResult.success(doctorInfo);
+  }
+
+  @PostMapping("/doctor/verify")
+  public JsonResult<?> doctorInfoV(@RequestBody DoctorInfoV doctorInfoV) {
+    User user = userService.getUserByEmail(doctorInfoV.email);
+    user.setUserType("10");
+
+    DoctorVerify doctorVerify = new DoctorVerify();
+    doctorVerify.setUserId(user.getUserId());
+    doctorVerify.setVerifyState("01");
+    doctorVerify.setDoctorHospital(doctorInfoV.address);
+    doctorVerify.setDoctorIdnumber(doctorInfoV.idNumber);
+    doctorVerify.setDoctorQualification(doctorInfoV.qualificationsUrl);
+    doctorVerify.setAdminId(1L);
+
+    communityService.addDoctorVerify(doctorVerify);
+    userService.updateUser(user);
+
+    return JsonResult.success();
+  }
+
+  @GetMapping("/doctor/getlist")
+  public JsonResult<?> doctorInfoB(Long adminid) {
+    return JsonResult.success(communityService.dibList());
+  }
+
+  @PostMapping("/doctor/changestate")
+  public JsonResult<?> doctorChangeState(@RequestBody DoctorInfoBV bv) {
+    communityService.doctorChangeState(bv.userid);
+    return JsonResult.success();
+  }
+
+  @PostMapping("/doctor/agree")
+  public JsonResult<?> doctorChangeState1(@RequestBody DoctorInfoBV bv) {
+    communityService.doctorChangeState1(bv.userid);
+    return JsonResult.success();
+  }
+
+  @PostMapping("/doctor/disagree")
+  public JsonResult<?> doctorChangeState2(@RequestBody DoctorInfoBV bv) {
+    communityService.doctorChangeState2(bv.userid);
+    return JsonResult.success();
+  }
 
 }

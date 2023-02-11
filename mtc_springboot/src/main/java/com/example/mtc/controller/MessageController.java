@@ -72,6 +72,8 @@ public class MessageController {
 
       if (Objects.equals(msg.getUserId(), myId)) {
         chatRecord.messageSender = 0L;
+      } else {
+        chatRecord.messageSender = 1L;
       }
       chatRecord.messageText = msg.getMessageContent();
       chatRecord.messageTime = msg.getMessageType();

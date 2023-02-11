@@ -16,7 +16,7 @@ public class DoctorVerify implements Serializable {
 
   private Long adminId;
 
-  private byte[] doctorQualification;
+  private String doctorQualification;
 
   private static final long serialVersionUID = 1L;
 
@@ -68,11 +68,11 @@ public class DoctorVerify implements Serializable {
     this.adminId = adminId;
   }
 
-  public byte[] getDoctorQualification() {
+  public String getDoctorQualification() {
     return doctorQualification;
   }
 
-  public void setDoctorQualification(byte[] doctorQualification) {
+  public void setDoctorQualification(String doctorQualification) {
     this.doctorQualification = doctorQualification;
   }
 

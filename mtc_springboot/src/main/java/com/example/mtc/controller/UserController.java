@@ -2,6 +2,7 @@ package com.example.mtc.controller;
 
 import com.example.mtc.model.HealthRecord;
 import com.example.mtc.model.User;
+import com.example.mtc.service.CommunityService;
 import com.example.mtc.service.HealthDataService;
 import com.example.mtc.service.UserService;
 import com.example.mtc.util.DateUtil;
@@ -25,6 +26,9 @@ public class UserController {
   private UserService userService;
   @Autowired
   private HealthDataService healthDataService;
+
+  @Autowired
+  private CommunityService communityService;
 
   @Data
   @NoArgsConstructor
@@ -84,6 +88,17 @@ public class UserController {
   private static class UserKeywordRequest {
     public String email;
     public List<String> keywords;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class UserL {
+    private Long userid;
+    private String username;
+    private String userpic;
+    private String useremail;
+    private Integer userstate;
   }
 
   @GetMapping("/login")
@@ -164,7 +179,9 @@ public class UserController {
 
   @GetMapping("/delete")
   public JsonResult<Boolean> delete(@RequestParam("email") String email) {
-    userService.delete(userService.getUserByEmailWithNull(email).getUserId());
+    User user = userService.getUserByEmailWithNull(email);
+    userService.delete(user.getUserId());
+    communityService.deleteDV(user.getUserId());
     return JsonResult.success();
   }
 
@@ -173,6 +190,20 @@ public class UserController {
   public ResponseEntity<String> getCode(@RequestParam(name = "email") String email) {
     User user = new User();
     user.setUserEmail(email);
+    if (userService.getUserByEmailWithNull(email) != null) {
+      return ResponseEntity.accepted().body("FUCK YOU");
+    }
+    return ResponseEntity.ok(userService.verifyCode(user));
+  }
+
+  @GetMapping("/getcode2")
+  @ResponseBody
+  public ResponseEntity<String> getCode2(@RequestParam(name = "email") String email) {
+    User user = new User();
+    user.setUserEmail(email);
+    if (userService.getUserByEmailWithNull(email) == null) {
+      return ResponseEntity.accepted().body("FUCK YOU");
+    }
     return ResponseEntity.ok(userService.verifyCode(user));
   }
 
@@ -294,7 +325,7 @@ public class UserController {
     return JsonResult.success(userService.getUserByEmailWithNull(email).getUserId());
   }
 
-  @PostMapping("changestate")
+  @GetMapping("changestate")
   public JsonResult<?> changeUserState(Long userId) {
     userService.changeUserState(userId);
     return JsonResult.success();
@@ -303,5 +334,10 @@ public class UserController {
   @GetMapping("type")
   public JsonResult<?> getUserType(Long userId) {
     return JsonResult.success(userService.getUserType(userId));
+  }
+
+  @GetMapping("list")
+  public JsonResult<?> getUserList() {
+    return JsonResult.success(userService.getUserList());
   }
 }

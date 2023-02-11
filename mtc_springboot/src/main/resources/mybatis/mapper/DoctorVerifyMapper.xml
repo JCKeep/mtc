@@ -10,7 +10,7 @@
     <result column="admin_id" jdbcType="BIGINT" property="adminId" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.mtc.model.DoctorVerify">
-    <result column="doctor_qualification" jdbcType="LONGVARBINARY" property="doctorQualification" />
+    <result column="doctor_qualification" jdbcType="VARCHAR" property="doctorQualification" />
   </resultMap>
   <sql id="Base_Column_List">
     doctor_id, user_id, doctor_idnumber, doctor_hospital, verify_state, admin_id
@@ -36,7 +36,7 @@
       doctor_qualification)
     values (#{doctorId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{doctorIdnumber,jdbcType=CHAR}, 
       #{doctorHospital,jdbcType=VARCHAR}, #{verifyState,jdbcType=VARCHAR}, #{adminId,jdbcType=BIGINT}, 
-      #{doctorQualification,jdbcType=LONGVARBINARY})
+      #{doctorQualification,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.mtc.model.DoctorVerify">
     insert into t_community_doctorverify
@@ -83,7 +83,7 @@
         #{adminId,jdbcType=BIGINT},
       </if>
       <if test="doctorQualification != null">
-        #{doctorQualification,jdbcType=LONGVARBINARY},
+        #{doctorQualification,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -106,7 +106,7 @@
         admin_id = #{adminId,jdbcType=BIGINT},
       </if>
       <if test="doctorQualification != null">
-        doctor_qualification = #{doctorQualification,jdbcType=LONGVARBINARY},
+        doctor_qualification = #{doctorQualification,jdbcType=VARCHAR},
       </if>
     </set>
     where doctor_id = #{doctorId,jdbcType=BIGINT}
@@ -118,7 +118,7 @@
       doctor_hospital = #{doctorHospital,jdbcType=VARCHAR},
       verify_state = #{verifyState,jdbcType=VARCHAR},
       admin_id = #{adminId,jdbcType=BIGINT},
-      doctor_qualification = #{doctorQualification,jdbcType=LONGVARBINARY}
+      doctor_qualification = #{doctorQualification,jdbcType=VARCHAR}
     where doctor_id = #{doctorId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.mtc.model.DoctorVerify">
@@ -130,4 +130,40 @@
       admin_id = #{adminId,jdbcType=BIGINT}
     where doctor_id = #{doctorId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectAll" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_community_doctorverify
+    where verify_state = '00'
+  </select>
+
+  <select id="selectByUserId" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_community_doctorverify
+    where user_id = #{userId,jdbcType=BIGINT} and verify_state = '00'
+  </select>
+
+  <select id="selectAllToVerify" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_community_doctorverify
+    where verify_state = '01'
+  </select>
+
+  <select id="selectByUserId1" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_community_doctorverify
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
 </mapper>
