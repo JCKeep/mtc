@@ -9,4 +9,5 @@ public interface MessageService {
   int send(Message message);
   List<Message> getMessage(Long myId, Long uid);
   List<MessageController.ChatList> getChatList(Long userId);
+  Message peek(Long myId, Long uid);
 }

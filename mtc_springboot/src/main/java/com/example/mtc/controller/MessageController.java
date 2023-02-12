@@ -62,6 +62,20 @@ public class MessageController {
     return JsonResult.success();
   }
 
+  @GetMapping("/peekmsg")
+  public JsonResult<?> peekMsg(Long myId, Long uid) {
+    Message msg = messageService.peek(myId, uid);
+    ChatRecord chatRecord = new ChatRecord();
+    if (Objects.equals(msg.getUserId(), myId)) {
+      chatRecord.messageSender = 0L;
+    } else {
+      chatRecord.messageSender = 1L;
+    }
+    chatRecord.messageText = msg.getMessageContent();
+    chatRecord.messageTime = msg.getMessageType();
+    return JsonResult.success(chatRecord);
+  }
+
   @GetMapping("/getmsg")
   public JsonResult<?> getMsg(Long myId, Long uid) {
     List<Message> msgList = messageService.getMessage(myId, uid);

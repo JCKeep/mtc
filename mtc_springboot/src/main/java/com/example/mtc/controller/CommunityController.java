@@ -145,7 +145,7 @@ public class CommunityController {
   @NoArgsConstructor
   @AllArgsConstructor
   private static class DoctorInfoBV {
-    private Long userid;
+    private Long userId;
   }
 
   @PostMapping("/getFood")
@@ -488,19 +488,20 @@ public class CommunityController {
 
   @PostMapping("/doctor/changestate")
   public JsonResult<?> doctorChangeState(@RequestBody DoctorInfoBV bv) {
-    communityService.doctorChangeState(bv.userid);
+    communityService.doctorChangeState(bv.userId);
     return JsonResult.success();
   }
 
   @PostMapping("/doctor/agree")
   public JsonResult<?> doctorChangeState1(@RequestBody DoctorInfoBV bv) {
-    communityService.doctorChangeState1(bv.userid);
+    communityService.doctorChangeState1(bv.userId);
     return JsonResult.success();
   }
 
   @PostMapping("/doctor/disagree")
   public JsonResult<?> doctorChangeState2(@RequestBody DoctorInfoBV bv) {
-    communityService.doctorChangeState2(bv.userid);
+    communityService.doctorChangeState2(bv.userId);
+    communityService.deleteDV(bv.userId);
     return JsonResult.success();
   }
 

@@ -118,4 +118,11 @@
     delete from t_community_relation
     where doctor_id = #{doctorId,jdbcType=BIGINT}
   </delete>
+
+  <select id="getAllByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_community_relation
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
 </mapper>

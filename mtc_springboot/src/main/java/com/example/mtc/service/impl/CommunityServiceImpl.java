@@ -380,6 +380,17 @@ public class CommunityServiceImpl implements CommunityService {
     DoctorVerify doctorVerify = doctorVerifyMapper.selectByUserId1(userId);
     if (doctorVerify != null) {
       doctorVerifyMapper.deleteByPrimaryKey(doctorVerify.getDoctorId());
+      relationMapper.getAllByUserId(userId)
+              .stream()
+              .map(relation -> {
+                return doctorVerifyMapper.selectByPrimaryKey(relation.getDoctorId()).getUserId();
+              })
+              .forEach(id -> {
+                stringRedisTemplate.delete("MTC_USER_HASH_" + userId + "_" + id);
+                stringRedisTemplate.delete("MTC_USER_HASH_" + id + "_" + userId);
+                stringRedisTemplate.opsForSet().remove("MTC_USER_CONTENT_SET_" + userId, String.valueOf(id));
+                stringRedisTemplate.opsForSet().remove("MTC_USER_CONTENT_SET_" + id, String.valueOf(userId));
+              });
       relationMapper.deleteRev(doctorVerify.getDoctorId());
     }
   }

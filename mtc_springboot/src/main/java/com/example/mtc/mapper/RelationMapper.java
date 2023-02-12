@@ -31,4 +31,6 @@ public interface RelationMapper {
 
   void deleteRev(Long doctorId);
 
+  List<Relation> getAllByUserId(Long userId);
+
 }

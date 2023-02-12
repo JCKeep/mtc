@@ -2,6 +2,7 @@ package com.example.mtc;
 
 import com.example.mtc.mapper.AdminMapper;
 import com.example.mtc.mapper.DoctorVerifyMapper;
+import com.example.mtc.mapper.MessageMapper;
 import com.example.mtc.model.Admin;
 import com.example.mtc.model.DoctorVerify;
 import com.example.mtc.service.MailService;
@@ -18,12 +19,11 @@ class DemoApplicationTests {
   @Autowired
   private DoctorVerifyMapper doctorVerifyMapper;
 
+  @Autowired
+  private MessageMapper messageMapper;
+
   @Test
   void test() {
-    DoctorVerify doctorVerify = new DoctorVerify();
-    doctorVerify.setDoctorId(11L);
-    doctorVerify.setVerifyState("00");
-    doctorVerifyMapper.updateByPrimaryKeySelective(doctorVerify);
-    System.out.println(doctorVerifyMapper.selectAllToVerify());
+    System.out.println(messageMapper.peekMsg(35L, 5L));
   }
 }
