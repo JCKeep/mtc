@@ -1,47 +1,32 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+<scale-box :width="1920" :height="1080">
+  <div class="test">
+    <div class="box">
+      <router-view />
     </div>
-  </header>
+  </div>
+</scale-box>
 
-  <main>
-    <TheWelcome />
-  </main>
+
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<script lang="ts" setup>
+import ScaleBox from 'scale-box'
+import 'scale-box/dist/style.css'
+</script>
+
+<style>
+
+#app {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0rem;
+  font-weight: normal;
+  background: rgb(248, 6, 6);
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.test {
+  padding-left: 240px;
+  padding-right: 240px;
+  margin-top: 3%;
 }
 </style>
