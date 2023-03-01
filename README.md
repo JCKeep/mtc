@@ -9,3 +9,7 @@
 * `keepalived` - Keepalived 配置
 * `mtc.sql` - 项目MySQL数据库文件
 * 项目环境要求：`Nginx`, `MySQL`, `Redis`, `OpenJDK 11`, `ubuntu 20.04`, `Keepalived`
+
+**TODO**
+
+- [ ] Docker 容器部署
