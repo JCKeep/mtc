@@ -11,6 +11,8 @@ then
     if [ $NGINX_PROCESS_RESTART -eq 0 ]
     then
         echo "nginx down at " `date` >> /etc/keepalived/logs/error.log
-        killall keepalived
+        systemctl stop keepalived
+        # if not support systemctl, use
+        # /etc/init.d/keepalived stop
     fi
 fi
