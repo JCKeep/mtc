@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo 1 > /proc/sys/net/ipv4/conf/eth0/arp_ignore
+echo 1 > /proc/sys/net/ipv4/conf/all/arp_ignore
+echo 2 > /proc/sys/net/ipv4/conf/eth0/arp_announce
+echo 2 > /proc/sys/net/ipv4/conf/all/arp_announce
