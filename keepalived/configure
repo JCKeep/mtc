@@ -1,6 +1,20 @@
-#!/bin/bash
+#!/bin/sh
 
-echo 1 > /proc/sys/net/ipv4/conf/eth0/arp_ignore
-echo 1 > /proc/sys/net/ipv4/conf/all/arp_ignore
-echo 2 > /proc/sys/net/ipv4/conf/eth0/arp_announce
-echo 2 > /proc/sys/net/ipv4/conf/all/arp_announce
+case $1 in
+   start)
+        # ip addr add $VIP dev lo
+        echo 1 > /proc/sys/net/ipv4/conf/all/arp_ignore
+        echo 1 > /proc/sys/net/ipv4/conf/lo/arp_ignore
+        echo 2 > /proc/sys/net/ipv4/conf/all/arp_announce
+        echo 2 > /proc/sys/net/ipv4/conf/lo/arp_announce
+        ;;
+    stop)
+        echo 0 > /proc/sys/net/ipv4/conf/all/arp_ignore
+        echo 0 > /proc/sys/net/ipv4/conf/lo/arp_ignore
+        echo 0 > /proc/sys/net/ipv4/conf/all/arp_announce
+        echo 0 > /proc/sys/net/ipv4/conf/lo/arp_announce
+        ;;
+    *)
+        echo "Wrong Arguments"
+        ;;
+esac
